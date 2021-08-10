@@ -1,17 +1,17 @@
 class AuthService {
-    public Init() {
+    public init() {
         return this;
     }
 
-    public Login() {
+    public login() {
         return this;
     }
 
-    public Logout() {
+    public logout() {
         return this;
     }
 
-    public RefreshToken() {
+    public refresh() {
         return this;
     }
 }
