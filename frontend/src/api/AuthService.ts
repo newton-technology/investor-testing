@@ -1,13 +1,29 @@
 import axios from 'axios';
+
+import AccessTokenStorage from '../stores/AccessTokenStorage';
+
+axios.interceptors.request.use(
+    (config) => {
+        const token = AccessTokenStorage.token;
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    },
+);
 class AuthService {
-    private url = `${process.env.REACT_APP_API_URL}/authorization`;
+    private readonly url = `${process.env.REACT_APP_API_URL}/authorization`;
 
-    public init() {
-        return this;
-    }
-
-    public login() {
-        return this;
+    public async login(payload: any) {
+        const accessToken = await axios.post(`${this.url}/signin`, payload).catch(() => {
+            /* */
+        });
+        if (!!accessToken.data) {
+            AccessTokenStorage.token = accessToken.data;
+        }
     }
 
     public logout() {
@@ -20,4 +36,3 @@ class AuthService {
 }
 
 export default new AuthService();
-axios.get('http://localhost:9000/api/investor_testing/categories').then((c) => console.log(c));
