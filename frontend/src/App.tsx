@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 import {Route, Switch} from 'react-router-dom';
 
@@ -13,3 +14,5 @@ const App: React.FC = () => {
 };
 
 export default App;
+
+axios.get('http://localhost:9000/api/investor_testing/categories').then((c) => console.log(c));
