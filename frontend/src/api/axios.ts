@@ -9,8 +9,8 @@ axiosWithToken.interceptors.request.use(
         const token = AccessTokenStorage.accessToken;
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
-        } else {
         }
+
         return config;
     },
     (error) => {
