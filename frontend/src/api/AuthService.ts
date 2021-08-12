@@ -1,4 +1,5 @@
 import AccessTokenStorage from '../stores/AccessTokenStorage';
+import {parseJwtRefreshTime} from '../utils/parseJwtLifeTime';
 import axios from './axios';
 
 interface IServerResponse {
@@ -16,13 +17,14 @@ interface ILogin extends IBaseAuth {
     accessToken: string;
 }
 
-interface ITokenStep extends IBaseAuth {
-    code: string;
-    accessToken: string;
+interface IRefresh {
+    refreshToken: string;
+    grant_type: 'refresh_token';
 }
 
 class AuthService {
     private readonly url = `${process.env.REACT_APP_API_URL}/authorization`;
+    private watcher: number | undefined = undefined;
 
     public async login(payload: ILogin) {
         const data = await this.request('token', payload);
@@ -39,8 +41,9 @@ class AuthService {
         AccessTokenStorage.refreshToken = undefined;
     }
 
-    public refresh() {
-        return this;
+    public async refresh(payload: IRefresh) {
+        const data = await this.request('token', payload);
+        this.setToken(data);
     }
 
     private setToken(data: IServerResponse | undefined) {
@@ -49,11 +52,8 @@ class AuthService {
         }
         if (data?.refreshToken) {
             AccessTokenStorage.refreshToken = data.refreshToken;
+            this.startRefreshTokenWatcher();
         }
-    }
-
-    private async confirmStep(payload: ITokenStep) {
-        await this.request('signin', payload);
     }
 
     private async request(endpoint: string, payload: any): Promise<IServerResponse | undefined> {
@@ -63,6 +63,14 @@ class AuthService {
         } catch (e) {
             console.log(e);
         }
+    }
+
+    private startRefreshTokenWatcher() {
+        if (this.watcher) {
+            clearTimeout(this.watcher);
+        }
+        const time = parseJwtRefreshTime(AccessTokenStorage?.refreshToken);
+        this.watcher = window.setTimeout(this.refresh, time);
     }
 }
 
