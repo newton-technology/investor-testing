@@ -18,7 +18,7 @@ interface ILogin extends IBaseAuth {
 }
 
 interface IRefresh {
-    refreshToken: string;
+    refreshToken?: string;
     grant_type: 'refresh_token';
 }
 
@@ -70,7 +70,12 @@ class AuthService {
             clearTimeout(this.watcher);
         }
         const time = parseJwtRefreshTime(AccessTokenStorage?.refreshToken);
-        this.watcher = window.setTimeout(this.refresh, time);
+        this.watcher = window.setTimeout(() => {
+            this.refresh({
+                refreshToken: AccessTokenStorage.refreshToken,
+                grant_type: 'refresh_token',
+            });
+        }, time);
     }
 }
 
