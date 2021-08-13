@@ -1,22 +1,29 @@
 import React from 'react';
+import {Route, Switch} from 'react-router-dom';
+import {ThemeProvider} from 'styled-components';
 
-import logo from './logo.svg';
-import './App.css';
+import {CategoryList} from './pages/category_list/CategoryList';
+import {CategoryTest} from './pages/category_test/CategoryTest';
+import {Layout} from './components/Layout';
+import {theme} from './theme/theme';
+import {GlobalStyle} from './theme/GlobalStyle';
 
-function App() {
+const App: React.FC = () => {
     return (
-        <div className='App'>
-            <header className='App-header'>
-                <img src={logo} className='App-logo' alt='logo' />
-                <p>
-                    Edit <code>src/App.tsx</code> and save to reload.
-                </p>
-                <a className='App-link' href='https://reactjs.org' target='_blank' rel='noopener noreferrer'>
-                    Learn React
-                </a>
-            </header>
-        </div>
+        <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <Layout>
+                <Switch>
+                    <Route path='/tests' exact>
+                        <CategoryList />
+                    </Route>
+                    <Route path='/tests/:id' exact>
+                        <CategoryTest />
+                    </Route>
+                </Switch>
+            </Layout>
+        </ThemeProvider>
     );
-}
+};
 
 export default App;
