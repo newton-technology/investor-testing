@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import {getJWTRefreshTime} from '../../utils/getJWTRefreshTime';
+import {getJWTRefreshTime, isJWTActual} from '../../utils/getJWTRefreshTime';
 import {parseJWT} from '../../utils/parseJWT';
 
 describe('parseJWT:', () => {
@@ -36,5 +36,25 @@ describe('getJWTRefreshTime:', () => {
                 1628846121839,
             ),
         ).toBe(439161);
+    });
+});
+
+describe('isJWTActual:', () => {
+    it('Should return true for live token', () => {
+        expect(
+            isJWTActual(
+                'eyJ0eXAiOiJKV1QiLxCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJuZXd0b24tdGVjaG5vbG9neVwvaW52ZXN0b3JfdGVzdGluZyIsImF1ZCI6Im5ld3Rvbi10ZWNobm9sb2d5XC9pbnZlc3Rvcl90ZXN0aW5nXC9zZXJ2aWNlIiwiaWF0IjoxNjI4ODQ0NzczLCJleHAiOjE2Mjg4NDUzNzMsInN1YiI6InRlc3RAdGVzdC5jb20iLCJ1dWlkIjoiMWViZmMxM2QtNzNkNC02MGE4LWE3MzAtMDI0MmFjMTIwMDA3IiwiZmxvdyI6InNpZ251cCJ9.aPpfATbSFwCHeA3lpfYsvQr0haXG8gIQ87zqsZhVnWo-otEYW9D92aaa49zRY8YjjH5SoY9XHjNTqMoyMhpHbN1Brsb6IECtYTMCd4ysTQhPnU9r6ifcZdV9DJKCqc6WftR8ZZlXch-cV_d6dfd4tk10ngxZ6gkICr-idiH4LzW4E9Y1M3Na66j4MhQUXpWGN-s5UmdwDyo7lF6enfKr6542Ui4p2uWbpUAZLn9tGxCMstTS9pfoy2I90hYhnV7iaZsCu6B-OL_DMej8Xsh_XbtE4RPcbnj_cP35VXxihUmPb0gWkY35051jqXHGCdJ-_aPWCLqWFBwT4jVEp7N2Jg',
+                1628844773000,
+            ),
+        ).toBe(true);
+    });
+
+    it('Should return false for outdated token', () => {
+        expect(
+            isJWTActual(
+                'eyJ0eXAiOiJKV1QiLxCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJuZXd0b24tdGVjaG5vbG9neVwvaW52ZXN0b3JfdGVzdGluZyIsImF1ZCI6Im5ld3Rvbi10ZWNobm9sb2d5XC9pbnZlc3Rvcl90ZXN0aW5nXC9zZXJ2aWNlIiwiaWF0IjoxNjI4ODQ0NzczLCJleHAiOjE2Mjg4NDUzNzMsInN1YiI6InRlc3RAdGVzdC5jb20iLCJ1dWlkIjoiMWViZmMxM2QtNzNkNC02MGE4LWE3MzAtMDI0MmFjMTIwMDA3IiwiZmxvdyI6InNpZ251cCJ9.aPpfATbSFwCHeA3lpfYsvQr0haXG8gIQ87zqsZhVnWo-otEYW9D92aaa49zRY8YjjH5SoY9XHjNTqMoyMhpHbN1Brsb6IECtYTMCd4ysTQhPnU9r6ifcZdV9DJKCqc6WftR8ZZlXch-cV_d6dfd4tk10ngxZ6gkICr-idiH4LzW4E9Y1M3Na66j4MhQUXpWGN-s5UmdwDyo7lF6enfKr6542Ui4p2uWbpUAZLn9tGxCMstTS9pfoy2I90hYhnV7iaZsCu6B-OL_DMej8Xsh_XbtE4RPcbnj_cP35VXxihUmPb0gWkY35051jqXHGCdJ-_aPWCLqWFBwT4jVEp7N2Jg',
+                1628854325816,
+            ),
+        ).toBe(false);
     });
 });

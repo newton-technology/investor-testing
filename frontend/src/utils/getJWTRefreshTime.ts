@@ -23,3 +23,14 @@ export const getJWTRefreshTime = (token: string | undefined, dateNow: number): n
 
     return undefined;
 };
+
+// TODO: Rename
+export const isJWTActual = (token: string | undefined, dateNow: number): boolean => {
+    const parsedJwt = parseJWT(token);
+    if (parsedJwt) {
+        const {exp} = parsedJwt;
+        return exp * 1000 > dateNow;
+    }
+
+    return false;
+};
