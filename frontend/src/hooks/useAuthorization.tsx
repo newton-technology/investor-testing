@@ -1,13 +1,26 @@
 import React, {useEffect} from 'react';
 
-import AuthService from '../api/AuthService';
+import AccessTokenStorage from '../stores/AccessTokenStorage';
 
-export const useAuthorization = (): undefined => {
-    const [token, setToken] = React.useState<undefined>();
+interface IToken {
+    accesToken?: string;
+    refreshToken?: string;
+}
+
+interface ITokenUserInfo {
+    userToken: IToken;
+    isAuth: boolean;
+}
+
+export const useAuthorization = (): ITokenUserInfo => {
+    const [userToken, setUserToken] = React.useState<IToken>({});
+    const [isAuth, setIsAuth] = React.useState<boolean>(false);
+
+    AccessTokenStorage.subscribe(setUserToken);
 
     useEffect(() => {
-        AuthService.Init();
-    }, []);
+        setIsAuth(AccessTokenStorage.isAuth);
+    }, [userToken]);
 
-    return token;
+    return {userToken, isAuth};
 };

@@ -1,5 +1,5 @@
 import AccessTokenStorage from '../stores/AccessTokenStorage';
-import {parseJwtRefreshTime} from '../utils/parseJwtLifeTime';
+import {getJWTRefreshTime} from '../utils/getJWTRefreshTime';
 import axios from './axios';
 
 interface IServerResponse {
@@ -25,6 +25,10 @@ interface IRefresh {
 class AuthService {
     private readonly url = `${process.env.REACT_APP_API_URL}/authorization`;
     private watcher: number | undefined = undefined;
+
+    constructor() {
+        this.startRefreshTokenWatcher();
+    }
 
     public async login(payload: ILogin) {
         const data = await this.request('token', payload);
@@ -69,13 +73,16 @@ class AuthService {
         if (this.watcher) {
             clearTimeout(this.watcher);
         }
-        const time = parseJwtRefreshTime(AccessTokenStorage?.refreshToken);
-        this.watcher = window.setTimeout(() => {
-            this.refresh({
-                refreshToken: AccessTokenStorage.refreshToken,
-                grant_type: 'refresh_token',
-            });
-        }, time);
+
+        if (AccessTokenStorage.refreshToken) {
+            const time = getJWTRefreshTime(AccessTokenStorage?.refreshToken, Date.now());
+            this.watcher = window.setTimeout(() => {
+                this.refresh({
+                    refreshToken: AccessTokenStorage.refreshToken,
+                    grant_type: 'refresh_token',
+                });
+            }, time);
+        }
     }
 }
 
