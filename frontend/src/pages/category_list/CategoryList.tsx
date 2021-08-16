@@ -16,12 +16,7 @@ export const CategoryList: React.FC = () => {
 
     return (
         <Container>
-            <Title>Тестирование</Title>
-            <Subtitle>
-                Согласно законодательству, доступ к рисковым сделкам и финансовым инструментам могут получить только
-                инвесторы, прошедшие проверку. Пройдите тестирование, чтобы расширить перечень доступных сделок и ценных
-                бумаг.
-            </Subtitle>
+            <Title>Выбери категорию теста</Title>
             {isLoading ? (
                 <Loader />
             ) : (
@@ -35,12 +30,18 @@ export const CategoryList: React.FC = () => {
     );
 };
 
-const Container = styled.div``;
-
-const Title = styled.div``;
-
-const Subtitle = styled.div`
-    margin-bottom: 40px;
+const Container = styled.div`
+    margin-top: 20px;
 `;
 
-const TestsList = styled.div``;
+const Title = styled.div`
+    font-weight: 500;
+    font-size: 32px;
+    margin-bottom: 45px;
+`;
+
+const TestsList = styled.div`
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+`;

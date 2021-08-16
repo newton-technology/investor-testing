@@ -5,7 +5,10 @@ export const theme: DefaultTheme = {
         regular: '#3A3463',
         primary: '#0DAAEC',
         secondary: '#2F6FEB',
-        mainBg: '#F2F6F8',
-        footerBg: '#1F1B30',
+        bg: {
+            primary: '#F2F6F8',
+            secondary: '#FFF',
+            footer: '#1F1B30',
+        },
     },
 };

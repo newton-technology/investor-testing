@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
+
 import {Icon} from '../../../components/Icon';
 
 export interface IAnswerControl {
@@ -10,17 +11,18 @@ export interface IAnswerControl {
 interface IProps {
     id: number;
     answer: string;
+    questionId: number;
     isMultipleAnswers: boolean;
-    getIsChecked: (id: number) => boolean;
-    changeValue: (id: number) => void;
+    getIsChecked: (questionId: number, answerId: number) => boolean;
+    changeValue: (questionId: number, answerId: number, isMultipleAnswers: boolean) => void;
 }
 
 export const AnswerControl: React.FC<IProps> = (props) => {
-    const {id, answer: text, getIsChecked, changeValue, isMultipleAnswers} = props;
-    const isChecked = getIsChecked(id);
+    const {id, answer: text, questionId, isMultipleAnswers, getIsChecked, changeValue} = props;
+    const isChecked = getIsChecked(questionId, id);
 
     const handleClick = () => {
-        changeValue(id);
+        changeValue(questionId, id, isMultipleAnswers);
     };
 
     return (

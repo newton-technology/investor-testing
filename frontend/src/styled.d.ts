@@ -6,8 +6,11 @@ declare module 'styled-components' {
             regular: string;
             primary: string;
             secondary: string;
-            mainBg: string;
-            footerBg: string;
+            bg: {
+                primary: string;
+                secondary: string;
+                footer: string;
+            };
         };
     }
 }

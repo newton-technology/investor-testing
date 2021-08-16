@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import {Button} from '../../../components/Button';
 import {Icon} from '../../../components/Icon';
 
 interface IProps {
     title: string;
-    subtitle: string;
+    isTestVisible: boolean;
+    goToTest: () => void;
 }
 
 const recommendations: string[] = [
@@ -16,16 +18,17 @@ const recommendations: string[] = [
 ];
 
 export const TestPreview: React.FC<IProps> = (props) => {
-    const {title, subtitle} = props;
+    const {title, goToTest, isTestVisible} = props;
 
     const handleClick = () => {
-        console.log('kk');
+        goToTest();
     };
 
     return (
         <Container>
-            <Title>{title}</Title>
-            <Subtitle>{subtitle}</Subtitle>
+            <Title>
+                <strong>Тема:</strong> {title}
+            </Title>
             <Subtitle>Что нужно знать перед началом теста</Subtitle>
             <List>
                 {recommendations.map((recommendation: string, i: number) => {
@@ -37,30 +40,38 @@ export const TestPreview: React.FC<IProps> = (props) => {
                     );
                 })}
             </List>
-            <ButtonContainer>
-                <Button onClick={handleClick}>Поехали</Button>
-            </ButtonContainer>
+            {!isTestVisible && (
+                <ButtonContainer>
+                    <Button onClick={handleClick}>Поехали</Button>
+                </ButtonContainer>
+            )}
         </Container>
     );
 };
 
 const Container = styled.div`
-    background-color: #fff;
+    background-color: ${({theme}) => theme.palette.bg.secondary};
     border-radius: 10px;
     padding: 32px;
 `;
 
-const Title = styled.div``;
+const Title = styled.div`
+    font-size: 24px;
+
+    strong {
+        font-weight: 700;
+    }
+`;
 
 const Subtitle = styled.div`
     margin-bottom: 40px;
     font-weight: 600;
     font-size: 24px;
+    margin: 32px 0 24px;
 `;
 
 const List = styled.ul`
     list-style: none;
-    margin: 24px 0 64px;
 `;
 
 const ListItem = styled.li`
@@ -78,4 +89,5 @@ const IconContainer = styled(Icon)`
 
 const ButtonContainer = styled.div`
     text-align: center;
+    margin-top: 64px;
 `;

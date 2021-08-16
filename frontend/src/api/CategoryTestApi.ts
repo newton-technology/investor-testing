@@ -70,7 +70,7 @@ export const CategoryTestApi = {
                         },
                     ],
                 });
-            }, 2000);
+            }, 500);
         });
     },
 };

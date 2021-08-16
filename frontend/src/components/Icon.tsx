@@ -18,6 +18,7 @@ export const Icon: React.FC<IProps> = (props) => {
 
 const IconContainer = styled.span<{iconSize: number}>`
     display: inline-block;
+    vertical-align: middle;
 
     svg {
         fill: currentColor;

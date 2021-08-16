@@ -10,7 +10,7 @@ export const Navbar: React.FC = () => {
         <NavContainer>
             <Container>
                 <Nav>
-                    <Logo to='/' />
+                    <Logo to='/tests'>Главная</Logo>
                     <LogoutButton>
                         <IconContainer name='arrow_right' />
                         Выйти
