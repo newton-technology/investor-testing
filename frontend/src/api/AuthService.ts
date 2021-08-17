@@ -36,7 +36,7 @@ class AuthService {
     }
 
     public async sendCode(payload: IBaseAuth) {
-        const data = await this.request('signup', payload);
+        const data = await this.request('signin', payload);
         this.setToken(data);
     }
 
