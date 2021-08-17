@@ -60,4 +60,4 @@ class AccessTokenStorage {
     }
 }
 
-export default new AccessTokenStorage();
+export const accessTokenStorage = new AccessTokenStorage();

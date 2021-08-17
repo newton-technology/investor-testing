@@ -1,4 +1,4 @@
-import AccessTokenStorage from '../stores/AccessTokenStorage';
+import {accessTokenStorage} from '../stores/AccessTokenStorage';
 import {getJWTRefreshTime} from '../utils/getJWTRefreshTime';
 import axios from './axios';
 
@@ -41,8 +41,8 @@ class AuthService {
     }
 
     public logout() {
-        AccessTokenStorage.accessToken = undefined;
-        AccessTokenStorage.refreshToken = undefined;
+        accessTokenStorage.accessToken = undefined;
+        accessTokenStorage.refreshToken = undefined;
     }
 
     public async refresh(payload: IRefresh) {
@@ -52,10 +52,10 @@ class AuthService {
 
     private setToken(data: IServerResponse | undefined) {
         if (data?.accessToken) {
-            AccessTokenStorage.accessToken = data.accessToken;
+            accessTokenStorage.accessToken = data.accessToken;
         }
         if (data?.refreshToken) {
-            AccessTokenStorage.refreshToken = data.refreshToken;
+            accessTokenStorage.refreshToken = data.refreshToken;
             this.startRefreshTokenWatcher();
         }
     }
@@ -74,11 +74,11 @@ class AuthService {
             clearTimeout(this.watcher);
         }
 
-        if (AccessTokenStorage.refreshToken) {
-            const time = getJWTRefreshTime(AccessTokenStorage?.refreshToken, Date.now());
+        if (accessTokenStorage.refreshToken) {
+            const time = getJWTRefreshTime(accessTokenStorage?.refreshToken, Date.now());
             this.watcher = window.setTimeout(() => {
                 this.refresh({
-                    refreshToken: AccessTokenStorage.refreshToken,
+                    refreshToken: accessTokenStorage.refreshToken,
                     grant_type: 'refresh_token',
                 });
             }, time);
@@ -86,4 +86,4 @@ class AuthService {
     }
 }
 
-export default new AuthService();
+export const authService = new AuthService();

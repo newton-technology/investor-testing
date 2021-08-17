@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-import AccessTokenStorage from '../stores/AccessTokenStorage';
+import {accessTokenStorage} from '../stores/AccessTokenStorage';
 
 const axiosWithToken = axios.create();
 
 axiosWithToken.interceptors.request.use(
     (config) => {
-        const token = AccessTokenStorage.accessToken;
+        const token = accessTokenStorage.accessToken;
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
         }
