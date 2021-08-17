@@ -1,4 +1,5 @@
-import {isJWTActual} from './../utils/getJWTRefreshTime';
+import {isJWTActual} from '../utils/jwtUtils';
+
 class AccessTokenStorage {
     private _accessToken: string | undefined;
     private _refreshToken: string | undefined;
@@ -36,7 +37,7 @@ class AccessTokenStorage {
         this.subscriber = cb;
     }
 
-    public get isAuth(): boolean {
+    public get isAuthenticated(): boolean {
         return !!this._refreshToken && isJWTActual(this._refreshToken, Date.now());
     }
 

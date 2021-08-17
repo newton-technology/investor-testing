@@ -1,5 +1,5 @@
 import {accessTokenStorage} from '../stores/AccessTokenStorage';
-import {getJWTRefreshTime} from '../utils/getJWTRefreshTime';
+import {getJWTRefreshTime} from '../utils/jwtUtils';
 import axios from './axios';
 
 interface IServerResponse {

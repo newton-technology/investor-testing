@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
-import {getJWTRefreshTime, isJWTActual} from '../../utils/getJWTRefreshTime';
-import {parseJWT} from '../../utils/parseJWT';
+import {getJWTRefreshTime, isJWTActual, parseJWT} from '../../utils/jwtUtils';
 
 describe('parseJWT:', () => {
     it('Should return parsed obj', () => {

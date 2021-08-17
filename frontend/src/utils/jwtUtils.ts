@@ -1,4 +1,12 @@
-import {parseJWT} from './parseJWT';
+interface IJwt {
+    aud: string;
+    exp: number;
+    flow: string;
+    iat: number;
+    iss: string;
+    sub: string;
+    uuid: string;
+}
 
 // refresh token at 20% of lifetime
 const TRESHOLD_OF_TOKEN_LIFE_IN_PERCENTAGE = 0.2;
@@ -33,4 +41,16 @@ export const isJWTActual = (token: string | undefined, dateNow: number): boolean
     }
 
     return false;
+};
+
+export const parseJWT = (token: string | undefined): IJwt | undefined => {
+    try {
+        if (token) {
+            const parsedToken = JSON.parse(atob(token.split('.')[1]));
+            return parsedToken;
+        }
+        return undefined;
+    } catch (e) {
+        return undefined;
+    }
 };

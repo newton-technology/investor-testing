@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-import AccessTokenStorage from '../stores/AccessTokenStorage';
+import {accessTokenStorage} from '../stores/AccessTokenStorage';
 
 interface IToken {
     accesToken?: string;
@@ -9,18 +9,18 @@ interface IToken {
 
 interface ITokenUserInfo {
     userToken: IToken;
-    isAuth: boolean;
+    isAuthenticated: boolean;
 }
 
 export const useAuthorization = (): ITokenUserInfo => {
     const [userToken, setUserToken] = React.useState<IToken>({});
-    const [isAuth, setIsAuth] = React.useState<boolean>(false);
+    const [isAuthenticated, setisAuthenticated] = React.useState<boolean>(false);
 
-    AccessTokenStorage.subscribe(setUserToken);
+    accessTokenStorage.subscribe(setUserToken);
 
     useEffect(() => {
-        setIsAuth(AccessTokenStorage.isAuth);
+        setisAuthenticated(accessTokenStorage.isAuthenticated);
     }, [userToken]);
 
-    return {userToken, isAuth};
+    return {userToken, isAuthenticated};
 };
