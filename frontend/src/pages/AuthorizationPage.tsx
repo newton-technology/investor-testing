@@ -1,10 +1,10 @@
 import React, {useState, useRef, useEffect} from 'react';
 import styled from 'styled-components';
 
-import AuthService from '../api/AuthService';
+import {authService} from '../api/AuthService';
 import {Button} from '../components/Button';
 import {CodeInput} from '../components/CodeInput/CodeInput';
-import AccessTokenStorage from '../stores/AccessTokenStorage';
+import {accessTokenStorage} from '../stores/AccessTokenStorage';
 
 const steps = {
     email: {
@@ -28,7 +28,7 @@ export const AuthorizationPage: React.FC = () => {
     }, [inputRef]);
 
     const sendCode = () => {
-        AuthService.sendCode({
+        authService.sendCode({
             email,
             grant_type: 'code',
         });
@@ -36,11 +36,11 @@ export const AuthorizationPage: React.FC = () => {
     };
 
     const login = () => {
-        if (AccessTokenStorage?.accessToken) {
-            AuthService.login({
+        if (accessTokenStorage?.accessToken) {
+            authService.login({
                 email,
                 code,
-                accessToken: AccessTokenStorage?.accessToken,
+                accessToken: accessTokenStorage?.accessToken,
                 grant_type: 'code',
             });
         }
