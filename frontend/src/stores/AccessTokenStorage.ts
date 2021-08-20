@@ -1,4 +1,4 @@
-import {isJWTActual} from '../utils/jwtUtils';
+import {isJwtExpired} from '../utils/jwtUtils';
 
 class AccessTokenStorage {
     private _accessToken: string | undefined;
@@ -38,7 +38,7 @@ class AccessTokenStorage {
     }
 
     public get isAuthenticated(): boolean {
-        return !!this._refreshToken && isJWTActual(this._refreshToken, Date.now());
+        return !!this._refreshToken && !isJwtExpired(this._refreshToken, Date.now());
     }
 
     private sendTokenToSubscriber() {
