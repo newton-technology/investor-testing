@@ -16,7 +16,6 @@ export const useQuery = (query: any) => {
                     setState({data: response, isLoading: false, isError: false});
                 })
                 .catch((error: any) => {
-                    debugger;
                     setState({data: null, isLoading: false, isError: true});
                 });
         };

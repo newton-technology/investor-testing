@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {Modal} from '../../../components/Modal';
 import {Button} from '../../../components/Button';
+import {Modal} from '../../../components/Modal';
 
 interface IProps {
     isOpen: boolean;

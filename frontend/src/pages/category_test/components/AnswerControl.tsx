@@ -2,6 +2,7 @@ import React from 'react';
 import styled, {css} from 'styled-components';
 
 import {Icon} from '../../../components/Icon';
+import {InfoIcon} from './InfoIcon';
 
 export interface IAnswerControl {
     id: number;
@@ -34,7 +35,9 @@ export const AnswerControl: React.FC<IProps> = (props) => {
             ) : (
                 <RadioControl isChecked={isChecked} />
             )}
-            <Text>{text}</Text>
+            <Text>
+                {text} <InfoIcon>{text}</InfoIcon>
+            </Text>
         </Container>
     );
 };

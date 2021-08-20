@@ -28,7 +28,7 @@ interface IValues {
 
 export const CategoryTest: React.FC = () => {
     const {id} = useParams<{id: string}>();
-    const {data, isLoading} = useQuery(() => CategoryTestApi.getTest(id));
+    const {data, isLoading, isError} = useQuery(() => CategoryTestApi.getTest(id));
     const [values, setValues] = useState<IValues>({});
     const [isTestVisible, setIsTestVisible] = useState<boolean>(false);
     const [isTestResultVisible, setIsTestResultVisible] = useState<boolean>(false);
@@ -83,9 +83,11 @@ export const CategoryTest: React.FC = () => {
         const ll = Object.values(values).reduce((prev: number[], current: number[]) => {
             return [...prev, ...current];
         }, []);
-
-        console.log(ll);
     };
+
+    if (isError) {
+        return <ServerErrorMessage />;
+    }
 
     if (isLoading) {
         return <Loader />;

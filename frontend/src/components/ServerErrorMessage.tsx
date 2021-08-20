@@ -4,17 +4,25 @@ import styled from 'styled-components';
 import {Button} from './Button';
 
 interface IProps {
-    onClick: () => void;
+    onClick?: () => void;
 }
 
-export const ServerErrorMessage: React.FC<IProps> = (props) => {
+export const ServerErrorMessage: React.FC<IProps> = ({onClick}) => {
+    const handleClick = () => {
+        if (onClick) {
+            onClick();
+        } else {
+            document.location.reload();
+        }
+    };
+
     return (
         <Container>
             <Title>Ошибка</Title>
             <Subtitle>
                 На сервере произошла непредвиденная ошибка. Пожалуйста, подождите. Она вскоре будет исправлена.
             </Subtitle>
-            <Button onClick={props.onClick}>Повторить попытку</Button>
+            <Button onClick={handleClick}>Повторить попытку</Button>
         </Container>
     );
 };

@@ -1,17 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import {Loader} from './Loader';
+
 interface IProps {
     className?: string;
     isPlain?: boolean;
+    isLoading?: boolean;
     onClick?: () => void;
 }
 
 export const Button: React.FC<IProps> = (props) => {
-    const {className, children, isPlain = false, onClick} = props;
+    const {className, children, isPlain = false, onClick, isLoading} = props;
     return (
         <ButtonContainer onClick={onClick} isPlain={isPlain} className={className}>
             {children}
+            {isLoading && <LoaderIcon isFull={false} />}
         </ButtonContainer>
     );
 };
@@ -31,4 +35,12 @@ const ButtonContainer = styled.button<{isPlain: boolean}>`
     &:hover {
         opacity: 0.9;
     }
+
+    svg {
+        fill: ${({theme, isPlain}) => (isPlain ? theme.palette.secondary : '#fff')};
+    }
+`;
+
+const LoaderIcon = styled(Loader)`
+    margin-left: 10px;
 `;
