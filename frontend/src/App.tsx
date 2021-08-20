@@ -1,17 +1,47 @@
 import React from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {Route, Switch, Redirect} from 'react-router-dom';
+import {ThemeProvider} from 'styled-components';
 
-import {useAuthorization} from './hooks/useAuthorization';
+import {CategoryList} from './pages/category_list/CategoryList';
+import {CategoryTest} from './pages/category_test/CategoryTest';
 import {AuthorizationPage} from './pages/AuthorizationPage';
-import './App.css';
+import {Layout} from './components/Layout';
+import {theme} from './theme/theme';
+import {GlobalStyle} from './theme/GlobalStyle';
+import {useAuthorization} from './hooks/useAuthorization';
 import './api/AuthService';
 
 const App: React.FC = () => {
-    useAuthorization();
+    const {isAuthenticated} = useAuthorization();
+
     return (
-        <Switch>
-            <Route path='/' component={AuthorizationPage} exact />
-        </Switch>
+        <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            {isAuthenticated ? (
+                <Layout>
+                    <Switch>
+                        <Route path='/' exact>
+                            <Redirect to='/tests' />
+                        </Route>
+                        <Route path='/tests' exact>
+                            <CategoryList />
+                        </Route>
+                        <Route path='/tests/:id' exact>
+                            <CategoryTest />
+                        </Route>
+                    </Switch>
+                </Layout>
+            ) : (
+                <Switch>
+                    <Route path='/' exact>
+                        <AuthorizationPage />
+                    </Route>
+                    <Route path='*'>
+                        <Redirect to='/' />
+                    </Route>
+                </Switch>
+            )}
+        </ThemeProvider>
     );
 };
 
