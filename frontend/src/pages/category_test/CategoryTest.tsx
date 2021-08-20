@@ -83,6 +83,7 @@ export const CategoryTest: React.FC = () => {
         const ll = Object.values(values).reduce((prev: number[], current: number[]) => {
             return [...prev, ...current];
         }, []);
+        setIsTestResultVisible(true);
     };
 
     if (isError) {
@@ -129,8 +130,8 @@ export const CategoryTest: React.FC = () => {
                         </>
                     )}
                 </TestContainer>
+                {isTestResultVisible && <TestResult isSuccess={true} />}
             </Container>
-            {isTestResultVisible && <TestResult />}
         </>
     );
 };

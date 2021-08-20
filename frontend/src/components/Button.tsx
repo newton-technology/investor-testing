@@ -1,5 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
+import {Link} from 'react-router-dom';
+import styled, {css} from 'styled-components';
 
 import {Loader} from './Loader';
 
@@ -7,11 +8,20 @@ interface IProps {
     className?: string;
     isPlain?: boolean;
     isLoading?: boolean;
+    to?: string;
     onClick?: () => void;
 }
 
 export const Button: React.FC<IProps> = (props) => {
-    const {className, children, isPlain = false, onClick, isLoading} = props;
+    const {className, children, isPlain = false, onClick, isLoading, to} = props;
+
+    if (to) {
+        return (
+            <LinkContainer to={to} isPlain={isPlain} className={className}>
+                {children}
+            </LinkContainer>
+        );
+    }
     return (
         <ButtonContainer onClick={onClick} isPlain={isPlain} className={className}>
             {children}
@@ -20,7 +30,7 @@ export const Button: React.FC<IProps> = (props) => {
     );
 };
 
-const ButtonContainer = styled.button<{isPlain: boolean}>`
+const button = css<{isPlain: boolean}>`
     background-color: ${({theme, isPlain}) => (isPlain ? 'transparent' : theme.palette.secondary)};
     color: ${({theme, isPlain}) => (isPlain ? theme.palette.secondary : '#fff')};
     border: 1px solid ${({theme}) => theme.palette.secondary};
@@ -31,6 +41,11 @@ const ButtonContainer = styled.button<{isPlain: boolean}>`
     display: inline-flex;
     align-items: center;
     border-radius: 4px;
+    justify-content: center;
+`;
+
+const ButtonContainer = styled.button<{isPlain: boolean}>`
+    ${button};
 
     &:hover {
         opacity: 0.9;
@@ -39,6 +54,10 @@ const ButtonContainer = styled.button<{isPlain: boolean}>`
     svg {
         fill: ${({theme, isPlain}) => (isPlain ? theme.palette.secondary : '#fff')};
     }
+`;
+
+const LinkContainer = styled(Link)<{isPlain: boolean}>`
+    ${button};
 `;
 
 const LoaderIcon = styled(Loader)`

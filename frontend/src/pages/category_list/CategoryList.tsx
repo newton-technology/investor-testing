@@ -15,6 +15,10 @@ export const CategoryList: React.FC = () => {
         return <ServerErrorMessage />;
     }
 
+    if (isLoading) {
+        return <Loader />;
+    }
+
     return (
         <Container>
             <Title>Выбери категорию теста</Title>
@@ -31,14 +35,12 @@ export const CategoryList: React.FC = () => {
     );
 };
 
-const Container = styled.div`
-    margin-top: 20px;
-`;
+const Container = styled.div``;
 
 const Title = styled.div`
-    font-weight: 500;
+    font-weight: 700;
     font-size: 32px;
-    margin-bottom: 45px;
+    margin-bottom: 32px;
 `;
 
 const TestsList = styled.div`
