@@ -7,13 +7,19 @@ import {CategoryTest} from './pages/category_test/CategoryTest';
 import {Layout} from './components/Layout';
 import {theme} from './theme/theme';
 import {GlobalStyle} from './theme/GlobalStyle';
+import {useAuthorization} from './hooks/useAuthorization';
+import {AuthorizationPage} from './pages/AuthorizationPage';
+import './api/AuthService';
 
 const App: React.FC = () => {
+    useAuthorization();
+
     return (
         <ThemeProvider theme={theme}>
             <GlobalStyle />
             <Layout>
                 <Switch>
+                    <Route path='/' component={AuthorizationPage} exact />
                     <Route path='/tests' exact>
                         <CategoryList />
                     </Route>
@@ -24,6 +30,6 @@ const App: React.FC = () => {
             </Layout>
         </ThemeProvider>
     );
-};
+}
 
 export default App;
