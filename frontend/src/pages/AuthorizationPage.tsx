@@ -2,8 +2,10 @@ import React, {useState, useRef, useEffect} from 'react';
 import styled from 'styled-components';
 
 import {authService} from '../api/AuthService';
+import {ReactComponent as Kek} from '../back.svg';
 import {Button} from '../components/Button';
 import {CodeInput} from '../components/CodeInput/CodeInput';
+import {Icon} from '../components/Icon';
 import {accessTokenStorage} from '../stores/AccessTokenStorage';
 
 const steps = {
@@ -15,9 +17,16 @@ const steps = {
     },
 };
 
+const emailRegex =
+    // eslint-disable-next-line max-len
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+const emailValidate = (email: string): boolean => emailRegex.test(email);
+
 export const AuthorizationPage: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [code, setCode] = useState<string>('');
+    const [isError, setIsError] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const [step, setStep] = useState<'email' | 'code'>('email');
 
@@ -46,8 +55,13 @@ export const AuthorizationPage: React.FC = () => {
         }
     };
 
+    useEffect(() => {
+        setIsError(!emailValidate(email));
+    }, [email]);
+
     return (
         <Wrapper>
+            <Kek style={{position: 'fixed'}} />
             <FormContainer>
                 <Form
                     onSubmit={(e) => {
@@ -60,17 +74,30 @@ export const AuthorizationPage: React.FC = () => {
                     }}>
                     <Title>{steps[step].title}</Title>
                     {step === 'email' ? (
-                        <Input
-                            type='email'
-                            value={email}
-                            onChange={(e) => {
-                                setEmail(e.target.value);
-                            }}
-                        />
+                        <React.Fragment>
+                            <Description>
+                                Мы поможем узнать, насколько хорошо вы разбираетесь в инструментах инвестирования, какие
+                                сложные сделки можете заключать уже сейчас, и какой вид сделок принесет вам максимальную
+                                прибыль в будущем
+                            </Description>
+                            <InputWrapper>
+                                {!email.length && <StyledIcon name='email' size={16} />}
+                                <Input
+                                    type='email'
+                                    placeholder='        Email'
+                                    value={email}
+                                    isError={isError && !!email.length}
+                                    onChange={(e) => {
+                                        setEmail(e.target.value);
+                                    }}
+                                />
+                            </InputWrapper>
+                        </React.Fragment>
                     ) : (
                         <StyledCodeInput ref={inputRef} length={6} onChange={setCode} />
                     )}
-                    <Button>Продолжить</Button>
+                    <Button disabled={isError}>Продолжить</Button>
+                    {isError && !!email.length && <ErrorMessage>Неправильно введен email.</ErrorMessage>}
                 </Form>
             </FormContainer>
         </Wrapper>
@@ -79,7 +106,8 @@ export const AuthorizationPage: React.FC = () => {
 
 const Wrapper = styled.div`
     align-items: center;
-    background: #587cfc;
+    /* background: #587cfc;  */
+    background: linear-gradient(139.02deg, #65dfe7 -19.37%, #587cfc 116.76%);
     display: flex;
     height: 100vh;
     justify-content: center;
@@ -101,20 +129,78 @@ const FormContainer = styled.div`
     background: #ffffff;
     border-radius: 10px;
     box-sizing: border-box;
-    height: 378px;
+    height: 573px;
     width: 444px;
+    z-index: 2;
 `;
 
-const Input = styled.input`
+const InputWrapper = styled.div`
+    position: relative;
+    width: 100%;
+`;
+
+const Input = styled.input<{isError: boolean}>`
+    margin-bottom: 16px;
     padding: 16px;
+    padding-left: 32px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    width: 100%;
+    outline: none;
+
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 17px;
+    line-height: 130%;
+    border: 1px solid ${({isError}) => (isError ? '#e30b17' : '#c4c8db')};
+    color: ${({isError}) => (isError ? '#e30b17' : 'black')};
+
+    &::placeholder {
+        /* padding-left: 64px; */
+        text-indent: 50px;
+    }
 `;
 
 const Title = styled.h1`
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 32px;
+    line-height: 130%;
+    color: #3a3463;
+`;
+
+const Description = styled.span`
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 17px;
+    line-height: 130%;
+    color: #3a3463;
+    padding-bottom: 24px;
+`;
+
+const ErrorMessage = styled.span`
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 17px;
+    line-height: 130%;
     text-align: center;
+    color: #de2b37;
+
+    /* visibility hidden */
 `;
 
 const StyledCodeInput = styled(CodeInput)`
     & > div {
         margin-bottom: 30px;
     }
+`;
+
+const StyledIcon = styled(Icon)`
+    left: 32px;
+    position: absolute;
+    top: 20px;
 `;
