@@ -13,12 +13,12 @@ import {TestResult} from './components/TestResult';
 import {ServerErrorMessage} from '../../components/ServerErrorMessage';
 
 export interface ITest {
-    id: number;
-    status: string;
-    questions: IQuestion[];
+    status: string | null;
     category: {
+        id: number;
         name: string;
         description: string;
+        descriptionShort: string;
     };
 }
 
@@ -130,7 +130,7 @@ export const CategoryTest: React.FC = () => {
                         </>
                     )}
                 </TestContainer>
-                {isTestResultVisible && <TestResult isSuccess={true} />}
+                {isTestResultVisible && <TestResult isSuccess={false} />}
             </Container>
         </>
     );

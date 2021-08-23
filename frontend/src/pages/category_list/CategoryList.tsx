@@ -27,7 +27,7 @@ export const CategoryList: React.FC = () => {
             ) : (
                 <TestsList>
                     {tests.map((test: ITest) => {
-                        return <TestCard key={test.id} {...test} />;
+                        return <TestCard key={test.category.id} status={test.status} {...test.category} />;
                     })}
                 </TestsList>
             )}
