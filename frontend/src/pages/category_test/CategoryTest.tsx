@@ -11,6 +11,7 @@ import {TestPreview} from './components/TestPreview';
 import {TestWarningModal} from './components/TestWarningModal';
 import {TestResult} from './components/TestResult';
 import {ServerErrorMessage} from '../../components/ServerErrorMessage';
+import {validate} from './utils';
 
 export interface ITest {
     id: number;
@@ -22,7 +23,7 @@ export interface ITest {
     };
 }
 
-interface IValues {
+export interface IValues {
     [key: number]: Set<number>;
 }
 
@@ -30,6 +31,7 @@ export const CategoryTest: React.FC = () => {
     const {id} = useParams<{id: string}>();
     const {data, isLoading, isError} = useQuery(() => CategoryTestApi.getTest(id));
     const [values, setValues] = useState<IValues>({});
+    const [incorrectQuestionId, setIncorrectQuestionId] = useState<number | undefined>();
     const [isTestVisible, setIsTestVisible] = useState<boolean>(false);
     const [isTestResultVisible, setIsTestResultVisible] = useState<boolean>(false);
     const [isTestWarningModalOpen, setIsTestWarningModalOpen] = useState<boolean>(false);
@@ -80,10 +82,21 @@ export const CategoryTest: React.FC = () => {
     };
 
     const handleSubmit = () => {
-        const ll = Object.values(values).reduce((prev: number[], current: number[]) => {
-            return [...prev, ...current];
-        }, []);
-        setIsTestResultVisible(true);
+        const questionsIds = questions.map((question: IQuestion) => question.id);
+        const incorrectId = validate(values, questionsIds);
+
+        if (!incorrectId) {
+            const result = Object.values(values).reduce((prev: number[], current: number[]) => {
+                return [...prev, ...current];
+            }, []);
+            console.log(values, result);
+            setIsTestResultVisible(true);
+            setIncorrectQuestionId(undefined);
+        } else {
+            setIncorrectQuestionId(incorrectId);
+        }
+
+        console.log(incorrectId);
     };
 
     if (isError) {
@@ -120,6 +133,7 @@ export const CategoryTest: React.FC = () => {
                                             questionsCount={questions.length}
                                             index={i + 1}
                                             isMultipleAnswers={isMultipleAnswers}
+                                            isError={incorrectQuestionId === question.id}
                                         />
                                     );
                                 })}
