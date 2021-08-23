@@ -40,7 +40,7 @@ export const AuthorizationPage: React.FC = () => {
             authService.login({
                 email,
                 code,
-                accessToken: accessTokenStorage?.accessToken,
+                access_token: accessTokenStorage?.accessToken,
                 grant_type: 'code',
             });
         }
