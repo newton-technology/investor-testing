@@ -2,7 +2,7 @@ import React, {useRef, useState, useEffect} from 'react';
 import {useParams, Prompt} from 'react-router-dom';
 import styled from 'styled-components';
 
-import {CategoryTestApi} from '../../api/CategoryTestApi';
+import {CategoryTestApi, IResponseError} from '../../api/CategoryTestApi';
 import {Button} from '../../components/Button';
 import {Loader} from '../../components/Loader';
 import {useQuery} from '../../hooks/useQuery';
@@ -15,12 +15,14 @@ import {validate} from './utils';
 
 export interface ITest {
     id: number;
-    status: string;
-    questions: IQuestion[];
+    status: string | null;
     category: {
+        id: number;
         name: string;
         description: string;
+        descriptionShort: string;
     };
+    questions: IQuestion[];
 }
 
 export interface IValues {
@@ -28,16 +30,15 @@ export interface IValues {
 }
 
 export const CategoryTest: React.FC = () => {
-    const {id} = useParams<{id: string}>();
-    const {data, isLoading, isError} = useQuery(() => CategoryTestApi.getTest(id));
+    const {categoryId} = useParams<{categoryId: string}>();
+    const {data, isLoading, isError} = useQuery<ITest, IResponseError>(() => CategoryTestApi.getTest(categoryId));
     const [values, setValues] = useState<IValues>({});
     const [incorrectQuestionId, setIncorrectQuestionId] = useState<number | undefined>();
     const [isTestVisible, setIsTestVisible] = useState<boolean>(false);
     const [isTestResultVisible, setIsTestResultVisible] = useState<boolean>(false);
     const [isTestWarningModalOpen, setIsTestWarningModalOpen] = useState<boolean>(false);
     const testRef = useRef<any>();
-
-    const {questions, category} = data || {};
+    const {id, questions = [], category} = data ?? {};
 
     useEffect(() => {
         const preventNav = (e: BeforeUnloadEvent) => {
@@ -99,12 +100,12 @@ export const CategoryTest: React.FC = () => {
         console.log(incorrectId);
     };
 
-    if (isError) {
-        return <ServerErrorMessage />;
-    }
-
     if (isLoading) {
         return <Loader />;
+    }
+
+    if (isError) {
+        return <ServerErrorMessage />;
     }
 
     return (
@@ -113,9 +114,11 @@ export const CategoryTest: React.FC = () => {
 
             <Container>
                 <TestWarningModal isOpen={isTestWarningModalOpen} />
-                <TestPreview title={category.description} goToTest={goToTest} isTestVisible={isTestVisible} />
+                {category && (
+                    <TestPreview title={category?.description} goToTest={goToTest} isTestVisible={isTestVisible} />
+                )}
                 <TestContainer ref={testRef}>
-                    {isTestVisible && questions && questions.length > 0 && (
+                    {isTestVisible && questions.length > 0 && (
                         <>
                             <QuestionsList>
                                 {questions.map((question: IQuestion, i: number) => {
@@ -144,7 +147,7 @@ export const CategoryTest: React.FC = () => {
                         </>
                     )}
                 </TestContainer>
-                {isTestResultVisible && <TestResult isSuccess={true} />}
+                {isTestResultVisible && <TestResult isSuccess={false} />}
             </Container>
         </>
     );
