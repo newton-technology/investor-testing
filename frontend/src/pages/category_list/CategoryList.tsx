@@ -7,30 +7,27 @@ import {ITest} from '../category_test/CategoryTest';
 import {Loader} from '../../components/Loader';
 import {ServerErrorMessage} from '../../components/ServerErrorMessage';
 import {TestCard} from './components/TestCard';
+import {IResponseError} from '../../api/CategoryTestApi';
 
 export const CategoryList: React.FC = () => {
-    const {data: tests = [], isLoading, isError} = useQuery(CategoryListApi.getCategories);
-
-    if (isError) {
-        return <ServerErrorMessage />;
-    }
+    const {data, isLoading, isError} = useQuery<ITest[], IResponseError>(CategoryListApi.getCategories);
 
     if (isLoading) {
         return <Loader />;
     }
 
+    if (isError) {
+        return <ServerErrorMessage />;
+    }
+
     return (
         <Container>
             <Title>Выбери категорию теста</Title>
-            {isLoading ? (
-                <Loader />
-            ) : (
-                <TestsList>
-                    {tests.map((test: ITest) => {
-                        return <TestCard key={test.category.id} status={test.status} {...test.category} />;
-                    })}
-                </TestsList>
-            )}
+            <TestsList>
+                {data?.map((test: ITest) => {
+                    return <TestCard key={test.category.id} status={test.status} {...test.category} />;
+                })}
+            </TestsList>
         </Container>
     );
 };
