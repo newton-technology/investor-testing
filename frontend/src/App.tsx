@@ -10,6 +10,7 @@ import {theme} from './theme/theme';
 import {GlobalStyle} from './theme/GlobalStyle';
 import {useAuthorization} from './hooks/useAuthorization';
 import './api/AuthService';
+import {PageNotFound} from './pages/PageNotFound';
 
 const App: React.FC = () => {
     const {isAuthenticated} = useAuthorization();
@@ -28,6 +29,9 @@ const App: React.FC = () => {
                         </Route>
                         <Route path='/tests/:categoryId'>
                             <CategoryTest />
+                        </Route>
+                        <Route path='*'>
+                            <PageNotFound />
                         </Route>
                     </Switch>
                 </Layout>

@@ -9,8 +9,6 @@ export const validate = (answers: IValues, questionsIds: number[]): number | und
             return incorrectId;
         }
     }
-
-    return incorrectId;
 };
 
 export const getAllAnswers = (values: IValues) => {

@@ -8,6 +8,7 @@ import {Loader} from '../../components/Loader';
 import {ServerErrorMessage} from '../../components/ServerErrorMessage';
 import {TestCard} from './components/TestCard';
 import {IResponseError} from '../../api/CategoryTestApi';
+import {breakpoint} from '../../theme/breakpont';
 
 export const CategoryList: React.FC = () => {
     const {data, isLoading, isError} = useQuery<ITest[], IResponseError>(CategoryListApi.getCategories);
@@ -36,12 +37,19 @@ const Container = styled.div``;
 
 const Title = styled.div`
     font-weight: 700;
-    font-size: 32px;
+    font-size: 28px;
     margin-bottom: 32px;
+
+    ${breakpoint('md')`
+        font-size: 32px;
+    `}
 `;
 
 const TestsList = styled.div`
     display: grid;
     grid-gap: 20px;
-    grid-template-columns: repeat(2, 1fr);
+
+    ${breakpoint('md')`
+        grid-template-columns: repeat(2, 1fr);
+    `}
 `;

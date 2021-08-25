@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import {Button} from '../../../components/Button';
 import {Icon} from '../../../components/Icon';
+import {breakpoint} from '../../../theme/breakpont';
 
 interface IProps {
     title: string;
@@ -52,11 +53,20 @@ export const TestPreview: React.FC<IProps> = (props) => {
 const Container = styled.div`
     background-color: ${({theme}) => theme.palette.bg.secondary};
     border-radius: 10px;
-    padding: 32px;
+    padding: 32px 24px;
+
+    ${breakpoint('md')`
+        padding: 32px;
+    `}
 `;
 
 const Title = styled.div`
-    font-size: 24px;
+    font-weight: 500;
+
+    ${breakpoint('md')`
+        font-size: 24px;
+        font-weight: 400;
+    `}
 
     strong {
         font-weight: 700;
@@ -64,8 +74,7 @@ const Title = styled.div`
 `;
 
 const Subtitle = styled.div`
-    margin-bottom: 40px;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 24px;
     margin: 32px 0 24px;
 `;
@@ -84,6 +93,7 @@ const ListItem = styled.li`
 
 const IconContainer = styled(Icon)`
     margin-right: 16px;
+    padding-top: 3px;
     color: ${({theme}) => theme.palette.primary};
 `;
 

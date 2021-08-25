@@ -50,7 +50,7 @@ const ModalContainer = styled.div`
     width: 100%;
     z-index: 1000;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
 `;
 
 const ModalDialog = styled.div`

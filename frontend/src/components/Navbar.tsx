@@ -4,13 +4,17 @@ import {Link} from 'react-router-dom';
 
 import {Container} from './Container';
 import {Icon} from './Icon';
+import logo from '../logo.png';
+import {breakpoint} from '../theme/breakpont';
 
 export const Navbar: React.FC = () => {
     return (
         <NavContainer>
             <Container>
                 <Nav>
-                    <Logo to='/tests'>Главная</Logo>
+                    <Logo to='/tests'>
+                        <img src={logo} />
+                    </Logo>
                     <LogoutButton>
                         <IconContainer name='arrow_right' />
                         Выйти
@@ -33,7 +37,13 @@ const Nav = styled.div`
     justify-content: space-between;
 `;
 
-const Logo = styled(Link)``;
+const Logo = styled(Link)`
+    margin-right: 40px;
+
+    img {
+        max-width: 100%;
+    }
+`;
 
 const LogoutButton = styled.div`
     font-size: 17px;

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import {AnswerControl, IAnswerControl} from './AnswerControl';
 import {InfoIcon} from './InfoIcon';
+import {breakpoint} from '../../../theme/breakpont';
 
 export interface IQuestion {
     id: number;
@@ -65,9 +66,13 @@ export const QuestionCard: React.FC<IProps> = (props) => {
 const Container = styled.div`
     border-radius: 10px;
     background-color: ${({theme}) => theme.palette.bg.secondary};
-    padding: 32px;
+    padding: 32px 24px;
     font-size: 17px;
     margin-top: 24px;
+
+    ${breakpoint('md')`
+        padding: 32px;
+    `}
 `;
 
 const QuestionNumber = styled.div`
@@ -85,11 +90,21 @@ const Title = styled.div`
 
 const Subtitle = styled.div`
     margin-top: 8px;
+    font-size: 14px;
+
+    ${breakpoint('md')`
+        font-size: inherit;
+    `}
 `;
 
 const ErrorMessage = styled.div`
     color: ${({theme}) => theme.palette.error};
     margin-top: 8px;
+    font-size: 14px;
+
+    ${breakpoint('md')`
+        font-size: inherit;
+    `}
 `;
 
 const Answers = styled.div`

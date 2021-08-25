@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect, useLayoutEffect} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {useParams, Prompt} from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -32,7 +32,10 @@ export interface IValues {
 
 export const CategoryTest: React.FC = () => {
     const {categoryId} = useParams<{categoryId: string}>();
-    const {data, isLoading, isError} = useQuery<ITest, IResponseError>(() => CategoryTestApi.getTest(categoryId));
+
+    const {data, isLoading, isError, error} = useQuery<ITest, IResponseError>(() => {
+        return CategoryTestApi.getTest(categoryId);
+    });
     const [values, setValues] = useState<IValues>({});
     const [incorrectQuestionId, setIncorrectQuestionId] = useState<number | undefined>();
     const [isTestVisible, setIsTestVisible] = useState<boolean>(false);
@@ -113,7 +116,10 @@ export const CategoryTest: React.FC = () => {
         return <Loader />;
     }
 
-    if (isError || !id) {
+    if (isError) {
+        if (error?.code === 'category_passed') {
+            return <TestResult isSuccess={true} />;
+        }
         return <ServerErrorMessage />;
     }
 
@@ -126,7 +132,7 @@ export const CategoryTest: React.FC = () => {
                 {category && (
                     <TestPreview title={category?.description} goToTest={goToTest} isTestVisible={isTestVisible} />
                 )}
-                {isTestVisible && questions.length > 0 && (
+                {isTestVisible && (
                     <TestContainer ref={testRef} isTestComplete={isTestResultVisible}>
                         <QuestionsList>
                             {questions.map((question: IQuestion, i: number) => {

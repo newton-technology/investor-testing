@@ -3,6 +3,7 @@ import styled, {css} from 'styled-components';
 
 import {Icon} from '../../../components/Icon';
 import {InfoIcon} from './InfoIcon';
+import {breakpoint} from '../../../theme/breakpont';
 
 export interface IAnswerControl {
     id: number;
@@ -55,13 +56,17 @@ const Container = styled.div`
 `;
 
 const controlCss = css`
-    margin-right: 28px;
+    margin-right: 16px;
     height: 24px;
     width: 24px;
     flex: 0 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    ${breakpoint('md')`
+        margin-right: 28px;
+    `}
 `;
 
 const CheckboxControl = styled.div<{isChecked: boolean}>`
