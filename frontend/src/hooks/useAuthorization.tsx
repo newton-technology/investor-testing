@@ -17,7 +17,7 @@ interface ITokenUserInfo {
 export const useAuthorization = (): ITokenUserInfo => {
     const [userToken, setUserToken] = React.useState<IToken>({});
     const [isAuthenticated, setisAuthenticated] = React.useState<boolean>(false);
-    const {isAfk} = useIsAfk(9000);
+    const {isAfk} = useIsAfk();
     accessTokenStorage.subscribe(setUserToken);
 
     useEffect(() => {
