@@ -12,3 +12,9 @@ export const validate = (answers: IValues, questionsIds: number[]): number | und
 
     return incorrectId;
 };
+
+export const getAllAnswers = (values: IValues) => {
+    return Object.values(values).reduce((prev: number[], current: number[]) => {
+        return [...prev, ...current];
+    }, []);
+};

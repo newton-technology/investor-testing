@@ -19,13 +19,15 @@ interface IProps {
     index: number;
     questionsCount: number;
     isMultipleAnswers: boolean;
+    info?: string;
     isError: boolean;
     getIsChecked: (questionId: number, answerId: number) => boolean;
     changeValue: (questionId: number, answerId: number, isMultipleAnswers: boolean) => void;
 }
 
 export const QuestionCard: React.FC<IProps> = (props) => {
-    const {title, id, answers, getIsChecked, changeValue, questionsCount, index, isMultipleAnswers, isError} = props;
+    const {title, id, answers, getIsChecked, changeValue, questionsCount, index, isMultipleAnswers, isError, info} =
+        props;
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -38,7 +40,7 @@ export const QuestionCard: React.FC<IProps> = (props) => {
         <Container ref={ref}>
             <QuestionNumber>{`${index}/${questionsCount}`}</QuestionNumber>
             <Title>
-                {title} <InfoIcon>{title}</InfoIcon>
+                {title} {info && <InfoIcon>{info}</InfoIcon>}
             </Title>
             {isMultipleAnswers && <Subtitle>{'(возможно несколько вариантов ответа)'}</Subtitle>}
             {isError && <ErrorMessage>Пожалуйста, выберите вариант ответа</ErrorMessage>}

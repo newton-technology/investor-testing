@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import styled from 'styled-components';
 
 import {Button} from '../../../components/Button';
@@ -21,9 +21,16 @@ const subtitle = {
 
 export const TestResult: React.FC<IProps> = (props) => {
     const {isSuccess} = props;
+    const ref = useRef<HTMLDivElement>();
+
+    useEffect(() => {
+        if (ref.current) {
+            ref.current.scrollIntoView({block: 'center', behavior: 'smooth'});
+        }
+    }, []);
 
     return (
-        <Container>
+        <Container ref={ref}>
             <Content>
                 <IconContainer name='planet' size={142} isSuccess={isSuccess} />
                 <Title isSuccess={isSuccess}>{isSuccess ? title.success : title.fail}</Title>
@@ -46,7 +53,7 @@ export const TestResult: React.FC<IProps> = (props) => {
     );
 };
 
-const Container = styled.div`
+const Container = styled.div<{ref: any}>`
     margin-top: 24px;
     text-align: center;
     padding: 40px 48px 48px;
