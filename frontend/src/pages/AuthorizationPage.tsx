@@ -2,7 +2,7 @@ import React, {useState, useRef, useEffect} from 'react';
 import styled from 'styled-components';
 
 import {authService} from '../api/AuthService';
-import {ReactComponent as Kek} from '../back.svg';
+import {ReactComponent as AuthPageBackground} from '../assets/svg/authPageBackground.svg';
 import {Button} from '../components/Button';
 import {CodeInput} from '../components/CodeInput/CodeInput';
 import {Icon} from '../components/Icon';
@@ -61,7 +61,7 @@ export const AuthorizationPage: React.FC = () => {
 
     return (
         <Wrapper>
-            <Kek style={{position: 'fixed'}} />
+            <AuthPageBackground style={{position: 'fixed'}} />
             <FormContainer>
                 <Form
                     onSubmit={(e) => {
@@ -190,7 +190,8 @@ const ErrorMessage = styled.span`
     text-align: center;
     color: #de2b37;
 
-    /* visibility hidden */
+    /* visibility hidden
+     */
 `;
 
 const StyledCodeInput = styled(CodeInput)`
