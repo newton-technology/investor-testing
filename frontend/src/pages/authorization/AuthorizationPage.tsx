@@ -1,20 +1,18 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
 import {authService} from '../../api/AuthService';
 import {ReactComponent as AuthPageBackground} from '../../assets/svg/authPageBackground.svg';
-import {Button} from '../../components/Button';
-import {Icon} from '../../components/Icon';
 import {accessTokenStorage} from '../../stores/AccessTokenStorage';
-import {CodeInput} from './components/CodeInput/CodeInput';
-import {ResendCode} from './components/ResendCode';
+import {CodeStep} from './components/form/CodeStep';
+import {EmailStep} from './components/form/EmailStep';
 
 const steps = {
     email: {
         title: 'Войдите, чтобы начать тестирование',
     },
     code: {
-        title: 'Введите код',
+        title: 'Введите код из письма',
     },
 };
 
@@ -28,15 +26,7 @@ export const AuthorizationPage: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [code, setCode] = useState<string>('');
     const [isError, setIsError] = useState<boolean>(false);
-    const inputRef = useRef<HTMLInputElement>(null);
     const [step, setStep] = useState<'email' | 'code'>('email');
-
-    useEffect(() => {
-        if (inputRef.current) {
-            inputRef.current.focus();
-        }
-    }, [inputRef]);
-
     const sendCode = () => {
         authService.sendCode({
             email,
@@ -54,6 +44,12 @@ export const AuthorizationPage: React.FC = () => {
                 grant_type: 'code',
             });
         }
+    };
+
+    const changeEmail = () => {
+        setEmail('');
+        setCode('');
+        setStep('email');
     };
 
     useEffect(() => {
@@ -74,32 +70,11 @@ export const AuthorizationPage: React.FC = () => {
                         }
                     }}>
                     <Title>{steps[step].title}</Title>
-                    <ResendCode />
                     {step === 'email' ? (
-                        <React.Fragment>
-                            <Description>
-                                Мы поможем узнать, насколько хорошо вы разбираетесь в инструментах инвестирования, какие
-                                сложные сделки можете заключать уже сейчас, и какой вид сделок принесет вам максимальную
-                                прибыль в будущем
-                            </Description>
-                            <InputWrapper>
-                                {!email.length && <StyledIcon name='email' size={16} />}
-                                <Input
-                                    type='email'
-                                    placeholder='        Email'
-                                    value={email}
-                                    isError={isError && !!email.length}
-                                    onChange={(e) => {
-                                        setEmail(e.target.value);
-                                    }}
-                                />
-                            </InputWrapper>
-                        </React.Fragment>
+                        <EmailStep email={email} isError={isError} setEmail={setEmail} />
                     ) : (
-                        <StyledCodeInput ref={inputRef} length={6} onChange={setCode} />
+                        <CodeStep email={email} changeEmail={changeEmail} setCode={setCode} sendCode={sendCode} />
                     )}
-                    <Button disabled={isError}>Продолжить</Button>
-                    {isError && !!email.length && <ErrorMessage>Неправильно введен email.</ErrorMessage>}
                 </Form>
             </FormContainer>
         </Wrapper>
@@ -108,7 +83,6 @@ export const AuthorizationPage: React.FC = () => {
 
 const Wrapper = styled.div`
     align-items: center;
-    /* background: #587cfc;  */
     background: linear-gradient(139.02deg, #65dfe7 -19.37%, #587cfc 116.76%);
     display: flex;
     height: 100vh;
@@ -136,33 +110,6 @@ const FormContainer = styled.div`
     z-index: 2;
 `;
 
-const InputWrapper = styled.div`
-    position: relative;
-    width: 100%;
-`;
-
-const Input = styled.input<{isError: boolean}>`
-    border: 1px solid ${({isError}) => (isError ? '#e30b17' : '#c4c8db')};
-    border-radius: 4px;
-    box-sizing: border-box;
-    color: ${({isError}) => (isError ? '#e30b17' : 'black')};
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: normal;
-    line-height: 130%;
-    margin-bottom: 16px;
-    outline: none;
-    padding: 16px;
-    padding-left: 32px;
-    width: 100%;
-
-    &::placeholder {
-        /* padding-left: 64px; */
-        text-indent: 50px;
-    }
-`;
-
 const Title = styled.h1`
     color: #3a3463;
     font-family: 'IBM Plex Sans', sans-serif;
@@ -170,39 +117,4 @@ const Title = styled.h1`
     font-style: normal;
     font-weight: bold;
     line-height: 130%;
-`;
-
-const Description = styled.span`
-    color: #3a3463;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: normal;
-    line-height: 130%;
-    padding-bottom: 24px;
-`;
-
-const ErrorMessage = styled.span`
-    color: #de2b37;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: normal;
-    line-height: 130%;
-    text-align: center;
-
-    /* visibility hidden
-     */
-`;
-
-const StyledCodeInput = styled(CodeInput)`
-    & > div {
-        margin-bottom: 30px;
-    }
-`;
-
-const StyledIcon = styled(Icon)`
-    left: 32px;
-    position: absolute;
-    top: 20px;
 `;
