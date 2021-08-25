@@ -6,13 +6,12 @@ import {Icon} from '../../../components/Icon';
 
 interface IProps {
     id: number;
-    name: string;
     description: string;
     descriptionShort: string;
     status: string | null;
 }
 
-export const TestCard: React.FC<IProps> = (props) => {
+export const CategoryCard: React.FC<IProps> = (props) => {
     const {status, id, descriptionShort} = props;
 
     const isComplete = status === 'passed';
@@ -21,9 +20,9 @@ export const TestCard: React.FC<IProps> = (props) => {
         <Container to={`tests/${id}`} $isComplete={isComplete}>
             <Title>{descriptionShort}</Title>
             {isComplete ? (
-                <TestCompleteLabel>
+                <CompleteLabel>
                     <IconContainer name='check_circle' size={25} /> Тест пройден
-                </TestCompleteLabel>
+                </CompleteLabel>
             ) : (
                 <GoTestButton>Пройти →</GoTestButton>
             )}
@@ -51,7 +50,7 @@ const Title = styled.div`
     margin-bottom: 24px;
 `;
 
-const TestCompleteLabel = styled.div`
+const CompleteLabel = styled.div`
     color: ${({theme}) => theme.palette.bg.secondary};
     font-weight: 600;
     font-size: 20px;
