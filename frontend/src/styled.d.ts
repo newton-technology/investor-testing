@@ -10,6 +10,10 @@ declare module 'styled-components' {
                 primary: string;
                 secondary: string;
                 footer: string;
+                darkBlue: string;
+            };
+            border: {
+                input: string;
             };
         };
     }
