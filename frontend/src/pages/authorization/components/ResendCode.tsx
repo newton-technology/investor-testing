@@ -1,13 +1,21 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React from 'react';
 
 import {useCountdown} from '../../../hooks/useCountdown';
 
-export const ResendCode: React.FC = () => {
-    const {countdown, formatedCountdown} = useCountdown(5000);
+interface IProps {
+    sendCode: () => void;
+}
+
+export const ResendCode: React.FC<IProps> = ({sendCode}) => {
+    const {countdown, formatedCountdown} = useCountdown();
 
     if (countdown <= 0) {
-        return <div>Отправить код</div>;
+        return (
+            <button type='button' onClick={sendCode}>
+                Отправить код
+            </button>
+        );
     }
 
-    return <div>{formatedCountdown}</div>;
+    return <div>Выслать код повторно через {formatedCountdown}</div>;
 };
