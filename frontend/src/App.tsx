@@ -9,7 +9,6 @@ import {CategoryList} from './pages/category_list/CategoryList';
 import {CategoryTest} from './pages/category_test/CategoryTest';
 import {GlobalStyle} from './theme/GlobalStyle';
 import {theme} from './theme/theme';
-import './api/AuthService';
 
 const App: React.FC = () => {
     const {isAuthenticated} = useAuthorization();

@@ -28,6 +28,7 @@ export const CodeStep: React.FC<IProps> = ({email, setCode, changeEmail, sendCod
             <button type='button' onClick={changeEmail}>
                 Изменить email
             </button>
+            <button>click</button>
         </React.Fragment>
     );
 };

@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState, useCallback} from 'react';
 
 interface IAfk {
     isAfk: boolean;
@@ -10,10 +10,10 @@ export const useIsAfk = (ms: number = tenMinutes): IAfk => {
     const timer = useRef<number>(0);
     const [isAfk, setIsAfk] = useState<boolean>(false);
 
-    const resetTimer = () => {
+    const resetTimer = useCallback(() => {
         clearTimeout(timer.current);
         timer.current = window.setTimeout(() => setIsAfk(true), ms);
-    };
+    }, []);
 
     useEffect(() => {
         timer.current = window.setTimeout(() => setIsAfk(true), ms);
