@@ -2,8 +2,10 @@ import React, {useRef, useEffect} from 'react';
 import styled from 'styled-components';
 
 import {Icon} from '../../../../components/Icon';
+import {emailEllipsisFormat} from '../../../../utils/emailEllipsisFormat';
 import {CodeInput} from '../CodeInput/CodeInput';
 import {ResendCode} from '../ResendCode';
+
 interface IProps {
     email: string;
     changeEmail: () => void;
@@ -24,7 +26,7 @@ export const CodeStep: React.FC<IProps> = ({email, setCode, changeEmail, sendCod
     return (
         <React.Fragment>
             <Description>
-                Мы отправили вам на почту <br /> <Email>{email}</Email> шестизначный код
+                Мы отправили вам на почту <br /> <Email>{emailEllipsisFormat(email)}</Email> шестизначный код
             </Description>
             <StyledCodeInput ref={inputRef} length={6} onChange={setCode} onComplete={login} />
             <ResendCode sendCode={sendCode} />
