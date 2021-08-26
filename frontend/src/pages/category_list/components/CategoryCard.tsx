@@ -1,19 +1,17 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import styled, {css} from 'styled-components';
+import styled from 'styled-components';
 
 import {Icon} from '../../../components/Icon';
-import {breakpoint} from '../../../theme/breakpont';
 
 interface IProps {
     id: number;
-    name: string;
     description: string;
     descriptionShort: string;
     status: string | null;
 }
 
-export const TestCard: React.FC<IProps> = (props) => {
+export const CategoryCard: React.FC<IProps> = (props) => {
     const {status, id, descriptionShort} = props;
 
     const isComplete = status === 'passed';
@@ -21,9 +19,9 @@ export const TestCard: React.FC<IProps> = (props) => {
     return isComplete ? (
         <Container>
             <Title>{descriptionShort}</Title>
-            <TestCompleteLabel>
+            <CompleteLabel>
                 <IconContainer name='check_circle' size={25} /> Тест пройден
-            </TestCompleteLabel>
+            </CompleteLabel>
         </Container>
     ) : (
         <ContainerLink to={`tests/${id}`}>
@@ -67,7 +65,7 @@ const Title = styled.div`
     `}
 `;
 
-const TestCompleteLabel = styled.div`
+const CompleteLabel = styled.div`
     color: ${({theme}) => theme.palette.bg.secondary};
     font-weight: 600;
     font-size: 20px;
