@@ -4,6 +4,7 @@ import React, {useEffect, useRef} from 'react';
 interface ICountdown {
     countdown: number;
     formatedCountdown: string;
+    restart: () => void;
 }
 
 const threeMinutes = 180000;
@@ -11,6 +12,11 @@ const threeMinutes = 180000;
 export const useCountdown = (ms: number = threeMinutes): ICountdown => {
     const timer = useRef<number>(0);
     const [countdown, setCountdown] = React.useState<number>(ms);
+
+    const restart = () => {
+        setCountdown(ms);
+        timer.current = window.setInterval(() => setCountdown((prev) => prev - 1000), 1000);
+    };
 
     useEffect(() => {
         timer.current = window.setInterval(() => setCountdown((prev) => prev - 1000), 1000);
@@ -23,5 +29,5 @@ export const useCountdown = (ms: number = threeMinutes): ICountdown => {
         }
     }, [countdown]);
 
-    return {countdown, formatedCountdown: dayjs(countdown).format('mm:ss')};
+    return {countdown, formatedCountdown: dayjs(countdown).format('mm:ss'), restart};
 };
