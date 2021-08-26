@@ -4,9 +4,9 @@ import styled from 'styled-components';
 import {authService} from '../../api/AuthService';
 import {ReactComponent as AuthPageBackground} from '../../assets/svg/authPageBackground.svg';
 import {accessTokenStorage} from '../../stores/AccessTokenStorage';
-import {CodeStep} from './components/form/CodeStep';
-import {EmailStep} from './components/form/EmailStep';
 import {FormHeader} from './components/FormHeader';
+import {CodeStep} from './components/forms/CodeStep';
+import {EmailStep} from './components/forms/EmailStep';
 
 const steps = {
     email: {
