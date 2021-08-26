@@ -3,34 +3,39 @@ import styled from 'styled-components';
 
 import {useQuery} from '../../hooks/useQuery';
 import {CategoryListApi} from '../../api/CategoryListApi';
-import {ITest} from '../category_test/CategoryTest';
 import {Loader} from '../../components/Loader';
 import {ServerErrorMessage} from '../../components/ServerErrorMessage';
-import {TestCard} from './components/TestCard';
+import {CategoryCard} from './components/CategoryCard';
+import {IResponseError} from '../../api/CategoryTestApi';
+
+export interface ICategory {
+    category: {
+        id: number;
+        description: string;
+        descriptionShort: string;
+    };
+    status: string | null;
+}
 
 export const CategoryList: React.FC = () => {
-    const {data: tests = [], isLoading, isError} = useQuery(CategoryListApi.getCategories);
-
-    if (isError) {
-        return <ServerErrorMessage />;
-    }
+    const {data, isLoading, isError} = useQuery<ICategory[], IResponseError>(CategoryListApi.getCategories);
 
     if (isLoading) {
         return <Loader />;
     }
 
+    if (isError) {
+        return <ServerErrorMessage />;
+    }
+
     return (
         <Container>
             <Title>Выбери категорию теста</Title>
-            {isLoading ? (
-                <Loader />
-            ) : (
-                <TestsList>
-                    {tests.map((test: ITest) => {
-                        return <TestCard key={test.id} {...test} />;
-                    })}
-                </TestsList>
-            )}
+            <List>
+                {data?.map((test: ICategory) => {
+                    return <CategoryCard key={test.category.id} status={test.status} {...test.category} />;
+                })}
+            </List>
         </Container>
     );
 };
@@ -43,7 +48,7 @@ const Title = styled.div`
     margin-bottom: 32px;
 `;
 
-const TestsList = styled.div`
+const List = styled.div`
     display: grid;
     grid-gap: 20px;
     grid-template-columns: repeat(2, 1fr);

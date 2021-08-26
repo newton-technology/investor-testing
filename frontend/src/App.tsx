@@ -26,18 +26,15 @@ const App: React.FC = () => {
                         <Route path='/tests' exact>
                             <CategoryList />
                         </Route>
-                        <Route path='/tests/:id' exact>
+                        <Route path='/tests/:categoryId'>
                             <CategoryTest />
                         </Route>
                     </Switch>
                 </Layout>
             ) : (
                 <Switch>
-                    <Route path='/' exact>
+                    <Route path='/'>
                         <AuthorizationPage />
-                    </Route>
-                    <Route path='*'>
-                        <Redirect to='/' />
                     </Route>
                 </Switch>
             )}
