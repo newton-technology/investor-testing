@@ -11,6 +11,7 @@ import {GlobalStyle} from './theme/GlobalStyle';
 import {useAuthorization} from './hooks/useAuthorization';
 import './api/AuthService';
 import {PageNotFound} from './pages/PageNotFound';
+import {ErrorBoundary} from './components/ErrorBoundary';
 
 const App: React.FC = () => {
     const {isAuthenticated} = useAuthorization();
@@ -18,30 +19,32 @@ const App: React.FC = () => {
     return (
         <ThemeProvider theme={theme}>
             <GlobalStyle />
-            {isAuthenticated ? (
-                <Layout>
+            <ErrorBoundary>
+                {isAuthenticated ? (
+                    <Layout>
+                        <Switch>
+                            <Route path='/' exact>
+                                <Redirect to='/tests' />
+                            </Route>
+                            <Route path='/tests' exact>
+                                <CategoryList />
+                            </Route>
+                            <Route path='/tests/:categoryId' exact>
+                                <CategoryTest />
+                            </Route>
+                            <Route path='*'>
+                                <PageNotFound />
+                            </Route>
+                        </Switch>
+                    </Layout>
+                ) : (
                     <Switch>
-                        <Route path='/' exact>
-                            <Redirect to='/tests' />
-                        </Route>
-                        <Route path='/tests' exact>
-                            <CategoryList />
-                        </Route>
-                        <Route path='/tests/:categoryId' exact>
-                            <CategoryTest />
-                        </Route>
-                        <Route path='*'>
-                            <PageNotFound />
+                        <Route path='/'>
+                            <AuthorizationPage />
                         </Route>
                     </Switch>
-                </Layout>
-            ) : (
-                <Switch>
-                    <Route path='/'>
-                        <AuthorizationPage />
-                    </Route>
-                </Switch>
-            )}
+                )}
+            </ErrorBoundary>
         </ThemeProvider>
     );
 };
