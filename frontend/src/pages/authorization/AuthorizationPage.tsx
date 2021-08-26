@@ -6,6 +6,7 @@ import {ReactComponent as AuthPageBackground} from '../../assets/svg/authPageBac
 import {accessTokenStorage} from '../../stores/AccessTokenStorage';
 import {CodeStep} from './components/form/CodeStep';
 import {EmailStep} from './components/form/EmailStep';
+import {FormHeader} from './components/FormHeader';
 
 const steps = {
     email: {
@@ -69,11 +70,18 @@ export const AuthorizationPage: React.FC = () => {
                             login();
                         }
                     }}>
+                    {step === 'email' && <FormHeader />}
                     <Title>{steps[step].title}</Title>
                     {step === 'email' ? (
                         <EmailStep email={email} isError={isError} setEmail={setEmail} />
                     ) : (
-                        <CodeStep email={email} changeEmail={changeEmail} setCode={setCode} sendCode={sendCode} />
+                        <CodeStep
+                            email={email}
+                            changeEmail={changeEmail}
+                            setCode={setCode}
+                            sendCode={sendCode}
+                            login={login}
+                        />
                     )}
                 </Form>
             </FormContainer>
@@ -105,7 +113,6 @@ const FormContainer = styled.div`
     background: #ffffff;
     border-radius: 10px;
     box-sizing: border-box;
-    height: 573px;
     width: 444px;
     z-index: 2;
 `;
@@ -117,4 +124,6 @@ const Title = styled.h1`
     font-style: normal;
     font-weight: bold;
     line-height: 130%;
+    margin-bottom: 16px;
+    margin-top: 32px;
 `;

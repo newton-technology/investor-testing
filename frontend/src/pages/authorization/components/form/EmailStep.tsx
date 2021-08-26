@@ -9,7 +9,6 @@ interface IProps {
     isError: boolean;
     setEmail: (email: string) => void;
 }
-
 export const EmailStep: React.FC<IProps> = ({email, isError, setEmail}) => {
     return (
         <React.Fragment>
@@ -94,5 +93,6 @@ const EULADescription = styled.span`
     color: #a9a9a9;
     font-size: 12px;
     line-height: 130%;
+    padding-bottom: 32px;
     padding-top: 16px;
 `;
