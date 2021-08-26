@@ -27,7 +27,7 @@ const App: React.FC = () => {
                         <Route path='/tests' exact>
                             <CategoryList />
                         </Route>
-                        <Route path='/tests/:categoryId'>
+                        <Route path='/tests/:categoryId' exact>
                             <CategoryTest />
                         </Route>
                         <Route path='*'>

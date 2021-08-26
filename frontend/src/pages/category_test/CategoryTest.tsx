@@ -109,7 +109,7 @@ export const CategoryTest: React.FC = () => {
 
     return (
         <Container>
-            <TestWarningModal isBlocked={isTestVisible} />
+            <TestWarningModal isBlocked={isTestVisible && !isTestResultVisible} />
             {category && (
                 <TestPreview title={category?.description} goToTest={goToTest} isTestVisible={isTestVisible} />
             )}

@@ -15,9 +15,11 @@ export const Modal: React.FC<IProps> = (props) => {
     useLayoutEffect(() => {
         if (isOpen) {
             document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflowY = 'scroll';
         }
         return () => {
             document.documentElement.style.overflow = 'visible';
+            document.body.style.overflowY = 'auto';
         };
     });
 
