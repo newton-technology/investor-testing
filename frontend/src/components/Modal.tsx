@@ -6,11 +6,11 @@ import {Portal} from './Portal';
 interface IProps {
     className?: string;
     isOpen: boolean;
-    onClose?: () => void;
+    onClose: () => void;
 }
 
 export const Modal: React.FC<IProps> = (props) => {
-    const {className, isOpen, children, onClose} = props;
+    const {isOpen, children, onClose} = props;
 
     useLayoutEffect(() => {
         if (isOpen) {
@@ -21,10 +21,6 @@ export const Modal: React.FC<IProps> = (props) => {
         };
     });
 
-    const handleClose = () => {
-        // onClose();
-    };
-
     if (!isOpen) {
         return null;
     }
@@ -33,7 +29,7 @@ export const Modal: React.FC<IProps> = (props) => {
         <Portal>
             <ModalContainer>
                 <ModalDialog>{children}</ModalDialog>
-                <ModalOverlay onClick={handleClose} />
+                <ModalOverlay onClick={onClose} />
             </ModalContainer>
         </Portal>
     );
