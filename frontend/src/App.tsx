@@ -2,16 +2,15 @@ import React from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import {ThemeProvider} from 'styled-components';
 
+import {Layout} from './components/Layout';
+import {useAuthorization} from './hooks/useAuthorization';
+import {Authorization} from './pages/authorization/Authorization';
 import {CategoryList} from './pages/category_list/CategoryList';
 import {CategoryTest} from './pages/category_test/CategoryTest';
-import {AuthorizationPage} from './pages/AuthorizationPage';
-import {Layout} from './components/Layout';
-import {theme} from './theme/theme';
-import {GlobalStyle} from './theme/GlobalStyle';
-import {useAuthorization} from './hooks/useAuthorization';
-import './api/AuthService';
 import {PageNotFound} from './pages/PageNotFound';
 import {ErrorBoundary} from './components/ErrorBoundary';
+import {GlobalStyle} from './theme/GlobalStyle';
+import {theme} from './theme/theme';
 
 const App: React.FC = () => {
     const {isAuthenticated} = useAuthorization();
@@ -40,7 +39,7 @@ const App: React.FC = () => {
                 ) : (
                     <Switch>
                         <Route path='/'>
-                            <AuthorizationPage />
+                            <Authorization />
                         </Route>
                     </Switch>
                 )}
