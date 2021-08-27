@@ -21,13 +21,13 @@ export const useAuthorization = (): ITokenUserInfo => {
         accesToken: undefined,
         refreshToken: undefined,
     });
-    const [isAuthenticated, setisAuthenticated] = useState<boolean>(false);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
     const {isAfk} = useIsAfk();
     accessTokenStorage.subscribe(setUserToken);
 
     useEffect(() => {
-        setisAuthenticated(accessTokenStorage.isAuthenticated);
+        setIsAuthenticated(accessTokenStorage.isAuthenticated);
     }, [userToken]);
 
     useEffect(() => {

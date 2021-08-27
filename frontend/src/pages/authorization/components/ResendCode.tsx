@@ -11,14 +11,14 @@ interface IProps {
 export const ResendCode: React.FC<IProps> = ({sendCode}) => {
     const {countdown, formatedCountdown, restart} = useCountdown();
 
-    const handleSendCode = () => {
+    const handleResendCode = () => {
         sendCode();
         restart();
     };
 
     if (countdown <= 0) {
         return (
-            <SendCode type='button' onClick={handleSendCode}>
+            <SendCode type='button' onClick={handleResendCode}>
                 <StyledIcon name='refresh' />
                 Отправить код
             </SendCode>
