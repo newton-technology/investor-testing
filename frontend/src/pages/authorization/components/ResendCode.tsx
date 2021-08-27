@@ -39,22 +39,18 @@ const StyledIcon = styled(Icon)`
 
 const Wrapper = styled.div`
     align-items: center;
-    color: #3a3463;
+    color: ${({theme}) => theme.palette.regular};
     display: flex;
     font-weight: 500;
     justify-content: center;
-    line-height: 130%;
     padding-bottom: 24px;
 `;
 
 const SendCode = styled.button`
     align-items: center;
-    color: #2f6feb;
+    color: ${({theme}) => theme.palette.secondary};
     display: flex;
     font-size: 17px;
-    font-style: normal;
-    font-weight: normal;
     justify-content: center;
-    line-height: 130%;
     padding-bottom: 24px;
 `;

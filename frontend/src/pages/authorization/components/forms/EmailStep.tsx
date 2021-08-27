@@ -45,15 +45,10 @@ const InputWrapper = styled.div`
 `;
 
 const Input = styled.input<{isError: boolean}>`
-    border: 1px solid ${({isError}) => (isError ? '#e30b17' : '#c4c8db')};
+    border: 1px solid ${({isError, theme}) => (isError ? theme.palette.error : '#c4c8db')};
     border-radius: 4px;
     box-sizing: border-box;
-    color: ${({isError}) => (isError ? '#e30b17' : 'black')};
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: normal;
-    line-height: 130%;
+    color: ${({isError, theme}) => (isError ? theme.palette.error : theme.palette.regular)};
     margin-bottom: 16px;
     outline: none;
     padding: 16px;
@@ -61,22 +56,11 @@ const Input = styled.input<{isError: boolean}>`
     width: 100%;
 `;
 const Description = styled.span`
-    color: #3a3463;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: normal;
-    line-height: 130%;
     padding-bottom: 24px;
 `;
 
 const ErrorMessage = styled.span`
-    color: #de2b37;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: normal;
-    line-height: 130%;
+    color: ${({theme}) => theme.palette.error};
     padding-top: 16px;
     text-align: center;
 `;

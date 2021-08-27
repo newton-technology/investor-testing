@@ -10,11 +10,11 @@ export const Segment: React.FC<IProps> = ({children, error}) => <Container error
 
 const Container = styled.div<{error?: boolean}>`
     align-items: center;
-    background-color: #ffffff;
-    border: 1px solid ${(props) => (props.error ? '#E30B17' : '#C4C8DB')};
+    background-color: ${({theme}) => theme.palette.bg.secondary};
+    border: 1px solid ${({error, theme}) => (error ? theme.palette.error : '#C4C8DB')};
     border-radius: 4px;
     box-sizing: border-box;
-    color: ${(props) => (props.error ? '#E30B17' : '#3A3463')};
+    color: ${({error, theme}) => (error ? theme.palette.error : theme.palette.regular)};
     display: flex;
     font-size: 42px;
     font-weight: 500;

@@ -31,14 +31,18 @@ const rotate = keyframes`
 
 const LoaderContainer = styled.span<{isInline?: boolean; isFullScreen?: boolean}>`
     display: ${({isInline}) => (isInline ? 'inline-flex' : 'flex')};
+    ${({isFullScreen, isInline}) =>
+        (isFullScreen || !isInline) &&
+        `
     align-items: center;
     justify-content: center;
-    height: ${({isFullScreen}) => (isFullScreen ? '100vh' : '100px')};
+    height: ${isFullScreen ? '100vh' : '100px'};
+`}
 
     svg {
         animation: ${rotate} 1s cubic-bezier(0.17, 0.67, 0.83, 0.67) infinite;
-        width: ${({isFullScreen}) => (isFullScreen ? '79px' : '26px')};
-        height: ${({isFullScreen}) => (isFullScreen ? '79px' : '26px')};
         fill: ${({theme}) => theme.palette.secondary};
+        height: ${({isFullScreen}) => (isFullScreen ? '79px' : '26px')};
+        width: ${({isFullScreen}) => (isFullScreen ? '79px' : '26px')};
     }
 `;

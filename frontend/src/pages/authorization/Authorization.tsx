@@ -105,7 +105,7 @@ export const Authorization: React.FC = () => {
 
 const Wrapper = styled.div`
     align-items: center;
-    background: linear-gradient(139.02deg, #65dfe7 -19.37%, #587cfc 116.76%);
+    background: ${({theme}) => theme.palette.bg.authorization};
     display: flex;
     height: 100vh;
     justify-content: center;
@@ -128,7 +128,7 @@ const Form = styled.form`
 
 const FormContainer = styled.div`
     align-items: center;
-    background: #ffffff;
+    background: ${({theme}) => theme.palette.bg.secondary};
     border-radius: 10px;
     box-sizing: border-box;
     max-width: 457px;
@@ -136,12 +136,8 @@ const FormContainer = styled.div`
 `;
 
 const Title = styled.h1`
-    color: #3a3463;
-    font-family: 'IBM Plex Sans', sans-serif;
     font-size: 32px;
-    font-style: normal;
     font-weight: bold;
-    line-height: 130%;
     margin-bottom: 16px;
     margin-top: 15px;
 
