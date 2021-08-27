@@ -11,14 +11,14 @@ import {CategoryTest} from './pages/category_test/CategoryTest';
 import {PageNotFound} from './pages/PageNotFound';
 import {GlobalStyle} from './theme/GlobalStyle';
 import {theme} from './theme/theme';
-
 const App: React.FC = () => {
     const {isAuthenticated, isAuthLoading} = useAuthorization();
 
     if (isAuthLoading) {
         return (
             <ThemeProvider theme={theme}>
-                <Loader />
+                <GlobalStyle />
+                <Loader isFullScreen />
             </ThemeProvider>
         );
     }
