@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 
 import {Container} from './Container';
+import {breakpoint} from '../theme/breakpont';
 
 export const Footer: React.FC = () => {
     const phones = ['8 495 320-79-18', '8 495 320-79-18'];
@@ -11,7 +12,7 @@ export const Footer: React.FC = () => {
         <FooterContainer>
             <Container>
                 <FooterTop>
-                    <Title>Контакты</Title>
+                    <PhonesTitle>Контакты</PhonesTitle>
                     <Phones>
                         {phones.map((phone: string, i: number) => {
                             return <Phone key={i}>{phone}</Phone>;
@@ -35,7 +36,7 @@ export const Footer: React.FC = () => {
                 </FooterMiddle>
                 <FooterBottom>
                     <Link to='/'>Перейти на официальный сайт</Link>
-                    <Link to='/'>Разработано Ньютон Технологии © 2021</Link>
+                    <NewtonLink to='/'>Разработано Ньютон Технологии © 2021</NewtonLink>
                 </FooterBottom>
             </Container>
         </FooterContainer>
@@ -43,43 +44,66 @@ export const Footer: React.FC = () => {
 };
 
 const FooterContainer = styled.div`
-    margin-top: 100px;
+    margin-top: 64px;
     color: ${({theme}) => theme.palette.bg.secondary};
-    padding-top: 48px;
-    padding-bottom: 48px;
+    padding-top: 38px;
+    padding-bottom: 32px;
     background-color: ${({theme}) => theme.palette.bg.footer};
+
+    ${breakpoint('md')`
+        margin-top: 100px;
+        padding-top: 48px;
+        padding-bottom: 48px;
+    `}
 `;
 
 const FooterTop = styled.div``;
 
-const Title = styled.div`
+const PhonesTitle = styled.div`
     font-size: 24px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
+    font-weight: 500;
 `;
 
 const Phones = styled.div`
-    display: flex;
     font-size: 32px;
-    font-weight: 600;
+    font-weight: 700;
+    display: inline-grid;
+    grid-gap: 20px;
+    margin-bottom: 32px;
+
+    ${breakpoint('md')`
+        grid-gap: 32px;
+        grid-template-columns: auto auto;
+    `}
 `;
 
-const Phone = styled.div`
-    & + & {
-        margin-left: 32px;
-    }
-`;
+const Phone = styled.div``;
 
 const FooterMiddle = styled.div`
     font-size: 17px;
     padding: 32px 0;
-    margin-top: 48px;
     border-top: 1px solid #c4c8db;
     line-height: 1.7;
 `;
 
 const FooterBottom = styled.div`
-    display: flex;
-    justify-content: space-between;
     font-size: 20px;
     color: ${({theme}) => theme.palette.primary};
+
+    ${breakpoint('md')`
+        display: flex;
+        justify-content: space-between;
+    `}
+`;
+
+const NewtonLink = styled(Link)`
+    margin-top: 60px;
+    font-size: 16px;
+    display: inline-block;
+
+    ${breakpoint('md')`
+        font-size: inherit;
+        margin-top: 0;
+    `}
 `;

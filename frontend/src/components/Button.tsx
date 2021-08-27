@@ -8,13 +8,13 @@ interface IProps {
     className?: string;
     isPlain?: boolean;
     isLoading?: boolean;
-    to?: string;
     disabled?: boolean;
+    to?: string;
     onClick?: () => void;
 }
 
 export const Button: React.FC<IProps> = (props) => {
-    const {className, children, isPlain = false, onClick, isLoading, to, disabled} = props;
+    const {className, children, isPlain = false, onClick, isLoading, disabled = false, to} = props;
 
     if (to) {
         return (
@@ -24,7 +24,7 @@ export const Button: React.FC<IProps> = (props) => {
         );
     }
     return (
-        <ButtonContainer onClick={onClick} $isPlain={isPlain} className={className} disabled={disabled}>
+        <ButtonContainer onClick={onClick} $isPlain={isPlain} disabled={disabled || isLoading} className={className}>
             {children}
             {isLoading && <LoaderIcon isFull={false} />}
         </ButtonContainer>
@@ -43,13 +43,20 @@ const button = css<{$isPlain: boolean}>`
     align-items: center;
     border-radius: 4px;
     justify-content: center;
+    transition: color 0.2s linear, background-color 0.2s linear;
+
+    &:hover {
+        background-color: ${({theme, $isPlain}) => ($isPlain ? theme.palette.secondary : 'transparent')};
+        color: ${({theme, $isPlain}) => ($isPlain ? theme.palette.bg.secondary : theme.palette.secondary)};
+    }
 `;
 
 const ButtonContainer = styled.button<{$isPlain: boolean}>`
     ${button};
 
-    &:hover {
-        opacity: 0.9;
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.4;
     }
 
     svg {

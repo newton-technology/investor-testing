@@ -1,8 +1,9 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 
 import {Icon} from '../../../components/Icon';
+import {breakpoint} from '../../../theme/breakpont';
 
 interface IProps {
     id: number;
@@ -16,38 +17,53 @@ export const CategoryCard: React.FC<IProps> = (props) => {
 
     const isComplete = status === 'passed';
 
-    return (
-        <Container to={`tests/${id}`} $isComplete={isComplete}>
+    return isComplete ? (
+        <Container>
             <Title>{descriptionShort}</Title>
-            {isComplete ? (
-                <CompleteLabel>
-                    <IconContainer name='check_circle' size={25} /> Тест пройден
-                </CompleteLabel>
-            ) : (
-                <GoTestButton>Пройти →</GoTestButton>
-            )}
+            <CompleteLabel>
+                <IconContainer name='check_circle' size={25} /> Тест пройден
+            </CompleteLabel>
         </Container>
+    ) : (
+        <ContainerLink to={`tests/${id}`}>
+            <Title>{descriptionShort}</Title>
+            <GoTestButton>Пройти →</GoTestButton>
+        </ContainerLink>
     );
 };
 
-const Container = styled(Link)<{$isComplete: boolean}>`
+const containerCss = css`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     border-radius: 10px;
-    color: inherit;
     padding: 24px;
-    background-color: ${({theme, $isComplete}) => ($isComplete ? theme.palette.primary : theme.palette.bg.secondary)};
-    color: ${({theme, $isComplete}) => $isComplete && theme.palette.bg.secondary};
+`;
+
+const Container = styled.div`
+    ${containerCss};
+    background-color: ${({theme}) => theme.palette.primary};
+    color: ${({theme}) => theme.palette.bg.secondary};
+`;
+
+const ContainerLink = styled(Link)`
+    ${containerCss};
+    background-color: ${({theme}) => theme.palette.bg.secondary};
+    color: inherit;
+    transition: transform 0.3s ease-in-out;
+    backface-visibility: hidden;
 
     &:hover {
-        opacity: 0.8;
+        transform: translateY(-5px);
     }
 `;
 
 const Title = styled.div`
-    font-size: 20px;
     margin-bottom: 24px;
+
+    ${breakpoint('md')`
+        font-size: 20px;
+    `}
 `;
 
 const CompleteLabel = styled.div`

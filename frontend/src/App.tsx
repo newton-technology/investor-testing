@@ -7,6 +7,7 @@ import {useAuthorization} from './hooks/useAuthorization';
 import {Authorization} from './pages/authorization/Authorization';
 import {CategoryList} from './pages/category_list/CategoryList';
 import {CategoryTest} from './pages/category_test/CategoryTest';
+import {PageNotFound} from './pages/PageNotFound';
 import {GlobalStyle} from './theme/GlobalStyle';
 import {theme} from './theme/theme';
 
@@ -27,6 +28,9 @@ const App: React.FC = () => {
                         </Route>
                         <Route path='/tests/:categoryId'>
                             <CategoryTest />
+                        </Route>
+                        <Route path='*'>
+                            <PageNotFound />
                         </Route>
                     </Switch>
                 </Layout>

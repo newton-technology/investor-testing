@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import styled from 'styled-components';
 
 import {AnswerControl, IAnswerControl} from './AnswerControl';
 import {InfoIcon} from './InfoIcon';
+import {breakpoint} from '../../../theme/breakpont';
 
 export interface IQuestion {
     id: number;
@@ -19,20 +20,31 @@ interface IProps {
     index: number;
     questionsCount: number;
     isMultipleAnswers: boolean;
+    info?: string;
+    isError: boolean;
     getIsChecked: (questionId: number, answerId: number) => boolean;
     changeValue: (questionId: number, answerId: number, isMultipleAnswers: boolean) => void;
 }
 
 export const QuestionCard: React.FC<IProps> = (props) => {
-    const {title, id, answers, getIsChecked, changeValue, questionsCount, index, isMultipleAnswers} = props;
+    const {title, id, answers, getIsChecked, changeValue, questionsCount, index, isMultipleAnswers, isError, info} =
+        props;
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (isError && ref.current) {
+            ref.current.scrollIntoView({behavior: 'smooth'});
+        }
+    }, [isError]);
 
     return (
-        <Container>
+        <Container ref={ref}>
             <QuestionNumber>{`${index}/${questionsCount}`}</QuestionNumber>
             <Title>
-                {title} <InfoIcon>{title}</InfoIcon>
+                {title} {info && <InfoIcon>{info}</InfoIcon>}
             </Title>
             {isMultipleAnswers && <Subtitle>{'(возможно несколько вариантов ответа)'}</Subtitle>}
+            {isError && <ErrorMessage>Пожалуйста, выберите вариант ответа</ErrorMessage>}
             <Answers>
                 {answers.map((answer) => {
                     return (
@@ -54,9 +66,13 @@ export const QuestionCard: React.FC<IProps> = (props) => {
 const Container = styled.div`
     border-radius: 10px;
     background-color: ${({theme}) => theme.palette.bg.secondary};
-    padding: 32px;
+    padding: 32px 24px;
     font-size: 17px;
     margin-top: 24px;
+
+    ${breakpoint('md')`
+        padding: 32px;
+    `}
 `;
 
 const QuestionNumber = styled.div`
@@ -74,6 +90,21 @@ const Title = styled.div`
 
 const Subtitle = styled.div`
     margin-top: 8px;
+    font-size: 14px;
+
+    ${breakpoint('md')`
+        font-size: inherit;
+    `}
+`;
+
+const ErrorMessage = styled.div`
+    color: ${({theme}) => theme.palette.error};
+    margin-top: 8px;
+    font-size: 14px;
+
+    ${breakpoint('md')`
+        font-size: inherit;
+    `}
 `;
 
 const Answers = styled.div`

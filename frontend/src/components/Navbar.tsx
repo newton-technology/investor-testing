@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import {authService} from '../api/AuthService';
 import {Container} from './Container';
 import {Icon} from './Icon';
+import logo from '../logo.png';
+import {breakpoint} from '../theme/breakpont';
 
 export const Navbar: React.FC = () => {
     const history = useHistory();
@@ -18,7 +20,9 @@ export const Navbar: React.FC = () => {
         <NavContainer>
             <Container>
                 <Nav>
-                    <Logo to='/tests'>Главная</Logo>
+                    <Logo to='/tests'>
+                        <img src={logo} />
+                    </Logo>
                     <LogoutButton onClick={logout}>
                         <IconContainer name='arrow_right' />
                         Выйти
@@ -41,7 +45,13 @@ const Nav = styled.div`
     justify-content: space-between;
 `;
 
-const Logo = styled(Link)``;
+const Logo = styled(Link)`
+    margin-right: 40px;
+
+    img {
+        max-width: 100%;
+    }
+`;
 
 const LogoutButton = styled.div`
     align-items: center;

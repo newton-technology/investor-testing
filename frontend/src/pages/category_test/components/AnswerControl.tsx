@@ -3,6 +3,7 @@ import styled, {css} from 'styled-components';
 
 import {Icon} from '../../../components/Icon';
 import {InfoIcon} from './InfoIcon';
+import {breakpoint} from '../../../theme/breakpont';
 
 export interface IAnswerControl {
     id: number;
@@ -14,12 +15,13 @@ interface IProps {
     answer: string;
     questionId: number;
     isMultipleAnswers: boolean;
+    info?: string;
     getIsChecked: (questionId: number, answerId: number) => boolean;
     changeValue: (questionId: number, answerId: number, isMultipleAnswers: boolean) => void;
 }
 
 export const AnswerControl: React.FC<IProps> = (props) => {
-    const {id, answer: text, questionId, isMultipleAnswers, getIsChecked, changeValue} = props;
+    const {id, answer: text, questionId, isMultipleAnswers, info, getIsChecked, changeValue} = props;
     const isChecked = getIsChecked(questionId, id);
 
     const handleClick = () => {
@@ -36,7 +38,7 @@ export const AnswerControl: React.FC<IProps> = (props) => {
                 <RadioControl isChecked={isChecked} />
             )}
             <Text>
-                {text} <InfoIcon>{text}</InfoIcon>
+                {text} {info && <InfoIcon>{info}</InfoIcon>}
             </Text>
         </Container>
     );
@@ -45,6 +47,7 @@ export const AnswerControl: React.FC<IProps> = (props) => {
 const Container = styled.div`
     display: flex;
     font-size: 17px;
+    line-height: 1.4;
     cursor: pointer;
 
     & + & {
@@ -53,14 +56,17 @@ const Container = styled.div`
 `;
 
 const controlCss = css`
-    margin-right: 28px;
-    margin-top: 3px;
+    margin-right: 16px;
     height: 24px;
     width: 24px;
     flex: 0 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    ${breakpoint('md')`
+        margin-right: 28px;
+    `}
 `;
 
 const CheckboxControl = styled.div<{isChecked: boolean}>`
