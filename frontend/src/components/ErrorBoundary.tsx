@@ -27,7 +27,7 @@ export class ErrorBoundary extends React.Component<IProps, IState> {
                     <ServerErrorMessage
                         title='Ошибка приложения'
                         subtitle='В приложении произошла непредвиденная ошибка'>
-                        <SupportLink href='mailto:rfp@nwtn-group.com'>Написать в поддержку</SupportLink>
+                        <SupportLink href='mailto:investor_testing@nwtn.io'>Написать в поддержку</SupportLink>
                     </ServerErrorMessage>
                 </ErrorMessageContainer>
             );
