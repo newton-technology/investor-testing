@@ -9,12 +9,12 @@ interface ICountdown {
 
 const threeMinutes = 180000;
 
-export const useCountdown = (ms: number = threeMinutes): ICountdown => {
+export const useCountdown = (timeoutMs: number = threeMinutes): ICountdown => {
     const timer = useRef<number>(0);
-    const [countdown, setCountdown] = React.useState<number>(ms);
+    const [countdown, setCountdown] = React.useState<number>(timeoutMs);
 
     const restart = () => {
-        setCountdown(ms);
+        setCountdown(timeoutMs);
         timer.current = window.setInterval(() => setCountdown((prev) => prev - 1000), 1000);
     };
 

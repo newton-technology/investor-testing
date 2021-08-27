@@ -6,17 +6,17 @@ interface IAfk {
 
 const tenMinutes = 600000;
 
-export const useIsAfk = (ms: number = tenMinutes): IAfk => {
+export const useIsAfk = (timeoutMs: number = tenMinutes): IAfk => {
     const timer = useRef<number>(0);
     const [isAfk, setIsAfk] = useState<boolean>(false);
 
     const resetTimer = useCallback(() => {
         clearTimeout(timer.current);
-        timer.current = window.setTimeout(() => setIsAfk(true), ms);
+        timer.current = window.setTimeout(() => setIsAfk(true), timeoutMs);
     }, []);
 
     useEffect(() => {
-        timer.current = window.setTimeout(() => setIsAfk(true), ms);
+        timer.current = window.setTimeout(() => setIsAfk(true), timeoutMs);
 
         return () => clearTimeout(timer.current);
     }, []);
