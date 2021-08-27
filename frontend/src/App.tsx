@@ -39,6 +39,9 @@ const App: React.FC = () => {
                     <Route path='/' exact>
                         <Authorization />
                     </Route>
+                    <Route path='*' exact>
+                        <Redirect to='/' />
+                    </Route>
                 </Switch>
             )}
         </ThemeProvider>
