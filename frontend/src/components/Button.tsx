@@ -9,11 +9,12 @@ interface IProps {
     isPlain?: boolean;
     isLoading?: boolean;
     to?: string;
+    disabled?: boolean;
     onClick?: () => void;
 }
 
 export const Button: React.FC<IProps> = (props) => {
-    const {className, children, isPlain = false, onClick, isLoading, to} = props;
+    const {className, children, isPlain = false, onClick, isLoading, to, disabled} = props;
 
     if (to) {
         return (
@@ -23,7 +24,7 @@ export const Button: React.FC<IProps> = (props) => {
         );
     }
     return (
-        <ButtonContainer onClick={onClick} $isPlain={isPlain} className={className}>
+        <ButtonContainer onClick={onClick} $isPlain={isPlain} className={className} disabled={disabled}>
             {children}
             {isLoading && <LoaderIcon isFull={false} />}
         </ButtonContainer>

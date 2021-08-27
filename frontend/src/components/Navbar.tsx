@@ -1,17 +1,25 @@
 import React from 'react';
+import {Link, useHistory} from 'react-router-dom';
 import styled from 'styled-components';
-import {Link} from 'react-router-dom';
 
+import {authService} from '../api/AuthService';
 import {Container} from './Container';
 import {Icon} from './Icon';
 
 export const Navbar: React.FC = () => {
+    const history = useHistory();
+
+    const logout = () => {
+        authService.logout();
+        history.push('/');
+    };
+
     return (
         <NavContainer>
             <Container>
                 <Nav>
                     <Logo to='/tests'>Главная</Logo>
-                    <LogoutButton>
+                    <LogoutButton onClick={logout}>
                         <IconContainer name='arrow_right' />
                         Выйти
                     </LogoutButton>
@@ -22,10 +30,10 @@ export const Navbar: React.FC = () => {
 };
 
 const NavContainer = styled.div`
-    padding-top: 17px;
-    padding-bottom: 17px;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 40px;
+    padding-bottom: 17px;
+    padding-top: 17px;
 `;
 
 const Nav = styled.div`
@@ -36,11 +44,11 @@ const Nav = styled.div`
 const Logo = styled(Link)``;
 
 const LogoutButton = styled.div`
-    font-size: 17px;
-    color: ${({theme}) => theme.palette.secondary};
-    display: flex;
     align-items: center;
+    color: ${({theme}) => theme.palette.secondary};
     cursor: pointer;
+    display: flex;
+    font-size: 17px;
 `;
 
 const IconContainer = styled(Icon)`
