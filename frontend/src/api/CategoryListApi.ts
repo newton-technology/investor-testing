@@ -1,9 +1,10 @@
-import axios from './axios';
+import axiosWithToken from './axios';
+import {ICategory} from '../pages/category_list/CategoryList';
 
 export const CategoryListApi = {
     getCategories() {
-        return axios.get(`${process.env.REACT_APP_API_URL}/categories`).then((response) => {
-            console.log(response);
+        return axiosWithToken.get<ICategory[]>(`${process.env.REACT_APP_API_URL}/categories`).then((response) => {
+            return response.data;
         });
     },
 };

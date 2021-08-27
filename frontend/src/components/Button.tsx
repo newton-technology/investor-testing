@@ -18,22 +18,22 @@ export const Button: React.FC<IProps> = (props) => {
 
     if (to) {
         return (
-            <LinkContainer to={to} isPlain={isPlain} className={className}>
+            <LinkContainer to={to} $isPlain={isPlain} className={className}>
                 {children}
             </LinkContainer>
         );
     }
     return (
-        <ButtonContainer onClick={onClick} isPlain={isPlain} className={className} disabled={disabled}>
+        <ButtonContainer onClick={onClick} $isPlain={isPlain} className={className} disabled={disabled}>
             {children}
             {isLoading && <LoaderIcon isFull={false} />}
         </ButtonContainer>
     );
 };
 
-const button = css<{isPlain: boolean}>`
-    background-color: ${({theme, isPlain}) => (isPlain ? 'transparent' : theme.palette.secondary)};
-    color: ${({theme, isPlain}) => (isPlain ? theme.palette.secondary : '#fff')};
+const button = css<{$isPlain: boolean}>`
+    background-color: ${({theme, $isPlain}) => ($isPlain ? 'transparent' : theme.palette.secondary)};
+    color: ${({theme, $isPlain}) => ($isPlain ? theme.palette.secondary : '#fff')};
     border: 1px solid ${({theme}) => theme.palette.secondary};
     height: 53px;
     font-size: 18px;
@@ -45,7 +45,7 @@ const button = css<{isPlain: boolean}>`
     justify-content: center;
 `;
 
-const ButtonContainer = styled.button<{isPlain: boolean}>`
+const ButtonContainer = styled.button<{$isPlain: boolean}>`
     ${button};
 
     &:hover {
@@ -53,11 +53,11 @@ const ButtonContainer = styled.button<{isPlain: boolean}>`
     }
 
     svg {
-        fill: ${({theme, isPlain}) => (isPlain ? theme.palette.secondary : '#fff')};
+        fill: ${({theme, $isPlain}) => ($isPlain ? theme.palette.secondary : '#fff')};
     }
 `;
 
-const LinkContainer = styled(Link)<{isPlain: boolean}>`
+const LinkContainer = styled(Link)<{$isPlain: boolean}>`
     ${button};
 `;
 
