@@ -34,13 +34,14 @@ export const CodeInput = React.forwardRef<HTMLInputElement, IProps>(
         const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
             const newValue = e.clipboardData.getData('Text').trim().slice(0, length);
             setValue(newValue);
+            onChange(newValue);
         };
 
         useEffect(() => {
             if (value.length === length && onComplete) {
                 onComplete(value);
             }
-        }, [value, length, onComplete]);
+        }, [value, length]);
 
         return (
             <Wrapper className={className} htmlFor='code'>
