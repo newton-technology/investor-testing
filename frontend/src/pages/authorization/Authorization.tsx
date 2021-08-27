@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import {authService} from '../../api/AuthService';
 import {ReactComponent as AuthPageBackground} from '../../assets/svg/authPageBackground.svg';
+import {Loader} from '../../components/Loader';
 import {accessTokenStorage} from '../../stores/AccessTokenStorage';
 import {FormHeader} from './components/FormHeader';
 import {CodeStep} from './components/forms/CodeStep';
