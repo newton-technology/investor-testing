@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import {useQuery} from '../../hooks/useQuery';
 import {CategoryListApi} from '../../api/CategoryListApi';
 import {Loader} from '../../components/Loader';
-import {ServerErrorMessage} from '../../components/ServerErrorMessage';
+import {ErrorMessage} from '../../components/ErrorMessage';
 import {CategoryCard} from './components/CategoryCard';
 import {IResponseError} from '../../api/CategoryTestApi';
 import {breakpoint} from '../../theme/breakpont';
@@ -26,7 +26,7 @@ export const CategoryList: React.FC = () => {
     }
 
     if (isError) {
-        return <ServerErrorMessage />;
+        return <ErrorMessage />;
     }
 
     return (

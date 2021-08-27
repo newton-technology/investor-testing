@@ -10,7 +10,7 @@ interface IProps {
     children?: ReactElement;
 }
 
-export const ServerErrorMessage: React.FC<IProps> = (props) => {
+export const ErrorMessage: React.FC<IProps> = (props) => {
     const {title, subtitle, children} = props;
 
     const handleClick = () => {

@@ -35,7 +35,7 @@ const LoaderContainer = styled.span<{isFull: boolean}>`
         `
         align-items: center;
         justify-content: center;
-        height: 100px;
+        height: 300px;
     `}
 
     svg {

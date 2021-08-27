@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {ServerErrorMessage} from './ServerErrorMessage';
+import {ErrorMessage} from './ErrorMessage';
 import {Container} from './Container';
-import {Button} from './Button';
 
 interface IProps {
     children: React.ReactNode;
@@ -24,11 +23,9 @@ export class ErrorBoundary extends React.Component<IProps, IState> {
         if (this.state.isError) {
             return (
                 <ErrorMessageContainer>
-                    <ServerErrorMessage
-                        title='Ошибка приложения'
-                        subtitle='В приложении произошла непредвиденная ошибка'>
+                    <ErrorMessage title='Ошибка приложения' subtitle='В приложении произошла непредвиденная ошибка'>
                         <SupportLink href='mailto:investor_testing@nwtn.io'>Написать в поддержку</SupportLink>
-                    </ServerErrorMessage>
+                    </ErrorMessage>
                 </ErrorMessageContainer>
             );
         }
