@@ -117,7 +117,8 @@ export const CategoryTest: React.FC = () => {
                 <TestContainer ref={testRef} isTestComplete={isTestResultVisible}>
                     <QuestionsList>
                         {questions.map((question: IQuestion, i: number) => {
-                            const isMultipleAnswers = question.answersCountToChooseMax > 1;
+                            const isMultipleAnswers =
+                                question.answersCountToChooseMin !== question.answersCountToChooseMax;
 
                             return (
                                 <QuestionCard
