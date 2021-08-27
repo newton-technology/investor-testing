@@ -17,17 +17,12 @@ interface ILogin extends IBaseAuth {
     access_token: string;
 }
 
-interface IRefresh {
-    refresh_token?: string;
-    grant_type: 'refresh_token';
-}
-
 class AuthService {
     private readonly url = `${process.env.REACT_APP_API_URL}/authorization`;
     private watcher: number | undefined = undefined;
 
     constructor() {
-        this.startRefreshTokenWatcher();
+        this.init();
     }
 
     public async login(payload: ILogin, errorCallBack: () => void) {
@@ -45,8 +40,11 @@ class AuthService {
         accessTokenStorage.refreshToken = undefined;
     }
 
-    public async refresh(payload: IRefresh) {
-        const data = await this.request('token', payload);
+    public async refresh() {
+        const data = await this.request('token', {
+            refresh_token: accessTokenStorage.refreshToken,
+            grant_type: 'refresh_token',
+        });
         this.setToken(data);
     }
 
@@ -76,6 +74,14 @@ class AuthService {
         }
     }
 
+    private init() {
+        if (accessTokenStorage.refreshToken && !accessTokenStorage.accessToken) {
+            this.refresh();
+        }
+
+        this.startRefreshTokenWatcher();
+    }
+
     private startRefreshTokenWatcher() {
         if (this.watcher) {
             clearTimeout(this.watcher);
@@ -84,10 +90,7 @@ class AuthService {
         if (accessTokenStorage.refreshToken) {
             const time = getJWTRefreshTime(accessTokenStorage?.refreshToken, Date.now());
             this.watcher = window.setTimeout(() => {
-                this.refresh({
-                    refresh_token: accessTokenStorage.refreshToken,
-                    grant_type: 'refresh_token',
-                });
+                this.refresh();
             }, time);
         }
     }
