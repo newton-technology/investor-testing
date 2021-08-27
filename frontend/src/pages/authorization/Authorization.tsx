@@ -68,7 +68,6 @@ export const Authorization: React.FC = () => {
         if (code.length === 0) {
             setIsWrongCode(false);
         }
-        console.log(code);
     }, [code]);
 
     return (
