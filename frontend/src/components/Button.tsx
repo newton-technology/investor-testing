@@ -26,7 +26,7 @@ export const Button: React.FC<IProps> = (props) => {
     return (
         <ButtonContainer onClick={onClick} $isPlain={isPlain} className={className} disabled={disabled}>
             {children}
-            {isLoading && <LoaderIcon isFull={false} />}
+            {isLoading && <LoaderIcon isInline={true} />}
         </ButtonContainer>
     );
 };
