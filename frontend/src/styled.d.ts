@@ -13,5 +13,12 @@ declare module 'styled-components' {
                 footer: string;
             };
         };
+        breakpoints: {
+            xs: number;
+            sm: number;
+            md: number;
+            lg: number;
+        };
+        breakepoint: (size: 'xs' | 'sm' | 'md' | 'lg') => (styles: TemplateStringsArray) => string;
     }
 }
