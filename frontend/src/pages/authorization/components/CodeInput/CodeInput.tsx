@@ -85,7 +85,7 @@ const Input = styled.input<{positionIndex?: number; error?: boolean}>`
     box-sizing: border-box;
     font-size: 42px;
     height: 52px;
-    left: ${({positionIndex = 1}) => (positionIndex + 1) * 42 + positionIndex * 6}px;
+    left: ${({positionIndex = 1}) => (positionIndex + 1) * 42 + positionIndex * 8}px;
     outline: none;
     padding: 0 5px;
     position: absolute;
