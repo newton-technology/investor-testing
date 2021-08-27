@@ -8,13 +8,14 @@ import {ResendCode} from '../ResendCode';
 
 interface IProps {
     email: string;
+    isWrongCode: boolean;
     changeEmail: () => void;
     setCode: (code: string) => void;
     sendCode: () => void;
     login: () => void;
 }
 
-export const CodeStep: React.FC<IProps> = ({email, setCode, changeEmail, sendCode, login}) => {
+export const CodeStep: React.FC<IProps> = ({email, isWrongCode, setCode, changeEmail, sendCode, login}) => {
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -28,8 +29,9 @@ export const CodeStep: React.FC<IProps> = ({email, setCode, changeEmail, sendCod
             <Description>
                 Мы отправили вам на почту <br /> <Email>{emailEllipsisFormat(email)}</Email> шестизначный код
             </Description>
-            <StyledCodeInput ref={inputRef} length={6} onChange={setCode} onComplete={login} />
+            <StyledCodeInput ref={inputRef} length={6} onChange={setCode} onComplete={login} error={isWrongCode} />
             <ResendCode sendCode={sendCode} />
+            {isWrongCode && <ErrorMessage>Неверный код </ErrorMessage>}
             <ChangeEmailButton type='button' onClick={changeEmail}>
                 <Icon name='chevron' />
                 Изменить email
@@ -60,17 +62,25 @@ const Email = styled.span`
 `;
 
 const ChangeEmailButton = styled.button`
-    font-weight: 500;
-    font-size: 17px;
-    line-height: 130%;
-    color: #2f6feb;
-
-    display: flex;
-    justify-content: center;
     align-items: center;
+    color: #2f6feb;
+    display: flex;
+    font-size: 17px;
+    font-weight: 500;
+    justify-content: center;
+    line-height: 130%;
     padding-bottom: 32px;
 
     & > span {
         margin-right: 8px;
     }
+`;
+const ErrorMessage = styled.div`
+    color: #de2b37;
+    display: flex;
+    font-size: 17px;
+    justify-content: center;
+    line-height: 130%;
+    padding-bottom: 32px;
+    padding-top: 8px;
 `;

@@ -23,11 +23,13 @@ const emailRegex =
 
 const emailValidate = (email: string): boolean => emailRegex.test(email);
 
-export const AuthorizationPage: React.FC = () => {
+export const Authorization: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [code, setCode] = useState<string>('');
     const [isError, setIsError] = useState<boolean>(false);
+    const [isWrongCode, setIsWrongCode] = useState<boolean>(false);
     const [step, setStep] = useState<'email' | 'code'>('email');
+
     const sendCode = () => {
         authService.sendCode({
             email,
@@ -38,12 +40,17 @@ export const AuthorizationPage: React.FC = () => {
 
     const login = () => {
         if (accessTokenStorage?.accessToken) {
-            authService.login({
-                email,
-                code,
-                access_token: accessTokenStorage?.accessToken,
-                grant_type: 'code',
-            });
+            authService.login(
+                {
+                    email,
+                    code,
+                    access_token: accessTokenStorage?.accessToken,
+                    grant_type: 'code',
+                },
+                () => {
+                    setIsWrongCode(true);
+                },
+            );
         }
     };
 
@@ -56,6 +63,13 @@ export const AuthorizationPage: React.FC = () => {
     useEffect(() => {
         setIsError(!emailValidate(email));
     }, [email]);
+
+    useEffect(() => {
+        if (code.length === 0) {
+            setIsWrongCode(false);
+        }
+        console.log(code);
+    }, [code]);
 
     return (
         <Wrapper>
@@ -81,6 +95,7 @@ export const AuthorizationPage: React.FC = () => {
                             setCode={setCode}
                             sendCode={sendCode}
                             login={login}
+                            isWrongCode={isWrongCode}
                         />
                     )}
                 </Form>

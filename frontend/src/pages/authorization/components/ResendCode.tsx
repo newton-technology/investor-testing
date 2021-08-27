@@ -9,7 +9,7 @@ interface IProps {
 }
 
 export const ResendCode: React.FC<IProps> = ({sendCode}) => {
-    const {countdown, formatedCountdown, restart} = useCountdown(10000);
+    const {countdown, formatedCountdown, restart} = useCountdown();
 
     const handleSendCode = () => {
         sendCode();
