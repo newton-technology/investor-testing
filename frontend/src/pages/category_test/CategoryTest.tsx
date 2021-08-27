@@ -1,5 +1,5 @@
 import React, {useRef, useState, useEffect} from 'react';
-import {useParams, Prompt} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import styled from 'styled-components';
 
 import {CategoryTestApi, IResponseError} from '../../api/CategoryTestApi';
@@ -40,7 +40,6 @@ export const CategoryTest: React.FC = () => {
     const [incorrectQuestionId, setIncorrectQuestionId] = useState<number | undefined>();
     const [isTestVisible, setIsTestVisible] = useState<boolean>(false);
     const [isTestResultVisible, setIsTestResultVisible] = useState<boolean>(false);
-    const [isTestWarningModalOpen, setIsTestWarningModalOpen] = useState<boolean>(false);
     const testRef = useRef<HTMLDivElement>();
     const {id, questions = [], category} = data ?? {};
 
@@ -53,21 +52,6 @@ export const CategoryTest: React.FC = () => {
             debugger;
         },
     });
-
-    useEffect(() => {
-        const preventNav = (e: BeforeUnloadEvent) => {
-            if (isTestVisible) {
-                // e.preventDefault();
-                // e.returnValue = '';
-            }
-        };
-
-        window.addEventListener('beforeunload', preventNav);
-
-        return () => {
-            window.removeEventListener('beforeunload', preventNav);
-        };
-    }, [isTestVisible]);
 
     useEffect(() => {
         if (isTestVisible && testRef.current) {
@@ -124,49 +108,45 @@ export const CategoryTest: React.FC = () => {
     }
 
     return (
-        <>
-            {/*<Prompt when={isTestVisible} message='Завершить тест досрочно? Ответы не будут сохранены' />*/}
+        <Container>
+            <TestWarningModal isBlocked={isTestVisible && !isTestResultVisible} />
+            {category && (
+                <TestPreview title={category?.description} goToTest={goToTest} isTestVisible={isTestVisible} />
+            )}
+            {isTestVisible && (
+                <TestContainer ref={testRef} isTestComplete={isTestResultVisible}>
+                    <QuestionsList>
+                        {questions.map((question: IQuestion, i: number) => {
+                            const isMultipleAnswers =
+                                question.answersCountToChooseMin !== question.answersCountToChooseMax;
 
-            <Container>
-                <TestWarningModal isOpen={isTestWarningModalOpen} />
-                {category && (
-                    <TestPreview title={category?.description} goToTest={goToTest} isTestVisible={isTestVisible} />
-                )}
-                {isTestVisible && (
-                    <TestContainer ref={testRef} isTestComplete={isTestResultVisible}>
-                        <QuestionsList>
-                            {questions.map((question: IQuestion, i: number) => {
-                                const isMultipleAnswers =
-                                    question.answersCountToChooseMin !== question.answersCountToChooseMax;
-
-                                return (
-                                    <QuestionCard
-                                        key={question.id}
-                                        id={question.id}
-                                        title={question.question}
-                                        answers={question.answers}
-                                        getIsChecked={getIsChecked}
-                                        changeValue={changeValue}
-                                        questionsCount={questions.length}
-                                        index={i + 1}
-                                        isMultipleAnswers={isMultipleAnswers}
-                                        isError={incorrectQuestionId === question.id}
-                                    />
-                                );
-                            })}
-                        </QuestionsList>
-                        {!isTestResultVisible && (
-                            <ButtonContainer>
-                                <Button onClick={handleSubmit} isLoading={checkTestMutation.isLoading}>
-                                    Завершить тест
-                                </Button>
-                            </ButtonContainer>
-                        )}
-                    </TestContainer>
-                )}
-                {isTestResultVisible && <TestResult isSuccess={checkTestMutation.data?.status === 'passed'} />}
-            </Container>
-        </>
+                            return (
+                                <QuestionCard
+                                    key={question.id}
+                                    id={question.id}
+                                    title={question.question}
+                                    answers={question.answers}
+                                    getIsChecked={getIsChecked}
+                                    changeValue={changeValue}
+                                    questionsCount={questions.length}
+                                    index={i + 1}
+                                    isMultipleAnswers={isMultipleAnswers}
+                                    isError={incorrectQuestionId === question.id}
+                                />
+                            );
+                        })}
+                    </QuestionsList>
+                    {!isTestResultVisible && (
+                        <ButtonContainer>
+                            <Button onClick={handleSubmit} isLoading={checkTestMutation.isLoading}>
+                                Завершить тест
+                            </Button>
+                        </ButtonContainer>
+                    )}
+                </TestContainer>
+            )}
+            {isTestResultVisible && <TestResult isSuccess={checkTestMutation.data?.status === 'passed'} />}
+        </Container>
     );
 };
 

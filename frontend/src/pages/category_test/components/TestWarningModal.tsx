@@ -1,29 +1,78 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
+import {Prompt, useLocation, useHistory} from 'react-router-dom';
+import {Location} from 'history';
 
 import {Button} from '../../../components/Button';
 import {Modal} from '../../../components/Modal';
 import {breakpoint} from '../../../theme/breakpont';
 
 interface IProps {
-    isOpen: boolean;
-    onClose?: () => void;
+    isBlocked: boolean;
 }
 
-export const TestWarningModal: React.FC<IProps> = (props) => {
-    const {isOpen, onClose} = props;
+export const TestWarningModal: React.FC<IProps> = ({isBlocked}) => {
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+    const history = useHistory();
+    const [lastLocation, setLastLocation] = useState<Location | undefined>();
+    const [isNavigationConfirm, setIsNavigationConfirm] = useState(false);
+
+    useEffect(() => {
+        const unload = (e: BeforeUnloadEvent) => {
+            if (isBlocked) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        };
+        window.addEventListener('beforeunload', unload);
+
+        return () => {
+            window.removeEventListener('beforeunload', unload);
+        };
+    }, [isBlocked]);
+
+    useEffect(() => {
+        if (isNavigationConfirm && lastLocation) {
+            history.push(lastLocation.pathname);
+        }
+    }, [isNavigationConfirm, lastLocation, history]);
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleBlockedRoute = (nextLocation: Location) => {
+        if (!isNavigationConfirm && isBlocked) {
+            setIsModalOpen(true);
+            setLastLocation(nextLocation);
+            return false;
+        }
+
+        return true;
+    };
+
+    const handleNavigationConfirm = () => {
+        closeModal();
+        setIsNavigationConfirm(true);
+    };
 
     return (
-        <Modal isOpen={isOpen}>
-            <Container>
-                <Title>Завершить тест досрочно?</Title>
-                <Subtitle>Ответы не будут сохранены</Subtitle>
-                <ButtonsContainer>
-                    <Button isPlain>Все равно выйти</Button>
-                    <Button>Продолжить тест</Button>
-                </ButtonsContainer>
-            </Container>
-        </Modal>
+        <>
+            <Prompt when message={handleBlockedRoute} />
+            <Modal isOpen={isModalOpen} onClose={closeModal}>
+                <Container>
+                    <Title>Завершить тест досрочно?</Title>
+                    <Subtitle>Ответы не будут сохранены</Subtitle>
+                    <ButtonsContainer>
+                        <Button isPlain onClick={handleNavigationConfirm}>
+                            Все равно выйти
+                        </Button>
+                        <Button onClick={closeModal}>Продолжить тест</Button>
+                    </ButtonsContainer>
+                </Container>
+            </Modal>
+        </>
     );
 };
 

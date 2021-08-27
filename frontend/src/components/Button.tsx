@@ -43,11 +43,10 @@ const button = css<{$isPlain: boolean}>`
     align-items: center;
     border-radius: 4px;
     justify-content: center;
-    transition: color 0.2s linear, background-color 0.2s linear;
+    transition: transform 0.2s linear;
 
     &:hover {
-        background-color: ${({theme, $isPlain}) => ($isPlain ? theme.palette.secondary : 'transparent')};
-        color: ${({theme, $isPlain}) => ($isPlain ? theme.palette.bg.secondary : theme.palette.secondary)};
+        transform: translateY(-3px);
     }
 `;
 

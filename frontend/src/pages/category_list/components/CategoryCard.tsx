@@ -69,9 +69,12 @@ const Title = styled.div`
 const CompleteLabel = styled.div`
     color: ${({theme}) => theme.palette.bg.secondary};
     font-weight: 600;
-    font-size: 20px;
     display: flex;
     justify-content: flex-end;
+
+    ${breakpoint('md')`
+        font-size: 20px;
+    `}
 `;
 
 const IconContainer = styled(Icon)`
