@@ -41,7 +41,6 @@ const Wrapper = styled.div`
     align-items: center;
     color: #3a3463;
     display: flex;
-    font-size: 17px;
     font-weight: 500;
     justify-content: center;
     line-height: 130%;

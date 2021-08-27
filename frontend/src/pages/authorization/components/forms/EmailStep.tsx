@@ -39,6 +39,7 @@ export const EmailStep: React.FC<IProps> = ({email, isError, setEmail}) => {
 };
 
 const InputWrapper = styled.div`
+    color: #929bad;
     position: relative;
     width: 100%;
 `;

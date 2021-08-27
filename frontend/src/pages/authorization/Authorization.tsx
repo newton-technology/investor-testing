@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import {authService} from '../../api/AuthService';
 import {ReactComponent as AuthPageBackground} from '../../assets/svg/authPageBackground.svg';
-import {Loader} from '../../components/Loader';
 import {accessTokenStorage} from '../../stores/AccessTokenStorage';
 import {FormHeader} from './components/FormHeader';
 import {CodeStep} from './components/forms/CodeStep';
@@ -110,6 +109,7 @@ const Wrapper = styled.div`
     display: flex;
     height: 100vh;
     justify-content: center;
+    padding: 0 32px;
     width: 100%;
 `;
 
@@ -117,10 +117,13 @@ const Form = styled.form`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    height: 100%;
     justify-content: center;
     padding: 0 32px;
     width: 100%;
+
+    ${({theme}) => theme.breakepoint('xs')`
+        padding: 0 24px;
+    `}
 `;
 
 const FormContainer = styled.div`
@@ -128,7 +131,7 @@ const FormContainer = styled.div`
     background: #ffffff;
     border-radius: 10px;
     box-sizing: border-box;
-    width: 444px;
+    max-width: 457px;
     z-index: 2;
 `;
 
@@ -140,5 +143,9 @@ const Title = styled.h1`
     font-weight: bold;
     line-height: 130%;
     margin-bottom: 16px;
-    margin-top: 32px;
+    margin-top: 15px;
+
+    ${({theme}) => theme.breakepoint('xs')`
+        font-size: 28px;
+    `}
 `;
