@@ -18,6 +18,10 @@ class AccessTokenStorage {
             this._accessToken = token;
             localStorage.setItem('accessToken', token);
             this.sendTokenToSubscriber();
+        } else {
+            this._accessToken = token;
+            localStorage.removeItem('accessToken');
+            this.sendTokenToSubscriber();
         }
     }
 
@@ -29,6 +33,10 @@ class AccessTokenStorage {
         if (token) {
             this._refreshToken = token;
             localStorage.setItem('refreshToken', token);
+            this.sendTokenToSubscriber();
+        } else {
+            this._refreshToken = token;
+            localStorage.removeItem('refreshToken');
             this.sendTokenToSubscriber();
         }
     }

@@ -3,8 +3,8 @@ import {getJWTRefreshTime} from '../utils/jwtUtils';
 import axios from './axios';
 
 interface IServerResponse {
-    accessToken: string;
-    refreshToken?: string;
+    access_token: string;
+    refresh_token?: string;
 }
 
 interface IBaseAuth {
@@ -14,11 +14,11 @@ interface IBaseAuth {
 
 interface ILogin extends IBaseAuth {
     code: string;
-    accessToken: string;
+    access_token: string;
 }
 
 interface IRefresh {
-    refreshToken?: string;
+    refresh_token?: string;
     grant_type: 'refresh_token';
 }
 
@@ -30,8 +30,8 @@ class AuthService {
         this.startRefreshTokenWatcher();
     }
 
-    public async login(payload: ILogin) {
-        const data = await this.request('token', payload);
+    public async login(payload: ILogin, errorCallBack: () => void) {
+        const data = await this.request('token', payload, errorCallBack);
         this.setToken(data);
     }
 
@@ -51,20 +51,27 @@ class AuthService {
     }
 
     private setToken(data: IServerResponse | undefined) {
-        if (data?.accessToken) {
-            accessTokenStorage.accessToken = data.accessToken;
+        if (data?.access_token) {
+            accessTokenStorage.accessToken = data.access_token;
         }
-        if (data?.refreshToken) {
-            accessTokenStorage.refreshToken = data.refreshToken;
+        if (data?.refresh_token) {
+            accessTokenStorage.refreshToken = data.refresh_token;
             this.startRefreshTokenWatcher();
         }
     }
 
-    private async request(endpoint: string, payload: any): Promise<IServerResponse | undefined> {
+    private async request(
+        endpoint: string,
+        payload: any,
+        errorCallBack?: (errorCode: string) => void,
+    ): Promise<IServerResponse | undefined> {
         try {
             const {data} = await axios.post<IServerResponse>(`${this.url}/${endpoint}`, payload);
             return data;
         } catch (e) {
+            if (errorCallBack) {
+                errorCallBack(e.response.status);
+            }
             console.log(e);
         }
     }
@@ -78,7 +85,7 @@ class AuthService {
             const time = getJWTRefreshTime(accessTokenStorage?.refreshToken, Date.now());
             this.watcher = window.setTimeout(() => {
                 this.refresh({
-                    refreshToken: accessTokenStorage.refreshToken,
+                    refresh_token: accessTokenStorage.refreshToken,
                     grant_type: 'refresh_token',
                 });
             }, time);
