@@ -4,7 +4,7 @@ import {ThemeProvider} from 'styled-components';
 
 import {Layout} from './components/Layout';
 import {useAuthorization} from './hooks/useAuthorization';
-import {AuthorizationPage} from './pages/authorization/AuthorizationPage';
+import {Authorization} from './pages/authorization/Authorization';
 import {CategoryList} from './pages/category_list/CategoryList';
 import {CategoryTest} from './pages/category_test/CategoryTest';
 import {GlobalStyle} from './theme/GlobalStyle';
@@ -33,7 +33,7 @@ const App: React.FC = () => {
             ) : (
                 <Switch>
                     <Route path='/' exact>
-                        <AuthorizationPage />
+                        <Authorization />
                     </Route>
                     <Route path='*'>
                         <Redirect to='/' />

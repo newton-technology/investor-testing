@@ -58,10 +58,6 @@ const Input = styled.input<{isError: boolean}>`
     padding: 16px;
     padding-left: 32px;
     width: 100%;
-
-    &::placeholder {
-        text-indent: 50px;
-    }
 `;
 const Description = styled.span`
     color: #3a3463;
