@@ -17,7 +17,7 @@ export const EmailStep: React.FC<IProps> = ({email, isError, isServerError, setE
                 Мы поможем узнать, насколько хорошо вы разбираетесь в инструментах инвестирования, какие сложные сделки
                 можете заключать уже сейчас, и какой вид сделок принесет вам максимальную прибыль в будущем
             </Description>
-            <InputWrapper>
+            <InputContainer>
                 {!email.length && <StyledIcon name='email' size={16} />}
                 <Input
                     type='email'
@@ -28,7 +28,7 @@ export const EmailStep: React.FC<IProps> = ({email, isError, isServerError, setE
                         setEmail(e.target.value);
                     }}
                 />
-            </InputWrapper>
+            </InputContainer>
             <Button disabled={isError}>Продолжить</Button>
             {isServerError && <ErrorMessage>Ошибка сервера, повторите позже.</ErrorMessage>}
             {isError && !!email.length && <ErrorMessage>Неправильно введен email.</ErrorMessage>}
@@ -40,7 +40,7 @@ export const EmailStep: React.FC<IProps> = ({email, isError, isServerError, setE
     );
 };
 
-const InputWrapper = styled.div`
+const InputContainer = styled.div`
     color: #929bad;
     position: relative;
     width: 100%;

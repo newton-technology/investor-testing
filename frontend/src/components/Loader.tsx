@@ -42,7 +42,7 @@ const LoaderContainer = styled.span<{isInline?: boolean; isFullScreen?: boolean}
     svg {
         animation: ${rotate} 1s cubic-bezier(0.17, 0.67, 0.83, 0.67) infinite;
         fill: ${({theme}) => theme.palette.secondary};
-        height: ${({isFullScreen}) => (isFullScreen ? '79px' : '26px')};
-        width: ${({isFullScreen}) => (isFullScreen ? '79px' : '26px')};
+        height: ${({isFullScreen}) => (isFullScreen ? '80px' : '26px')};
+        width: ${({isFullScreen}) => (isFullScreen ? '80px' : '26px')};
     }
 `;

@@ -26,10 +26,10 @@ export const ResendCode: React.FC<IProps> = ({sendCode}) => {
     }
 
     return (
-        <Wrapper>
+        <Container>
             <StyledIcon name='clock' />
             Выслать код повторно через {formatedCountdown}
-        </Wrapper>
+        </Container>
     );
 };
 
@@ -37,7 +37,7 @@ const StyledIcon = styled(Icon)`
     padding-right: 8px;
 `;
 
-const Wrapper = styled.div`
+const Container = styled.div`
     align-items: center;
     color: ${({theme}) => theme.palette.regular};
     display: flex;

@@ -11,6 +11,7 @@ import {CategoryTest} from './pages/category_test/CategoryTest';
 import {PageNotFound} from './pages/PageNotFound';
 import {GlobalStyle} from './theme/GlobalStyle';
 import {theme} from './theme/theme';
+
 const App: React.FC = () => {
     const {isAuthenticated, isAuthLoading} = useAuthorization();
 
@@ -48,7 +49,7 @@ const App: React.FC = () => {
                     <Route path='/' exact>
                         <Authorization />
                     </Route>
-                    <Route path='*' exact>
+                    <Route path='*'>
                         <Redirect to='/' />
                     </Route>
                 </Switch>

@@ -15,11 +15,10 @@ declare module 'styled-components' {
             };
         };
         breakpoints: {
-            xs: number;
             sm: number;
             md: number;
             lg: number;
         };
-        breakepoint: (size: 'xs' | 'sm' | 'md' | 'lg') => (styles: TemplateStringsArray) => string;
+        breakpoint: (size: 'sm' | 'md' | 'lg') => (styles: TemplateStringsArray) => string;
     }
 }

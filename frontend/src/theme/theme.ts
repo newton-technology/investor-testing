@@ -14,19 +14,16 @@ export const theme: DefaultTheme = {
         },
     },
     breakpoints: {
-        xs: 0,
-        sm: 576,
+        sm: 375,
         md: 768,
         lg: 1200,
     },
-    breakepoint: (size) => {
+    breakpoint: (size) => {
         switch (size) {
-            case 'xs':
-                return (styles) => `@media (max-width: ${theme.breakpoints.sm}px) {${styles}}`;
             case 'sm':
-                return (styles) => `@media (max-width: ${theme.breakpoints.md}px) {${styles}}`;
+                return (styles) => `@media (min-width: ${theme.breakpoints.sm}px) {${styles}}`;
             case 'md':
-                return (styles) => `@media (max-width: ${theme.breakpoints.lg}px) {${styles}}`;
+                return (styles) => `@media (min-width: ${theme.breakpoints.md}px) {${styles}}`;
             case 'lg':
                 return (styles) => `@media (min-width: ${theme.breakpoints.lg}px) {${styles}}`;
         }

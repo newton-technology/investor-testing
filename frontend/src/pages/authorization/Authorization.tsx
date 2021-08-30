@@ -74,7 +74,7 @@ export const Authorization: React.FC = () => {
     }, [code]);
 
     return (
-        <Wrapper>
+        <Container>
             <AuthPageBackground style={{position: 'fixed'}} />
             <FormContainer>
                 <Form
@@ -102,11 +102,11 @@ export const Authorization: React.FC = () => {
                     )}
                 </Form>
             </FormContainer>
-        </Wrapper>
+        </Container>
     );
 };
 
-const Wrapper = styled.div`
+const Container = styled.div`
     align-items: center;
     background: ${({theme}) => theme.palette.bg.authorization};
     display: flex;
@@ -121,11 +121,11 @@ const Form = styled.form`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0 32px;
+    padding: 0 24px;
     width: 100%;
 
-    ${({theme}) => theme.breakepoint('xs')`
-        padding: 0 24px;
+    ${({theme}) => theme.breakpoint('md')`
+        padding: 0 32px;
     `}
 `;
 
@@ -139,12 +139,12 @@ const FormContainer = styled.div`
 `;
 
 const Title = styled.h1`
-    font-size: 32px;
+    font-size: 28px;
     font-weight: bold;
     margin-bottom: 16px;
     margin-top: 15px;
 
-    ${({theme}) => theme.breakepoint('xs')`
-        font-size: 28px;
+    ${({theme}) => theme.breakpoint('md')`
+        font-size: 32px;
     `}
 `;
