@@ -7,9 +7,10 @@ import {Icon} from '../../../../components/Icon';
 interface IProps {
     email: string;
     isError: boolean;
+    isServerError: boolean;
     setEmail: (email: string) => void;
 }
-export const EmailStep: React.FC<IProps> = ({email, isError, setEmail}) => {
+export const EmailStep: React.FC<IProps> = ({email, isError, isServerError, setEmail}) => {
     return (
         <React.Fragment>
             <Description>
@@ -29,6 +30,7 @@ export const EmailStep: React.FC<IProps> = ({email, isError, setEmail}) => {
                 />
             </InputWrapper>
             <Button disabled={isError}>Продолжить</Button>
+            {isServerError && <ErrorMessage>Ошибка сервера, повторите позже.</ErrorMessage>}
             {isError && !!email.length && <ErrorMessage>Неправильно введен email.</ErrorMessage>}
             <EULADescription>
                 Нажимая кнопку Продолжить, вы соглашаетесь с условиями <u>пользовательского соглашения</u> и даете{' '}

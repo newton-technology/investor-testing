@@ -27,30 +27,33 @@ export const Authorization: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [code, setCode] = useState<string>('');
     const [isError, setIsError] = useState<boolean>(false);
+    const [isServerError, setIsServerError] = useState<boolean>(false);
     const [isWrongCode, setIsWrongCode] = useState<boolean>(false);
     const [step, setStep] = useState<'email' | 'code'>('email');
 
     const sendCode = () => {
-        authService.sendCode({
-            email,
-            grant_type: 'code',
-        });
-        setStep('code');
+        authService
+            .sendCode({
+                email,
+                grant_type: 'code',
+            })
+            .then(() => {
+                setStep('code');
+                setIsServerError(false);
+            })
+            .catch(() => setIsServerError(true));
     };
 
     const login = () => {
         if (accessTokenStorage?.accessToken) {
-            authService.login(
-                {
+            authService
+                .login({
                     email,
                     code,
                     access_token: accessTokenStorage?.accessToken,
                     grant_type: 'code',
-                },
-                () => {
-                    setIsWrongCode(true);
-                },
-            );
+                })
+                .catch(() => setIsWrongCode(true));
         }
     };
 
@@ -86,7 +89,7 @@ export const Authorization: React.FC = () => {
                     {step === 'email' && <FormHeader />}
                     <Title>{steps[step].title}</Title>
                     {step === 'email' ? (
-                        <EmailStep email={email} isError={isError} setEmail={setEmail} />
+                        <EmailStep email={email} isError={isError} isServerError={isServerError} setEmail={setEmail} />
                     ) : (
                         <CodeStep
                             email={email}

@@ -25,8 +25,8 @@ class AuthService {
         this.init();
     }
 
-    public async login(payload: ILogin, errorCallBack: () => void) {
-        const data = await this.request('token', payload, errorCallBack);
+    public async login(payload: ILogin) {
+        const data = await this.request('token', payload);
         this.setToken(data);
     }
 
@@ -58,20 +58,9 @@ class AuthService {
         }
     }
 
-    private async request(
-        endpoint: string,
-        payload: any,
-        errorCallBack?: (errorCode: string) => void,
-    ): Promise<IServerResponse | undefined> {
-        try {
-            const {data} = await axios.post<IServerResponse>(`${this.url}/${endpoint}`, payload);
-            return data;
-        } catch (e) {
-            if (errorCallBack) {
-                errorCallBack(e.response.status);
-            }
-            console.log(e);
-        }
+    private async request(endpoint: string, payload: any): Promise<IServerResponse | undefined> {
+        const {data} = await axios.post<IServerResponse>(`${this.url}/${endpoint}`, payload);
+        return data;
     }
 
     private init() {
