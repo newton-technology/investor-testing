@@ -67,6 +67,10 @@ const controlCss = css`
     ${breakpoint('md')`
         margin-right: 28px;
     `}
+
+    ${Container}:hover & {
+        border-color: ${({theme}) => theme.palette.primary};
+    }
 `;
 
 const CheckboxControl = styled.div<{isChecked: boolean}>`

@@ -1,15 +1,19 @@
 import {DefaultTheme} from 'styled-components';
 
+import customize from '../customize.json';
+
+const palette = customize.palette;
+
 export const theme: DefaultTheme = {
     palette: {
-        regular: '#3A3463',
-        primary: '#0DAAEC',
-        secondary: '#2F6FEB',
+        regular: palette.regular || '#3A3463',
+        primary: palette.primary || '#0DAAEC',
+        secondary: palette.secondary || '#2F6FEB',
         error: '#E30B17',
         bg: {
-            primary: '#F2F6F8',
-            secondary: '#FFF',
-            footer: '#1F1B30',
+            primary: palette.bg.primary || '#F2F6F8',
+            secondary: palette.bg.secondary || '#FFF',
+            footer: palette.bg.footer || '#1F1B30',
             authorization: 'linear-gradient(139.02deg, #65dfe7 -19.37%, #587cfc 116.76%)',
         },
     },

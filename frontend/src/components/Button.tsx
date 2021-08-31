@@ -33,7 +33,7 @@ export const Button: React.FC<IProps> = (props) => {
 
 const button = css<{$isPlain: boolean}>`
     background-color: ${({theme, $isPlain}) => ($isPlain ? 'transparent' : theme.palette.secondary)};
-    color: ${({theme, $isPlain}) => ($isPlain ? theme.palette.secondary : '#fff')};
+    color: ${({theme, $isPlain}) => ($isPlain ? theme.palette.secondary : theme.palette.bg.secondary)};
     border: 1px solid ${({theme}) => theme.palette.secondary};
     height: 53px;
     font-size: 18px;
@@ -45,7 +45,7 @@ const button = css<{$isPlain: boolean}>`
     justify-content: center;
     transition: transform 0.2s linear;
 
-    &:hover {
+    &:not(:disabled):hover {
         transform: translateY(-3px);
     }
 `;

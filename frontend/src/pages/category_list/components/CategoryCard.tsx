@@ -7,7 +7,6 @@ import {breakpoint} from '../../../theme/breakpont';
 
 interface IProps {
     id: number;
-    description: string;
     descriptionShort: string;
     status: string | null;
 }

@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import styled from 'styled-components';
-import {Prompt, useLocation, useHistory} from 'react-router-dom';
 import {Location} from 'history';
+import React, {useEffect, useState} from 'react';
+import {Prompt, useHistory} from 'react-router-dom';
+import styled from 'styled-components';
 
 import {Button} from '../../../components/Button';
 import {Modal} from '../../../components/Modal';

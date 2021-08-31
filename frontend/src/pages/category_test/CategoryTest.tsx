@@ -10,7 +10,7 @@ import {IQuestion, QuestionCard} from './components/QuestionCard';
 import {TestPreview} from './components/TestPreview';
 import {TestWarningModal} from './components/TestWarningModal';
 import {TestResult} from './components/TestResult';
-import {ServerErrorMessage} from '../../components/ServerErrorMessage';
+import {ErrorMessage} from '../../components/ErrorMessage';
 import {getAllAnswers, validate} from './utils';
 import {useMutation} from '../../hooks/useMutation';
 
@@ -104,7 +104,7 @@ export const CategoryTest: React.FC = () => {
         if (error?.code === 'category_passed') {
             return <TestResult isSuccess={true} />;
         }
-        return <ServerErrorMessage />;
+        return <ErrorMessage />;
     }
 
     return (
