@@ -11,7 +11,14 @@ declare module 'styled-components' {
                 primary: string;
                 secondary: string;
                 footer: string;
+                authorization: string;
             };
         };
+        breakpoints: {
+            sm: number;
+            md: number;
+            lg: number;
+        };
+        breakpoint: (size: 'sm' | 'md' | 'lg') => (styles: TemplateStringsArray) => string;
     }
 }

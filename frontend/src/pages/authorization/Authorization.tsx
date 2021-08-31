@@ -27,30 +27,33 @@ export const Authorization: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [code, setCode] = useState<string>('');
     const [isError, setIsError] = useState<boolean>(false);
+    const [isServerError, setIsServerError] = useState<boolean>(false);
     const [isWrongCode, setIsWrongCode] = useState<boolean>(false);
     const [step, setStep] = useState<'email' | 'code'>('email');
 
     const sendCode = () => {
-        authService.sendCode({
-            email,
-            grant_type: 'code',
-        });
-        setStep('code');
+        authService
+            .sendCode({
+                email,
+                grant_type: 'code',
+            })
+            .then(() => {
+                setStep('code');
+                setIsServerError(false);
+            })
+            .catch(() => setIsServerError(true));
     };
 
     const login = () => {
         if (accessTokenStorage?.accessToken) {
-            authService.login(
-                {
+            authService
+                .login({
                     email,
                     code,
                     access_token: accessTokenStorage?.accessToken,
                     grant_type: 'code',
-                },
-                () => {
-                    setIsWrongCode(true);
-                },
-            );
+                })
+                .catch(() => setIsWrongCode(true));
         }
     };
 
@@ -68,11 +71,10 @@ export const Authorization: React.FC = () => {
         if (code.length === 0) {
             setIsWrongCode(false);
         }
-        console.log(code);
     }, [code]);
 
     return (
-        <Wrapper>
+        <Container>
             <AuthPageBackground style={{position: 'fixed'}} />
             <FormContainer>
                 <Form
@@ -87,7 +89,7 @@ export const Authorization: React.FC = () => {
                     {step === 'email' && <FormHeader />}
                     <Title>{steps[step].title}</Title>
                     {step === 'email' ? (
-                        <EmailStep email={email} isError={isError} setEmail={setEmail} />
+                        <EmailStep email={email} isError={isError} isServerError={isServerError} setEmail={setEmail} />
                     ) : (
                         <CodeStep
                             email={email}
@@ -100,16 +102,17 @@ export const Authorization: React.FC = () => {
                     )}
                 </Form>
             </FormContainer>
-        </Wrapper>
+        </Container>
     );
 };
 
-const Wrapper = styled.div`
+const Container = styled.div`
     align-items: center;
-    background: linear-gradient(139.02deg, #65dfe7 -19.37%, #587cfc 116.76%);
+    background: ${({theme}) => theme.palette.bg.authorization};
     display: flex;
     height: 100vh;
     justify-content: center;
+    padding: 0 32px;
     width: 100%;
 `;
 
@@ -117,28 +120,31 @@ const Form = styled.form`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    height: 100%;
     justify-content: center;
-    padding: 0 32px;
+    padding: 0 24px;
     width: 100%;
+
+    ${({theme}) => theme.breakpoint('md')`
+        padding: 0 32px;
+    `}
 `;
 
 const FormContainer = styled.div`
     align-items: center;
-    background: #ffffff;
+    background: ${({theme}) => theme.palette.bg.secondary};
     border-radius: 10px;
     box-sizing: border-box;
-    width: 444px;
+    max-width: 457px;
     z-index: 2;
 `;
 
 const Title = styled.h1`
-    color: #3a3463;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 32px;
-    font-style: normal;
+    font-size: 28px;
     font-weight: bold;
-    line-height: 130%;
     margin-bottom: 16px;
-    margin-top: 32px;
+    margin-top: 15px;
+
+    ${({theme}) => theme.breakpoint('md')`
+        font-size: 32px;
+    `}
 `;

@@ -3,6 +3,7 @@ import {Route, Switch, Redirect} from 'react-router-dom';
 import {ThemeProvider} from 'styled-components';
 
 import {Layout} from './components/Layout';
+import {Loader} from './components/Loader';
 import {useAuthorization} from './hooks/useAuthorization';
 import {Authorization} from './pages/authorization/Authorization';
 import {CategoryList} from './pages/category_list/CategoryList';
@@ -13,7 +14,18 @@ import {GlobalStyle} from './theme/GlobalStyle';
 import {theme} from './theme/theme';
 
 const App: React.FC = () => {
-    const {isAuthenticated} = useAuthorization();
+    const {isAuthenticated, isAuthLoading} = useAuthorization();
+
+    if (isAuthLoading) {
+        return (
+            <ThemeProvider theme={theme}>
+                <GlobalStyle />
+                <ErrorBoundary>
+                    <Loader isFullScreen />
+                </ErrorBoundary>
+            </ThemeProvider>
+        );
+    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -38,8 +50,11 @@ const App: React.FC = () => {
                     </Layout>
                 ) : (
                     <Switch>
-                        <Route path='/'>
+                        <Route path='/' exact>
                             <Authorization />
+                        </Route>
+                        <Route path='*'>
+                            <Redirect to='/' />
                         </Route>
                     </Switch>
                 )}
