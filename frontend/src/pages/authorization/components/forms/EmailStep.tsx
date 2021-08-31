@@ -7,16 +7,17 @@ import {Icon} from '../../../../components/Icon';
 interface IProps {
     email: string;
     isError: boolean;
+    isServerError: boolean;
     setEmail: (email: string) => void;
 }
-export const EmailStep: React.FC<IProps> = ({email, isError, setEmail}) => {
+export const EmailStep: React.FC<IProps> = ({email, isError, isServerError, setEmail}) => {
     return (
         <React.Fragment>
             <Description>
                 Мы поможем узнать, насколько хорошо вы разбираетесь в инструментах инвестирования, какие сложные сделки
                 можете заключать уже сейчас, и какой вид сделок принесет вам максимальную прибыль в будущем
             </Description>
-            <InputWrapper>
+            <InputContainer>
                 {!email.length && <StyledIcon name='email' size={16} />}
                 <Input
                     type='email'
@@ -27,8 +28,9 @@ export const EmailStep: React.FC<IProps> = ({email, isError, setEmail}) => {
                         setEmail(e.target.value);
                     }}
                 />
-            </InputWrapper>
+            </InputContainer>
             <Button disabled={isError}>Продолжить</Button>
+            {isServerError && <ErrorMessage>Ошибка сервера, повторите позже.</ErrorMessage>}
             {isError && !!email.length && <ErrorMessage>Неправильно введен email.</ErrorMessage>}
             <EULADescription>
                 Нажимая кнопку Продолжить, вы соглашаетесь с условиями <u>пользовательского соглашения</u> и даете{' '}
@@ -38,21 +40,17 @@ export const EmailStep: React.FC<IProps> = ({email, isError, setEmail}) => {
     );
 };
 
-const InputWrapper = styled.div`
+const InputContainer = styled.div`
+    color: #929bad;
     position: relative;
     width: 100%;
 `;
 
 const Input = styled.input<{isError: boolean}>`
-    border: 1px solid ${({isError}) => (isError ? '#e30b17' : '#c4c8db')};
+    border: 1px solid ${({isError, theme}) => (isError ? theme.palette.error : '#c4c8db')};
     border-radius: 4px;
     box-sizing: border-box;
-    color: ${({isError}) => (isError ? '#e30b17' : 'black')};
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: normal;
-    line-height: 130%;
+    color: ${({isError, theme}) => (isError ? theme.palette.error : theme.palette.regular)};
     margin-bottom: 16px;
     outline: none;
     padding: 16px;
@@ -60,22 +58,11 @@ const Input = styled.input<{isError: boolean}>`
     width: 100%;
 `;
 const Description = styled.span`
-    color: #3a3463;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: normal;
-    line-height: 130%;
     padding-bottom: 24px;
 `;
 
 const ErrorMessage = styled.span`
-    color: #de2b37;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: normal;
-    line-height: 130%;
+    color: ${({theme}) => theme.palette.error};
     padding-top: 16px;
     text-align: center;
 `;

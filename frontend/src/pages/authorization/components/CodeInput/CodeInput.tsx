@@ -34,16 +34,17 @@ export const CodeInput = React.forwardRef<HTMLInputElement, IProps>(
         const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
             const newValue = e.clipboardData.getData('Text').trim().slice(0, length);
             setValue(newValue);
+            onChange(newValue);
         };
 
         useEffect(() => {
             if (value.length === length && onComplete) {
                 onComplete(value);
             }
-        }, [value, length, onComplete]);
+        }, [value, length]);
 
         return (
-            <Wrapper className={className} htmlFor='code'>
+            <Container className={className} htmlFor='code'>
                 <Input
                     id='code'
                     ref={ref}
@@ -54,19 +55,19 @@ export const CodeInput = React.forwardRef<HTMLInputElement, IProps>(
                     error={error}
                     type='text'
                 />
-                <SegmentWrapper>
+                <SegmentContainer>
                     {positions.map((_, index) => (
                         <Segment key={index} error={error}>
                             {value.slice(index, index + 1)}
                         </Segment>
                     ))}
-                </SegmentWrapper>
-            </Wrapper>
+                </SegmentContainer>
+            </Container>
         );
     },
 );
 
-const Wrapper = styled.label`
+const Container = styled.label`
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -84,7 +85,7 @@ const Input = styled.input<{positionIndex?: number; error?: boolean}>`
     box-sizing: border-box;
     font-size: 42px;
     height: 52px;
-    left: ${({positionIndex = 1}) => (positionIndex + 1) * 42 + positionIndex * 10}px;
+    left: ${({positionIndex = 1}) => (positionIndex + 1) * 42 + positionIndex * 8}px;
     outline: none;
     padding: 0 5px;
     position: absolute;
@@ -96,7 +97,7 @@ const Input = styled.input<{positionIndex?: number; error?: boolean}>`
     }
 `;
 
-const SegmentWrapper = styled.div`
+const SegmentContainer = styled.div`
     display: flex;
     height: 52px;
 `;

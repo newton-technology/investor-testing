@@ -10,6 +10,22 @@ export const theme: DefaultTheme = {
             primary: '#F2F6F8',
             secondary: '#FFF',
             footer: '#1F1B30',
+            authorization: 'linear-gradient(139.02deg, #65dfe7 -19.37%, #587cfc 116.76%)',
         },
+    },
+    breakpoints: {
+        sm: 375,
+        md: 768,
+        lg: 1200,
+    },
+    breakpoint: (size) => {
+        switch (size) {
+            case 'sm':
+                return (styles) => `@media (min-width: ${theme.breakpoints.sm}px) {${styles}}`;
+            case 'md':
+                return (styles) => `@media (min-width: ${theme.breakpoints.md}px) {${styles}}`;
+            case 'lg':
+                return (styles) => `@media (min-width: ${theme.breakpoints.lg}px) {${styles}}`;
+        }
     },
 };

@@ -17,21 +17,16 @@ interface ILogin extends IBaseAuth {
     access_token: string;
 }
 
-interface IRefresh {
-    refresh_token?: string;
-    grant_type: 'refresh_token';
-}
-
 class AuthService {
     private readonly url = `${process.env.REACT_APP_API_URL}/authorization`;
     private watcher: number | undefined = undefined;
 
     constructor() {
-        this.startRefreshTokenWatcher();
+        this.init();
     }
 
-    public async login(payload: ILogin, errorCallBack: () => void) {
-        const data = await this.request('token', payload, errorCallBack);
+    public async login(payload: ILogin) {
+        const data = await this.request('token', payload);
         this.setToken(data);
     }
 
@@ -45,8 +40,11 @@ class AuthService {
         accessTokenStorage.refreshToken = undefined;
     }
 
-    public async refresh(payload: IRefresh) {
-        const data = await this.request('token', payload);
+    public async refresh() {
+        const data = await this.request('token', {
+            refresh_token: accessTokenStorage.refreshToken,
+            grant_type: 'refresh_token',
+        });
         this.setToken(data);
     }
 
@@ -60,20 +58,17 @@ class AuthService {
         }
     }
 
-    private async request(
-        endpoint: string,
-        payload: any,
-        errorCallBack?: (errorCode: string) => void,
-    ): Promise<IServerResponse | undefined> {
-        try {
-            const {data} = await axios.post<IServerResponse>(`${this.url}/${endpoint}`, payload);
-            return data;
-        } catch (e) {
-            if (errorCallBack) {
-                errorCallBack(e.response.status);
-            }
-            console.log(e);
+    private async request(endpoint: string, payload: any): Promise<IServerResponse | undefined> {
+        const {data} = await axios.post<IServerResponse>(`${this.url}/${endpoint}`, payload);
+        return data;
+    }
+
+    private init() {
+        if (accessTokenStorage.refreshToken && !accessTokenStorage.accessToken) {
+            this.refresh();
         }
+
+        this.startRefreshTokenWatcher();
     }
 
     private startRefreshTokenWatcher() {
@@ -84,10 +79,7 @@ class AuthService {
         if (accessTokenStorage.refreshToken) {
             const time = getJWTRefreshTime(accessTokenStorage?.refreshToken, Date.now());
             this.watcher = window.setTimeout(() => {
-                this.refresh({
-                    refresh_token: accessTokenStorage.refreshToken,
-                    grant_type: 'refresh_token',
-                });
+                this.refresh();
             }, time);
         }
     }

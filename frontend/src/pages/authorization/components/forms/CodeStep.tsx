@@ -47,28 +47,20 @@ const StyledCodeInput = styled(CodeInput)`
 `;
 
 const Description = styled.span`
-    color: #3a3463;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: normal;
-    line-height: 130%;
     padding-bottom: 35px;
 `;
 
 const Email = styled.span`
-    color: #0daaec;
+    color: ${({theme}) => theme.palette.primary};
     overflow-wrap: anywhere;
 `;
 
 const ChangeEmailButton = styled.button`
     align-items: center;
-    color: #2f6feb;
+    color: ${({theme}) => theme.palette.secondary};
     display: flex;
-    font-size: 17px;
     font-weight: 500;
     justify-content: center;
-    line-height: 130%;
     padding-bottom: 32px;
 
     & > span {
@@ -76,11 +68,9 @@ const ChangeEmailButton = styled.button`
     }
 `;
 const ErrorMessage = styled.div`
-    color: #de2b37;
+    color: ${({theme}) => theme.palette.error};
     display: flex;
-    font-size: 17px;
     justify-content: center;
-    line-height: 130%;
     padding-bottom: 32px;
     padding-top: 8px;
 `;
