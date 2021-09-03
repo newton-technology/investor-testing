@@ -5,11 +5,12 @@ import styled from 'styled-components';
 import {authService} from '../api/AuthService';
 import {Container} from './Container';
 import {Icon} from './Icon';
-import logo from '../logo.png';
-import {breakpoint} from '../theme/breakpont';
+
+const logos = require.context('../assets/img', false, /logo\.(svg|png|jpe?g)$/);
 
 export const Navbar: React.FC = () => {
     const history = useHistory();
+    const module = logos.keys().map(logos)[0] as any;
 
     const logout = () => {
         authService.logout();
@@ -20,9 +21,7 @@ export const Navbar: React.FC = () => {
         <NavContainer>
             <Container>
                 <Nav>
-                    <Logo to='/tests'>
-                        <img src={logo} />
-                    </Logo>
+                    <Logo to='/tests'>{module && <img src={module.default} />}</Logo>
                     <LogoutButton onClick={logout}>
                         <IconContainer name='arrow_right' />
                         Выйти
@@ -50,6 +49,7 @@ const Logo = styled(Link)`
 
     img {
         max-width: 100%;
+        max-height: 50px;
     }
 `;
 
