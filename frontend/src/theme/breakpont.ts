@@ -5,7 +5,7 @@ interface IBreakpoints {
 }
 
 const breakpoints: IBreakpoints = {
-    sm: 576,
+    sm: 375,
     md: 768,
     lg: 1200,
 };

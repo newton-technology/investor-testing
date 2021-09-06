@@ -5,67 +5,69 @@ import {Segment} from './components/Segment';
 
 interface IProps {
     length: number;
-    errorMessage?: string;
+    error?: boolean;
     onComplete?: (value: string) => void;
-    onChange?: (value: string) => void;
+    onChange: (value: string) => void;
     className?: string;
 }
 
 export const CodeInput = React.forwardRef<HTMLInputElement, IProps>(
-    ({length, errorMessage, onComplete, onChange, className}, ref) => {
-        const [value, setValue] = useState('');
+    ({length, error, onComplete, onChange, className}, ref) => {
+        const [value, setValue] = useState<string>('');
         const positions = new Array(length).fill(0);
 
         const changeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
             const newValue = (value + e.target.value).trim().slice(0, length);
-            if (onChange) {
-                onChange(newValue);
-            }
+            onChange(newValue);
             e.target.value = '';
             setValue(newValue);
         };
+
         const handleKeyUp = (e: React.KeyboardEvent) => {
             if (e.key === 'Backspace') {
-                setValue(value.slice(0, value.length - 1));
+                const newValue = value.slice(0, value.length - 1);
+                setValue(newValue);
+                onChange(newValue);
             }
         };
-        const onPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+
+        const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
             const newValue = e.clipboardData.getData('Text').trim().slice(0, length);
             setValue(newValue);
+            onChange(newValue);
         };
 
         useEffect(() => {
             if (value.length === length && onComplete) {
                 onComplete(value);
             }
-        }, [value, length, onComplete]);
+        }, [value, length]);
 
         return (
-            <Container className={className}>
+            <Container className={className} htmlFor='code'>
                 <Input
+                    id='code'
                     ref={ref}
                     positionIndex={Math.min(length - 1, value.length)}
-                    isLast={value.length === length}
                     onChange={changeHandle}
                     onKeyUp={handleKeyUp}
-                    onPaste={onPaste}
-                    error={!!errorMessage}
+                    onPaste={handlePaste}
+                    error={error}
                     type='text'
                 />
                 <SegmentContainer>
                     {positions.map((_, index) => (
-                        <Segment key={index} error={!!errorMessage}>
+                        <Segment key={index} error={error}>
                             {value.slice(index, index + 1)}
                         </Segment>
                     ))}
                 </SegmentContainer>
-                {!!errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
             </Container>
         );
     },
 );
 
-const Container = styled.div`
+const Container = styled.label`
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -77,19 +79,18 @@ const Container = styled.div`
     }
 `;
 
-const Input = styled.input<{positionIndex?: number; isLast?: boolean; error?: boolean}>`
+const Input = styled.input<{positionIndex?: number; error?: boolean}>`
     background-color: transparent;
     border: none;
     box-sizing: border-box;
-    font-size: 32px;
-    height: 56px;
-    left: ${({positionIndex}) => (positionIndex || 1) * 55}px;
+    font-size: 42px;
+    height: 52px;
+    left: ${({positionIndex = 1}) => (positionIndex + 1) * 42 + positionIndex * 8}px;
     outline: none;
     padding: 0 5px;
     position: absolute;
-    text-align: ${({isLast}) => (isLast ? 'right' : 'left')};
     top: 0;
-    width: 45px;
+    width: 42px;
 
     &:focus ~ div > div {
         ${(props) => !props.error && 'border-color: #0057B6;'}
@@ -98,13 +99,5 @@ const Input = styled.input<{positionIndex?: number; isLast?: boolean; error?: bo
 
 const SegmentContainer = styled.div`
     display: flex;
-    height: 56px;
-`;
-
-const ErrorMessage = styled.span`
-    color: #cd003e;
-    display: block;
-    font-size: 14px;
-    line-height: 140%;
-    padding-bottom: 10px;
+    height: 52px;
 `;

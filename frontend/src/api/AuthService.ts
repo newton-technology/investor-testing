@@ -3,8 +3,8 @@ import {getJWTRefreshTime} from '../utils/jwtUtils';
 import axios from './axios';
 
 interface IServerResponse {
-    accessToken: string;
-    refreshToken?: string;
+    access_token: string;
+    refresh_token?: string;
 }
 
 interface IBaseAuth {
@@ -14,12 +14,7 @@ interface IBaseAuth {
 
 interface ILogin extends IBaseAuth {
     code: string;
-    accessToken: string;
-}
-
-interface IRefresh {
-    refreshToken?: string;
-    grant_type: 'refresh_token';
+    access_token: string;
 }
 
 class AuthService {
@@ -27,7 +22,7 @@ class AuthService {
     private watcher: number | undefined = undefined;
 
     constructor() {
-        this.startRefreshTokenWatcher();
+        this.init();
     }
 
     public async login(payload: ILogin) {
@@ -45,28 +40,35 @@ class AuthService {
         accessTokenStorage.refreshToken = undefined;
     }
 
-    public async refresh(payload: IRefresh) {
-        const data = await this.request('token', payload);
+    public async refresh() {
+        const data = await this.request('token', {
+            refresh_token: accessTokenStorage.refreshToken,
+            grant_type: 'refresh_token',
+        });
         this.setToken(data);
     }
 
     private setToken(data: IServerResponse | undefined) {
-        if (data?.accessToken) {
-            accessTokenStorage.accessToken = data.accessToken;
+        if (data?.access_token) {
+            accessTokenStorage.accessToken = data.access_token;
         }
-        if (data?.refreshToken) {
-            accessTokenStorage.refreshToken = data.refreshToken;
+        if (data?.refresh_token) {
+            accessTokenStorage.refreshToken = data.refresh_token;
             this.startRefreshTokenWatcher();
         }
     }
 
     private async request(endpoint: string, payload: any): Promise<IServerResponse | undefined> {
-        try {
-            const {data} = await axios.post<IServerResponse>(`${this.url}/${endpoint}`, payload);
-            return data;
-        } catch (e) {
-            console.log(e);
+        const {data} = await axios.post<IServerResponse>(`${this.url}/${endpoint}`, payload);
+        return data;
+    }
+
+    private init() {
+        if (accessTokenStorage.refreshToken && !accessTokenStorage.accessToken) {
+            this.refresh();
         }
+
+        this.startRefreshTokenWatcher();
     }
 
     private startRefreshTokenWatcher() {
@@ -77,10 +79,7 @@ class AuthService {
         if (accessTokenStorage.refreshToken) {
             const time = getJWTRefreshTime(accessTokenStorage?.refreshToken, Date.now());
             this.watcher = window.setTimeout(() => {
-                this.refresh({
-                    refreshToken: accessTokenStorage.refreshToken,
-                    grant_type: 'refresh_token',
-                });
+                this.refresh();
             }, time);
         }
     }

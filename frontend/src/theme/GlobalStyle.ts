@@ -9,7 +9,7 @@ export const GlobalStyle = createGlobalStyle`
 
     body {
         font-family: 'IBM Plex Sans', sans-serif;
-        font-size: 16px;
+        font-size: 17px;
         color: ${({theme}) => theme.palette.regular};
         background-color: ${({theme}) => theme.palette.bg.primary};
         line-height: 1.3;

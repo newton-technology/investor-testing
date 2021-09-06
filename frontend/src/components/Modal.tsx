@@ -6,24 +6,22 @@ import {Portal} from './Portal';
 interface IProps {
     className?: string;
     isOpen: boolean;
-    onClose?: () => void;
+    onClose: () => void;
 }
 
 export const Modal: React.FC<IProps> = (props) => {
-    const {className, isOpen, children, onClose} = props;
+    const {isOpen, children, onClose} = props;
 
     useLayoutEffect(() => {
         if (isOpen) {
             document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflowY = 'scroll';
         }
         return () => {
             document.documentElement.style.overflow = 'visible';
+            document.body.style.overflowY = 'auto';
         };
     });
-
-    const handleClose = () => {
-        // onClose();
-    };
 
     if (!isOpen) {
         return null;
@@ -33,7 +31,7 @@ export const Modal: React.FC<IProps> = (props) => {
         <Portal>
             <ModalContainer>
                 <ModalDialog>{children}</ModalDialog>
-                <ModalOverlay onClick={handleClose} />
+                <ModalOverlay onClick={onClose} />
             </ModalContainer>
         </Portal>
     );
@@ -50,7 +48,7 @@ const ModalContainer = styled.div`
     width: 100%;
     z-index: 1000;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
 `;
 
 const ModalDialog = styled.div`

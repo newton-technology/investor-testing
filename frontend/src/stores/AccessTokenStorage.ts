@@ -16,7 +16,9 @@ class AccessTokenStorage {
     public set accessToken(token: string | undefined) {
         if (token) {
             this._accessToken = token;
-            localStorage.setItem('accessToken', token);
+            this.sendTokenToSubscriber();
+        } else {
+            this._accessToken = token;
             this.sendTokenToSubscriber();
         }
     }
@@ -30,6 +32,10 @@ class AccessTokenStorage {
             this._refreshToken = token;
             localStorage.setItem('refreshToken', token);
             this.sendTokenToSubscriber();
+        } else {
+            this._refreshToken = token;
+            localStorage.removeItem('refreshToken');
+            this.sendTokenToSubscriber();
         }
     }
 
@@ -38,7 +44,11 @@ class AccessTokenStorage {
     }
 
     public get isAuthenticated(): boolean {
-        return !!this._refreshToken && !isJwtExpired(this._refreshToken, Date.now());
+        return !!this._refreshToken && !this.isRefreshTokenExpired && !!this._accessToken;
+    }
+
+    public get isRefreshTokenExpired(): boolean {
+        return isJwtExpired(this._refreshToken, Date.now());
     }
 
     private sendTokenToSubscriber() {
@@ -48,12 +58,7 @@ class AccessTokenStorage {
     }
 
     private init() {
-        const accessToken = localStorage.getItem('accessToken');
         const refreshToken = localStorage.getItem('refreshToken');
-
-        if (accessToken) {
-            this._accessToken = accessToken;
-        }
 
         if (refreshToken) {
             this._refreshToken = refreshToken;
