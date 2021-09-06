@@ -2,7 +2,6 @@ import React, {ReactElement} from 'react';
 import styled from 'styled-components';
 
 import {Button} from './Button';
-import {breakpoint} from '../theme/breakpont';
 
 interface IProps {
     title?: string;
@@ -37,7 +36,7 @@ const Container = styled.div`
     max-width: 500px;
     margin: 0 auto;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         padding: 32px;
     `}
 `;
@@ -47,7 +46,7 @@ const Title = styled.div`
     font-weight: 700;
     margin-bottom: 8px;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         font-size: 32px;
     `}
 `;
@@ -55,7 +54,7 @@ const Title = styled.div`
 const Subtitle = styled.div`
     margin-bottom: 32px;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         font-size: 20px;
     `}
 `;

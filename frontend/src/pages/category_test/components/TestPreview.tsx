@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import {Button} from '../../../components/Button';
 import {Icon} from '../../../components/Icon';
-import {breakpoint} from '../../../theme/breakpont';
 
 interface IProps {
     title: string;
@@ -55,7 +54,7 @@ const Container = styled.div`
     border-radius: 10px;
     padding: 32px 24px;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         padding: 32px;
     `}
 `;
@@ -63,7 +62,7 @@ const Container = styled.div`
 const Title = styled.div`
     font-weight: 500;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         font-size: 24px;
         font-weight: 400;
     `}

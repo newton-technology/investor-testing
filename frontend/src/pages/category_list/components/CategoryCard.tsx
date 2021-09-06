@@ -3,7 +3,6 @@ import {Link} from 'react-router-dom';
 import styled, {css} from 'styled-components';
 
 import {Icon} from '../../../components/Icon';
-import {breakpoint} from '../../../theme/breakpont';
 
 interface IProps {
     id: number;
@@ -60,7 +59,7 @@ const ContainerLink = styled(Link)`
 const Title = styled.div`
     margin-bottom: 24px;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         font-size: 20px;
     `}
 `;
@@ -71,7 +70,7 @@ const CompleteLabel = styled.div`
     display: flex;
     justify-content: flex-end;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         font-size: 20px;
     `}
 `;

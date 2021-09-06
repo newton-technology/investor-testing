@@ -1,6 +1,6 @@
 import axios, {AxiosError} from 'axios';
-
 import {useEffect, useState} from 'react';
+
 import {IResponseError} from '../api/CategoryTestApi';
 
 type IState<QueryData, QueryError> = {

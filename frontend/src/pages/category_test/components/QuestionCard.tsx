@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import {AnswerControl, IAnswerControl} from './AnswerControl';
 import {InfoIcon} from './InfoIcon';
-import {breakpoint} from '../../../theme/breakpont';
 
 export interface IQuestion {
     id: number;
@@ -70,7 +69,7 @@ const Container = styled.div`
     font-size: 17px;
     margin-top: 24px;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         padding: 32px;
     `}
 `;
@@ -92,7 +91,7 @@ const Subtitle = styled.div`
     margin-top: 8px;
     font-size: 14px;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         font-size: inherit;
     `}
 `;
@@ -102,7 +101,7 @@ const ErrorMessage = styled.div`
     margin-top: 8px;
     font-size: 14px;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         font-size: inherit;
     `}
 `;

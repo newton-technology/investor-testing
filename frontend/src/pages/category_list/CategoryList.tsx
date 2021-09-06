@@ -1,13 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {useQuery} from '../../hooks/useQuery';
 import {CategoryListApi} from '../../api/CategoryListApi';
-import {Loader} from '../../components/Loader';
-import {ErrorMessage} from '../../components/ErrorMessage';
-import {CategoryCard} from './components/CategoryCard';
 import {IResponseError} from '../../api/CategoryTestApi';
-import {breakpoint} from '../../theme/breakpont';
+import {ErrorMessage} from '../../components/ErrorMessage';
+import {Loader} from '../../components/Loader';
+import {useQuery} from '../../hooks/useQuery';
+import {CategoryCard} from './components/CategoryCard';
 
 export interface ICategory {
     category: {
@@ -48,7 +47,7 @@ const Title = styled.div`
     font-size: 28px;
     margin-bottom: 32px;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         font-size: 32px;
     `}
 `;
@@ -57,7 +56,7 @@ const List = styled.div`
     display: grid;
     grid-gap: 20px;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         grid-template-columns: repeat(2, 1fr);
     `}
 `;

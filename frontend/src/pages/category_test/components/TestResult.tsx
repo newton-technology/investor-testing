@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import {Button} from '../../../components/Button';
 import {Icon} from '../../../components/Icon';
 import {ReactComponent as BgImage} from './result_bg.svg';
-import {breakpoint} from '../../../theme/breakpont';
 
 interface IProps {
     isSuccess: boolean;
@@ -68,7 +67,7 @@ const Container = styled.div<{ref: any}>`
     max-width: 566px;
     margin: 24px auto 0;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
          padding-left: 48px;
          padding-right: 48px;
     `}
@@ -83,7 +82,7 @@ const IconContainer = styled(Icon)<{isSuccess: boolean}>`
     color: ${({theme, isSuccess}) => (isSuccess ? theme.palette.primary : theme.palette.regular)};
 
     svg {
-        ${breakpoint('md')`
+        ${({theme}) => theme.breakpoint('md')`
             width: 142px;
             height: 142px;
         `}
@@ -97,7 +96,7 @@ const Title = styled.div<{isSuccess: boolean}>`
     margin-top: 20px;
     color: ${({theme, isSuccess}) => (isSuccess ? theme.palette.primary : theme.palette.regular)};
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         font-size: 32px;
         margin-top: 30px;
     `}
@@ -107,7 +106,7 @@ const Subtitle = styled.div`
     margin-bottom: 32px;
     white-space: pre-wrap;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         font-size: 20px;
     `}
 `;
@@ -116,7 +115,7 @@ const ButtonsContainer = styled.div`
     display: grid;
     grid-gap: 8px;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         display: inline-grid;
         grid-gap: 20px;
     `}
@@ -138,7 +137,7 @@ const Bg = styled.div<{isSuccess: boolean}>`
         top: 50%;
         max-width: 120%;
 
-        ${breakpoint('md')`
+        ${({theme}) => theme.breakpoint('md')`
             max-width: none;
         `}
     }
