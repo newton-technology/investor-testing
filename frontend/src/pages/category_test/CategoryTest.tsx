@@ -126,6 +126,7 @@ export const CategoryTest: React.FC = () => {
                                     id={question.id}
                                     title={question.question}
                                     answers={question.answers}
+                                    hint={question.hint}
                                     getIsChecked={getIsChecked}
                                     changeValue={changeValue}
                                     questionsCount={questions.length}
