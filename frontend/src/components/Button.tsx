@@ -10,11 +10,12 @@ interface IProps {
     isLoading?: boolean;
     disabled?: boolean;
     to?: string;
+    type?: 'submit' | 'button';
     onClick?: () => void;
 }
 
 export const Button: React.FC<IProps> = (props) => {
-    const {className, children, isPlain = false, onClick, isLoading, disabled = false, to} = props;
+    const {className, children, isPlain = false, onClick, isLoading, disabled = false, to, ...rest} = props;
 
     if (to) {
         return (
@@ -24,7 +25,12 @@ export const Button: React.FC<IProps> = (props) => {
         );
     }
     return (
-        <ButtonContainer onClick={onClick} $isPlain={isPlain} disabled={disabled || isLoading} className={className}>
+        <ButtonContainer
+            onClick={onClick}
+            $isPlain={isPlain}
+            disabled={disabled || isLoading}
+            className={className}
+            {...rest}>
             {children}
             {isLoading && <LoaderIcon isInline={true} />}
         </ButtonContainer>
