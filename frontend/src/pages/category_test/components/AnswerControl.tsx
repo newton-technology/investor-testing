@@ -2,7 +2,7 @@ import React from 'react';
 import styled, {css} from 'styled-components';
 
 import {Icon} from '../../../components/Icon';
-import {InfoIcon} from './InfoIcon';
+import {HintIcon} from './HintIcon';
 
 export interface IAnswerControl {
     id: number;
@@ -14,13 +14,13 @@ interface IProps {
     answer: string;
     questionId: number;
     isMultipleAnswers: boolean;
-    info?: string;
+    hint?: string;
     getIsChecked: (questionId: number, answerId: number) => boolean;
     changeValue: (questionId: number, answerId: number, isMultipleAnswers: boolean) => void;
 }
 
 export const AnswerControl: React.FC<IProps> = (props) => {
-    const {id, answer: text, questionId, isMultipleAnswers, info, getIsChecked, changeValue} = props;
+    const {id, answer: text, questionId, isMultipleAnswers, hint, getIsChecked, changeValue} = props;
     const isChecked = getIsChecked(questionId, id);
 
     const handleClick = () => {
@@ -37,7 +37,7 @@ export const AnswerControl: React.FC<IProps> = (props) => {
                 <RadioControl isChecked={isChecked} />
             )}
             <Text>
-                {text} {info && <InfoIcon>{info}</InfoIcon>}
+                {text} {hint && <HintIcon>{hint}</HintIcon>}
             </Text>
         </Container>
     );

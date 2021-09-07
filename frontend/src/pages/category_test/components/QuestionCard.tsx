@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import styled from 'styled-components';
 
 import {AnswerControl, IAnswerControl} from './AnswerControl';
-import {InfoIcon} from './InfoIcon';
+import {HintIcon} from './HintIcon';
 
 export interface IQuestion {
     id: number;
@@ -10,6 +10,7 @@ export interface IQuestion {
     answersCountToChooseMin: number;
     answersCountToChooseMax: number;
     answers: IAnswerControl[];
+    hint?: string;
 }
 
 interface IProps {
@@ -19,14 +20,14 @@ interface IProps {
     index: number;
     questionsCount: number;
     isMultipleAnswers: boolean;
-    info?: string;
+    hint?: string;
     isError: boolean;
     getIsChecked: (questionId: number, answerId: number) => boolean;
     changeValue: (questionId: number, answerId: number, isMultipleAnswers: boolean) => void;
 }
 
 export const QuestionCard: React.FC<IProps> = (props) => {
-    const {title, id, answers, getIsChecked, changeValue, questionsCount, index, isMultipleAnswers, isError, info} =
+    const {title, id, answers, getIsChecked, changeValue, questionsCount, index, isMultipleAnswers, isError, hint} =
         props;
     const ref = useRef<HTMLDivElement>(null);
 
@@ -40,7 +41,7 @@ export const QuestionCard: React.FC<IProps> = (props) => {
         <Container ref={ref}>
             <QuestionNumber>{`${index}/${questionsCount}`}</QuestionNumber>
             <Title>
-                {title} {info && <InfoIcon>{info}</InfoIcon>}
+                {title} {hint && <HintIcon>{hint}</HintIcon>}
             </Title>
             {isMultipleAnswers && <Subtitle>{'(возможно несколько вариантов ответа)'}</Subtitle>}
             {isError && <ErrorMessage>Пожалуйста, выберите вариант ответа</ErrorMessage>}
