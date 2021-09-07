@@ -1,7 +1,7 @@
 import React from 'react';
 
-import {ErrorMessage} from '../components/ErrorMessage';
 import {Button} from '../components/Button';
+import {ErrorMessage} from '../components/ErrorMessage';
 
 export const PageNotFound = () => {
     return (
