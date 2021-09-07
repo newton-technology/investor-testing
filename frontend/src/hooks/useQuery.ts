@@ -18,8 +18,8 @@ export function useQuery<QueryData = unknown, QueryError = Error>(query: () => P
         error: undefined,
     });
 
-    const handleQuery = async () => {
-        await query()
+    const handleQuery = () => {
+        query()
             .then((response) => {
                 setState({...state, data: response, isLoading: false});
             })
