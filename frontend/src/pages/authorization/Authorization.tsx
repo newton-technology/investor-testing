@@ -45,6 +45,7 @@ export const Authorization: React.FC = () => {
                 .then(() => {
                     setStep('code');
                     setIsServerError(false);
+                    setIsButtonDisabled(false);
                 })
                 .catch(() => {
                     setIsServerError(true);
