@@ -3,7 +3,6 @@ import styled, {css} from 'styled-components';
 
 import {Icon} from '../../../components/Icon';
 import {InfoIcon} from './InfoIcon';
-import {breakpoint} from '../../../theme/breakpont';
 
 export interface IAnswerControl {
     id: number;
@@ -64,7 +63,7 @@ const controlCss = css`
     align-items: center;
     justify-content: center;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         margin-right: 28px;
     `}
 

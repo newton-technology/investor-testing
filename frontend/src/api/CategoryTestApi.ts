@@ -1,5 +1,5 @@
-import axiosWithToken from './axios';
 import {ITest} from '../pages/category_test/CategoryTest';
+import axiosWithToken from './axios';
 
 export interface IResponseError {
     code: string;

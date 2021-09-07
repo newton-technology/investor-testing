@@ -4,15 +4,15 @@ import styled from 'styled-components';
 
 import {CategoryTestApi, IResponseError} from '../../api/CategoryTestApi';
 import {Button} from '../../components/Button';
+import {ErrorMessage} from '../../components/ErrorMessage';
 import {Loader} from '../../components/Loader';
+import {useMutation} from '../../hooks/useMutation';
 import {useQuery} from '../../hooks/useQuery';
 import {IQuestion, QuestionCard} from './components/QuestionCard';
 import {TestPreview} from './components/TestPreview';
-import {TestWarningModal} from './components/TestWarningModal';
 import {TestResult} from './components/TestResult';
-import {ErrorMessage} from '../../components/ErrorMessage';
+import {TestWarningModal} from './components/TestWarningModal';
 import {getAllAnswers, validate} from './utils';
-import {useMutation} from '../../hooks/useMutation';
 
 export interface ITest {
     id: number;
@@ -47,9 +47,6 @@ export const CategoryTest: React.FC = () => {
         onSuccess: () => {
             setIsTestResultVisible(true);
             setIncorrectQuestionId(undefined);
-        },
-        onError: () => {
-            debugger;
         },
     });
 
@@ -100,7 +97,7 @@ export const CategoryTest: React.FC = () => {
         return <Loader />;
     }
 
-    if (isError) {
+    if (isError || checkTestMutation.isError) {
         if (error?.code === 'category_passed') {
             return <TestResult isSuccess={true} />;
         }

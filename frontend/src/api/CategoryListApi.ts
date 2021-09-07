@@ -1,5 +1,5 @@
-import axiosWithToken from './axios';
 import {ICategory} from '../pages/category_list/CategoryList';
+import axiosWithToken from './axios';
 
 export const CategoryListApi = {
     getCategories() {
