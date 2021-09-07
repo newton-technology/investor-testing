@@ -29,19 +29,31 @@ export const Authorization: React.FC = () => {
     const [isError, setIsError] = useState<boolean>(false);
     const [isServerError, setIsServerError] = useState<boolean>(false);
     const [isWrongCode, setIsWrongCode] = useState<boolean>(false);
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
     const [step, setStep] = useState<'email' | 'code'>('email');
 
     const sendCode = () => {
-        authService
-            .sendCode({
-                email,
-                grant_type: 'code',
-            })
-            .then(() => {
-                setStep('code');
-                setIsServerError(false);
-            })
-            .catch(() => setIsServerError(true));
+        const isValidate = emailValidate(email);
+
+        if (isValidate) {
+            setIsButtonDisabled(true);
+            authService
+                .sendCode({
+                    email,
+                    grant_type: 'code',
+                })
+                .then(() => {
+                    setStep('code');
+                    setIsServerError(false);
+                })
+                .catch(() => {
+                    setIsServerError(true);
+                    setIsButtonDisabled(false);
+                });
+        } else {
+            setIsError(true);
+            setIsServerError(false);
+        }
     };
 
     const login = () => {
@@ -64,7 +76,7 @@ export const Authorization: React.FC = () => {
     };
 
     useEffect(() => {
-        setIsError(!emailValidate(email));
+        setIsError(false);
     }, [email]);
 
     useEffect(() => {
@@ -89,7 +101,13 @@ export const Authorization: React.FC = () => {
                     {step === 'email' && <FormHeader />}
                     <Title>{steps[step].title}</Title>
                     {step === 'email' ? (
-                        <EmailStep email={email} isError={isError} isServerError={isServerError} setEmail={setEmail} />
+                        <EmailStep
+                            email={email}
+                            isError={isError}
+                            isServerError={isServerError}
+                            isButtonDisabled={isButtonDisabled}
+                            setEmail={setEmail}
+                        />
                     ) : (
                         <CodeStep
                             email={email}
