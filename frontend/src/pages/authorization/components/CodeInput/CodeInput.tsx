@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import {Segment} from './components/Segment';
 
 interface IProps {
+    value: string;
+    setValue: React.Dispatch<React.SetStateAction<string>>;
     length: number;
     error?: boolean;
     onComplete?: (value: string) => void;
@@ -12,8 +14,7 @@ interface IProps {
 }
 
 export const CodeInput = React.forwardRef<HTMLInputElement, IProps>(
-    ({length, error, onComplete, onChange, className}, ref) => {
-        const [value, setValue] = useState<string>('');
+    ({value, setValue, length, error, onComplete, onChange, className}, ref) => {
         const positions = new Array(length).fill(0);
 
         const changeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,7 +85,6 @@ const Input = styled.input<{positionIndex?: number; error?: boolean}>`
     box-sizing: border-box;
     font-size: 42px;
     height: 32px;
-    /* left: ${({positionIndex = 0}) => (positionIndex + 1) * 21 + positionIndex * 10}px; */
     left: ${({positionIndex = 0}) => positionIndex * 52 + 21}px;
     outline: none;
     padding: 0;
