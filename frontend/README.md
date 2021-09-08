@@ -1,46 +1,66 @@
-# Getting Started with Create React App
+# Investor-testing
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Сервис тестирования инвесторов от команды [Ньютон Технологии](https://nwtn.io/).
 
-## Available Scripts
+## Зачем нужно тестирование?
 
-In the project directory, you can run:
+С 1 октября 2021 года вступают в силу поправки в закон о рынке ценных бумаг.
+Теперь неквалифицированные инвесторы будут обязаны пройти тестирование,
+чтобы получить доступ к сложным финансовым инструментам.
+Порядок тестирования определяется базовым стандартом, который разрабатывают
+саморегулируемые организации - НАУФОР и СРО НФА.
 
-### `yarn start`
+## Функции сервиса:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+-   Идентификация пользователя по подтвержденному email.
+-   Тестирование клиентов в web-интерфейсе.
+-   Возможно проходить тест несколько раз.
+-   История пройденных тестов.
+-   Уведомление на email о пройденных тестах.
+-   Экспорт результатов тестирования клиентов в формате CSV.
+-   Возможность подключения собственного личного кабинета брокера по API.
+-   Панель администратора для просмотра результатов
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Преимущества сервиса
 
-### `yarn test`
+## Лицензия
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+_WIP_
 
-### `yarn build`
+## Установка
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+[NodeJS LTS](https://nodejs.org/)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+npm i --save-d
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Запуск приложения
 
-### `yarn eject`
+```
+npm start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Кастомизация
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Для изменения цветовой схемы требуется изменить файл
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```
+./src/customize.json
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+palette - основная цветовая схема
+content - основной контент приложения
+```
 
-## Learn More
+### Смена логотипа
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Для смены логотипа нужно заменить файлы в папке /src/assets/img
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+logo.svg - основной логотип
+logoOnLogin.svg - логотип при авторизации
+```
+
+### Настройка
+
+Создать файл .env на примере .example.env
