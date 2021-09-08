@@ -8,10 +8,10 @@ interface IProps {
     email: string;
     isError: boolean;
     isServerError: boolean;
-    isButtonDisabled: boolean;
+    isButtonLoading: boolean;
     setEmail: (email: string) => void;
 }
-export const EmailStep: React.FC<IProps> = ({email, isError, isButtonDisabled, isServerError, setEmail}) => {
+export const EmailStep: React.FC<IProps> = ({email, isError, isButtonLoading, isServerError, setEmail}) => {
     return (
         <React.Fragment>
             <Description>
@@ -30,7 +30,9 @@ export const EmailStep: React.FC<IProps> = ({email, isError, isButtonDisabled, i
                     }}
                 />
             </InputContainer>
-            <Button disabled={isError || isButtonDisabled}>Продолжить</Button>
+            <Button disabled={isError || isButtonLoading} isLoading={isButtonLoading}>
+                Продолжить
+            </Button>
             {isServerError && <ErrorMessage>Ошибка сервера, повторите позже.</ErrorMessage>}
             {isError && !!email.length && <ErrorMessage>Неправильно введен email.</ErrorMessage>}
             <EULADescription>
