@@ -29,14 +29,14 @@ export const Authorization: React.FC = () => {
     const [isError, setIsError] = useState<boolean>(false);
     const [isServerError, setIsServerError] = useState<boolean>(false);
     const [isWrongCode, setIsWrongCode] = useState<boolean>(false);
-    const [isButtonLoading, setisButtonLoading] = useState<boolean>(false);
+    const [isButtonLoading, setIsButtonLoading] = useState<boolean>(false);
     const [step, setStep] = useState<'email' | 'code'>('email');
 
     const sendCode = () => {
-        const isValidate = emailValidate(email);
+        const isValid = emailValidate(email);
 
-        if (isValidate) {
-            setisButtonLoading(true);
+        if (isValid) {
+            setIsButtonLoading(true);
             authService
                 .sendCode({
                     email,
@@ -45,11 +45,12 @@ export const Authorization: React.FC = () => {
                 .then(() => {
                     setStep('code');
                     setIsServerError(false);
-                    setisButtonLoading(false);
                 })
                 .catch(() => {
                     setIsServerError(true);
-                    setisButtonLoading(false);
+                })
+                .finally(() => {
+                    setIsButtonLoading(false);
                 });
         } else {
             setIsError(true);
