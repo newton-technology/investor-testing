@@ -8,6 +8,7 @@ import {ErrorMessage} from '../../components/ErrorMessage';
 import {Loader} from '../../components/Loader';
 import {useMutation} from '../../hooks/useMutation';
 import {useQuery} from '../../hooks/useQuery';
+import {useScrollToTop} from '../../hooks/useScrollToTop';
 import {IQuestion, QuestionCard} from './components/QuestionCard';
 import {TestPreview} from './components/TestPreview';
 import {TestResult} from './components/TestResult';
@@ -32,6 +33,7 @@ export interface IValues {
 
 export const CategoryTest: React.FC = () => {
     const {categoryId} = useParams<{categoryId: string}>();
+    useScrollToTop();
 
     const {data, isLoading, isError, error} = useQuery<ITest, IResponseError>(() => {
         return CategoryTestApi.getTest(categoryId);

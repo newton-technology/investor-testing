@@ -6,6 +6,7 @@ import {IResponseError} from '../../api/CategoryTestApi';
 import {ErrorMessage} from '../../components/ErrorMessage';
 import {Loader} from '../../components/Loader';
 import {useQuery} from '../../hooks/useQuery';
+import {useScrollToTop} from '../../hooks/useScrollToTop';
 import {CategoryCard} from './components/CategoryCard';
 
 export interface ICategory {
@@ -19,6 +20,7 @@ export interface ICategory {
 
 export const CategoryList: React.FC = () => {
     const {data, isLoading, isError} = useQuery<ICategory[], IResponseError>(CategoryListApi.getCategories);
+    useScrollToTop();
 
     if (isLoading) {
         return <Loader />;
