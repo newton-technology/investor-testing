@@ -18,22 +18,28 @@ export function useQuery<QueryData = unknown, QueryError = Error>(query: () => P
         error: undefined,
     });
 
+    const handleQuery = () => {
+        query()
+            .then((response) => {
+                setState({...state, data: response, isLoading: false});
+            })
+            .catch((error: QueryError | AxiosError<QueryError>) => {
+                if (axios.isAxiosError(error)) {
+                    setState({...state, isLoading: false, isError: true, error: error.response?.data});
+                } else {
+                    setState({...state, isLoading: false, isError: true, error: error});
+                }
+            });
+    };
+
+    const refetch = () => {
+        setState({...state, isLoading: true});
+        handleQuery();
+    };
+
     useEffect(() => {
-        const handleQuery = async () => {
-            await query()
-                .then((response) => {
-                    setState({...state, data: response, isLoading: false});
-                })
-                .catch((error: QueryError | AxiosError<QueryError>) => {
-                    if (axios.isAxiosError(error)) {
-                        setState({...state, isLoading: false, isError: true, error: error.response?.data});
-                    } else {
-                        setState({...state, isLoading: false, isError: true, error: error});
-                    }
-                });
-        };
         handleQuery();
     }, []);
 
-    return state;
+    return {...state, refetch};
 }
