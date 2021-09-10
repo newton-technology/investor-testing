@@ -29,14 +29,14 @@ export const Authorization: React.FC = () => {
     const [isError, setIsError] = useState<boolean>(false);
     const [isServerError, setIsServerError] = useState<boolean>(false);
     const [isWrongCode, setIsWrongCode] = useState<boolean>(false);
-    const [isButtonLoading, setIsButtonLoading] = useState<boolean>(false);
+    const [isAuthLoading, setIsAuthLoading] = useState<boolean>(false);
     const [step, setStep] = useState<'email' | 'code'>('email');
 
     const sendCode = () => {
         const isValid = emailValidate(email);
 
         if (isValid) {
-            setIsButtonLoading(true);
+            setIsAuthLoading(true);
             authService
                 .sendCode({
                     email,
@@ -46,12 +46,8 @@ export const Authorization: React.FC = () => {
                     setStep('code');
                     setIsServerError(false);
                 })
-                .catch(() => {
-                    setIsServerError(true);
-                })
-                .finally(() => {
-                    setIsButtonLoading(false);
-                });
+                .catch(() => setIsServerError(true))
+                .finally(() => setIsAuthLoading(false));
         } else {
             setIsError(true);
             setIsServerError(false);
@@ -77,6 +73,15 @@ export const Authorization: React.FC = () => {
         setStep('email');
     };
 
+    const onSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (step === 'email') {
+            sendCode();
+        } else {
+            login();
+        }
+    };
+
     useEffect(() => {
         setIsError(false);
     }, [email]);
@@ -91,15 +96,7 @@ export const Authorization: React.FC = () => {
         <Container>
             <AuthPageBackground style={{position: 'fixed'}} />
             <FormContainer>
-                <Form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        if (step === 'email') {
-                            sendCode();
-                        } else {
-                            login();
-                        }
-                    }}>
+                <Form onSubmit={onSubmit}>
                     {step === 'email' && <FormHeader />}
                     <Title>{steps[step].title}</Title>
                     {step === 'email' ? (
@@ -107,7 +104,7 @@ export const Authorization: React.FC = () => {
                             email={email}
                             isError={isError}
                             isServerError={isServerError}
-                            isButtonLoading={isButtonLoading}
+                            isAuthLoading={isAuthLoading}
                             setEmail={setEmail}
                         />
                     ) : (
@@ -163,8 +160,5 @@ const Title = styled.h1`
     font-weight: bold;
     margin-bottom: 16px;
     margin-top: 15px;
-
-    ${({theme}) => theme.breakpoint('md')`
-        font-size: 32px;
-    `}
+    text-align: center;
 `;

@@ -18,11 +18,13 @@ export const FormHeader: React.FC = () => {
 };
 
 const Container = styled.div`
+    display: flex;
+    justify-content: center;
     padding-bottom: 17px;
     padding-top: 32px;
 
     img {
-        max-width: 100%;
         max-height: 100px;
+        max-width: 100%;
     }
 `;

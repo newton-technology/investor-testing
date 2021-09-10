@@ -65,6 +65,7 @@ const StyledCodeInput = styled(CodeInput)`
 
 const Description = styled.span`
     padding-bottom: 35px;
+    text-align: center;
 `;
 
 const Email = styled.span`
