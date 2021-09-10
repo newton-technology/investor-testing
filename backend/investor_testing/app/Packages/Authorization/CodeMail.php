@@ -28,6 +28,7 @@ class CodeMail extends Mailable
     public function build(): CodeMail
     {
         return $this->view('emails.authorization_code')
+            ->subject($this->code . ' — ваш код для тестирования')
             ->with(
                 [
                     'code' => $this->code,

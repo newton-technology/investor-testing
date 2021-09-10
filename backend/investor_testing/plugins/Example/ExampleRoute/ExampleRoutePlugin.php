@@ -2,7 +2,7 @@
 
 namespace Plugins\Example\ExampleRoute;
 
-use Plugins\Plugin;
+use Common\Plugins\Plugin;
 
 class ExampleRoutePlugin extends Plugin
 {
