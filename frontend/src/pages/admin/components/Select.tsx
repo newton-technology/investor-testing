@@ -1,33 +1,22 @@
-import React, {useState, useRef, useCallback, useEffect, SyntheticEvent, memo} from 'react';
+import React, {useState, useCallback, SyntheticEvent, memo} from 'react';
 import styled from 'styled-components';
 
+import {Status} from '../../../api/ManagmentApi';
 import {Icon} from '../../../components/Icon';
+import {useClickOutside} from '../../../hooks/useClickOutside';
 import {useToggle} from '../../../hooks/useToggle';
-
-type Option = {
-    title: string;
-    value: string | null;
-};
+import {Option} from '../AllTestsPage';
 
 interface IProps {
     options: Option[];
-    value?: string | null;
+    value?: Status[];
     onChange?: (e: SyntheticEvent, data: Option) => void;
 }
 
 const Select: React.FC<IProps> = ({options, onChange, value}) => {
     const {state: isOpen, toggle, setDisabled} = useToggle(false);
     const [selected, setSelected] = useState<Option>(options.find((option) => option.value === value) || options[0]);
-    const selectRef = useRef<HTMLDivElement | null>(null);
-
-    const clickOutside = useCallback(
-        (e: MouseEvent): void => {
-            if (isOpen && selectRef.current && !selectRef.current.contains(e.target as Node)) {
-                setDisabled();
-            }
-        },
-        [isOpen, setDisabled],
-    );
+    const selectRef = useClickOutside<HTMLDivElement>(setDisabled, isOpen);
 
     const selectOption = useCallback(
         (option: Option) => (e: SyntheticEvent) => {
@@ -36,13 +25,6 @@ const Select: React.FC<IProps> = ({options, onChange, value}) => {
         },
         [onChange],
     );
-
-    useEffect(() => {
-        document.addEventListener('mousedown', clickOutside);
-        return () => {
-            document.removeEventListener('mousedown', clickOutside);
-        };
-    }, [isOpen, clickOutside]);
 
     return (
         <Container ref={selectRef} $isOpen={isOpen} onClick={toggle}>
@@ -53,7 +35,7 @@ const Select: React.FC<IProps> = ({options, onChange, value}) => {
                     {options
                         .filter((option) => option.value !== selected.value)
                         .map((option) => (
-                            <div key={option.value} onClick={selectOption(option)}>
+                            <div key={option.value.toString()} onClick={selectOption(option)}>
                                 {option.title}
                             </div>
                         ))}
@@ -76,6 +58,7 @@ const Container = styled.div<{$isOpen: boolean}>`
 
 const SelectLabel = styled.label<{$isOpen: boolean}>`
     color: ${({theme, $isOpen}) => ($isOpen ? theme.palette.bg.secondary : theme.palette.bg.darkBlue)};
+    cursor: pointer;
     font-size: 17px;
     line-height: 22px;
     user-select: none;

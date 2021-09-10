@@ -26,7 +26,7 @@ const InputsContainer = styled.div`
     background: ${({theme}) => theme.palette.bg.secondary};
     border-radius: 0px 4px 4px 0px;
     display: flex;
-    padding: 14px 24px;
+    padding: 10px 24px;
 `;
 
 const DateInputWrapper = styled.div`

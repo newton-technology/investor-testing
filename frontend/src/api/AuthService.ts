@@ -37,7 +37,7 @@ class AuthService {
         this.setToken(data);
     }
 
-    public async sendCode<T>(payload: T) {
+    public async sendCode<T = IBaseAuth | IAdminBaseAuth>(payload: T) {
         const data = await this.request('signin', payload);
         this.setToken(data);
     }

@@ -2,8 +2,6 @@ import React, {ChangeEvent, SyntheticEvent, memo} from 'react';
 import styled from 'styled-components';
 
 import {Icon} from '../../../components/Icon';
-import {useToggle} from '../../../hooks/useToggle';
-
 interface IProps {
     value?: string;
     placeholder?: string;
@@ -12,8 +10,6 @@ interface IProps {
 }
 
 const SearchInput: React.FC<IProps> = ({onChange, onSubmit, value, placeholder}) => {
-    const {state, setActive, setDisabled} = useToggle();
-
     const onSubmitHandler = (event: SyntheticEvent) => {
         event.preventDefault();
         if (onSubmit) onSubmit(event, value);
@@ -21,14 +17,9 @@ const SearchInput: React.FC<IProps> = ({onChange, onSubmit, value, placeholder})
 
     return (
         <InputFormContainer onSubmit={onSubmitHandler}>
-            <Input onChange={onChange} value={value} onFocus={setActive} onBlur={setDisabled} />
-            {((!state && placeholder) || !value) && (
-                <Placeholder>
-                    <IconPlaceholder name='search' size={17} />
-                    <span>{placeholder}</span>
-                </Placeholder>
-            )}
-            {state && value && (
+            {!value && <IconPlaceholder name='search' size={17} />}
+            <Input onChange={onChange} value={value} placeholder={placeholder} />
+            {value && (
                 <SubmitButton type='submit'>
                     <Icon name='search' size={17} />
                 </SubmitButton>
@@ -49,35 +40,34 @@ const InputFormContainer = styled.form`
 
 const Input = styled.input`
     border: 0;
+    border-radius: 4px;
     font-size: 17px;
     line-height: 130%;
-    padding: 14.28px 31px;
+    padding: 14.28px 15px 14.28px 31px;
     width: 100%;
 
     &: focus-visible {
         border: 0;
         outline: 0;
     }
-`;
 
-const Placeholder = styled.div`
-    align-items: center;
-    color: ${({theme}) => theme.palette.border.input};
-    display: flex;
-    left: 31px;
-    line-height: 22px;
-    position: absolute;
+    &:placeholder {
+        color: ${({theme}) => theme.palette.border.input};
+    }
 `;
 
 const IconPlaceholder = styled(Icon)`
+    left: 31px;
     margin-right: 16px;
+    position: absolute;
     & path {
         fill: ${({theme}) => theme.palette.border.input};
     }
 `;
 
 const SubmitButton = styled.button`
-    background: ${({theme}) => theme.palette.bg.darkBlue};
+    background: ${({theme}) => theme.palette.secondary};
+    border-radius: 0px 4px 4px 0;
     line-height: 1;
     padding: 17px 20px 16.5px 19px;
 `;

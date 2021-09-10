@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {Navbar} from './Navbar';
-import {Footer} from './Footer';
 import {Container} from './Container';
+import {Footer} from './Footer';
+import {Navbar} from './Navbar';
 
 export const Layout: React.FC = ({children}) => {
     return (
         <LayoutContainer>
-            <Navbar />
+            <Navbar isAdmin />
             <Container>{children}</Container>
             <Footer />
         </LayoutContainer>
