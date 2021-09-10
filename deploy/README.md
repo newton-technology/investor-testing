@@ -2,30 +2,65 @@
 
 ## Для установки сервиса тестирования инвесторов необходимы следующие программы и компонеты
 - docker + docker-compose
-- php@7.4
-- yarn
-- СУБД postgresql с пользователем terminal и admin (разрешен удаленный вход по паролю, admin - владелец БД)
-- liquibase
+- СУБД `postgresql` 
 
 ## Порядок установки
-1. Применить миграции к БД
-2. В директории `frontend` скопировать файл `.env.example` в `.env`
-3. Установить зависимости 
+1. Подготовка БД:
+- Создать группу `admins`
 ```
-yarn update
+postgres=# create role admins;
 ```
-4. Скомпилировать фронт
+- Создать пользователя `admin`, включить в группу `admins`
 ```
-yarn build
+postgres=# create user admin in role admins with password 'some-password';
 ```
-5. В директории `backend` установить зависимости
+- Создать БД `invstor_testing`, принадлежащую группе admins
 ```
-composer update
+postgres=# create database invstor_testing owner admins;
 ```
-6. В директории `deploy` скопировать файл `env.example` в `env`
-7. Заполнить значения env-переменных в файле `env`. (Инструкция по заполнению в файле backend/investor_testing/README.md)
-8. В файле `proxy_nginx.conf` задать домен в поле `server_name`.
-9. Запустить сборку контейнеров `docker`
+- Создать сущности в БД, применив скрипт `make-database.sql`
 ```
-docker-compose up -d
+$ psql -h host -U admin -W -f ./make-database.sql investor_testing
 ```
+
+2. Поготовка сервиса (Далее действия проводятся в директории `deploy`):
+
+- В директории `deploy` скопировать файл `env.example` в `env`
+
+- Заполнить значения env-переменных в файле `env`. (Инструкция по заполнению в файле backend/investor_testing/README.md).
+
+3. Подготовка веб сервера:
+
+- В файле `proxy_nginx.conf` задать домен в поле `server_name`.
+
+- ОПЦИОНАЛЬНО: если на вашем сервере уже есть веб сервер, пробросить 80 порт сервиса `proxy` на другой порт хоста и проксировать трафик на этот порт.
+
+4. Деплой:
+
+- Создать пару приватного и публичного ключа
+```
+$ openssl genrsa -out private.pem 3072
+$ openssl rsa -in private.pem -pubout -out public.pem
+```
+
+- Запустить загрузку контейнеров. Для этого Запустить команду
+
+```
+$ docker-compose up -d
+```
+
+Сервис должен заработать.
+
+10. Залить тестовые данные в БД (Необходимо подключиться к БД)
+
+```
+$ docker exec backend "php /var/www/projects/php/investor_testing/artisan import categories ./resources/demodata/categories.csv"
+$ docker exec backend "php /var/www/projects/php/investor_testing/artisan import categories ./resources/demodata/questions.csv
+$ docker exec backend "php /var/www/projects/php/investor_testing/artisan import categories ./resources/demodata/answers.csv
+```
+
+В БД будут импортированы тестовые данные из файлов внутри контейнера:
+- /var/www/projects/php/investor_testing/resources/demodata/categories.csv
+- /var/www/projects/php/investor_testing/resources/demodata/questions.csv
+- /var/www/projects/php/investor_testing/resources/demodata/answers.csv
+(Если необходимо залить другие данные, можно пробросить директорию со своими файлами внутрь контейнера)
