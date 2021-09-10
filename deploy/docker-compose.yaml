@@ -1,0 +1,37 @@
+version: '3.5'
+
+networks:
+  default:
+    name: dockercomposedeploy_default
+
+services:
+  frontend:
+    build: ../frontend/
+    container_name: frontend
+    volumes:
+      - ./frontend.conf:/etc/nginx/conf.d/default.conf
+  backend:
+    build: ../backend/
+    container_name: backend
+    volumes:
+      - ./env:/var/www/projects/php/investor_testing/.env
+      - ./public.pem:/var/www/projects/php/investor_testing/public.pem
+      - ./private.pem:/var/www/projects/php/investor_testing/private.pem
+      - ./php-fpm.conf:/etc/opt/remi/php74/php-fpm.conf
+  backend_nginx:
+    image: nginx
+    container_name: backend-nginx
+    volumes: 
+      - ./backend_nginx.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - backend
+  proxy:
+    image: nginx
+    container_name: proxy
+    volumes: 
+      - ./proxy_nginx.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - backend_nginx
+      - frontend
+    ports:
+      - 80:80
