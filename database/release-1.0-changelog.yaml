@@ -1,4 +1,0 @@
-databaseChangeLog:
-  - includeAll:
-      path: "release-1.0/"
-      relativeToChangelogFile: true
