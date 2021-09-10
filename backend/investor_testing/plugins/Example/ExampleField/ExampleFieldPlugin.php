@@ -3,8 +3,8 @@
 namespace Plugins\Example\ExampleField;
 
 use Common\Packages\Application\Application;
+use Common\Plugins\Plugin;
 use Newton\InvestorTesting\Packages\Common\CategoryItemRepository;
-use Plugins\Plugin;
 
 class ExampleFieldPlugin extends Plugin
 {

@@ -3,8 +3,8 @@
 namespace Plugins\Example\ExampleView;
 
 use Common\Packages\Application\Application;
+use Common\Plugins\Plugin;
 use Newton\InvestorTesting\Packages\Authorization\CodeRepository;
-use Plugins\Plugin;
 
 class ExampleViewPlugin extends Plugin
 {

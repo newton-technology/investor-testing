@@ -45,7 +45,7 @@ class UserRepository
     {
         return $this->getEntityByKey(
             [
-                ['email', $email],
+                ['email', strtolower($email)],
             ]
         );
     }

@@ -13,6 +13,7 @@ class CodeMail extends \Newton\InvestorTesting\Packages\Authorization\CodeMail
     public function build(): CodeMail
     {
         return $this->view('emails.plugin_authorization_code')
+            ->subject($this->code . ' — ваш код для тестирования')
             ->with(
                 [
                     'code' => $this->code,

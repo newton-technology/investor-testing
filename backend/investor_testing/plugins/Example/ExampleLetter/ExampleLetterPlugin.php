@@ -2,8 +2,8 @@
 
 namespace Plugins\Example\ExampleLetter;
 
+use Common\Plugins\Plugin;
 use Newton\InvestorTesting\Packages\Common\UserRepository;
-use Plugins\Plugin;
 
 class ExampleLetterPlugin extends Plugin
 {

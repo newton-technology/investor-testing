@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="ru">
 <head>
     <meta name="viewport" content="width=device-width"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -7,15 +7,28 @@
     <style>
         p {
             font-family: Helvetica, Arial, sans-serif;
+            font-size: 18px;
             color: #000000;
             margin-top: 40px;
-            font-size: 14px;
+            line-height: 1.5rem;
         }
+
+        .mt-0 {
+            margin-top: 0;
+        }
+
+        .signature {
+            font-size: 14px;
+            line-height: 1.2rem;
+        }
+
         #title {
             font-size: 20px;
+            font-weight: bold;
         }
+
         #code {
-            font-size: 20px;
+            font-size: 17px;
         }
 
         div {
@@ -26,16 +39,17 @@
 <body>
 <div>
     <p id="title">
-        <b>Скопируйте код, чтобы войти на сайт</b>
+        Скопируйте код, чтобы войти на сайт
     </p>
-    <p>После этого вы сможете пройти тестирование знаний об инструментах фондового рынка,
-        чтобы приобретать сложные финансовые инструменты. </p>
+    <p class="mt-0">На сайте вы сможете пройти тестирование знаний об инструментах фондового рынка. Это позволит использовать финансовые инструменты, недоступные обычным инвесторам.</p>
     <p id="code">
-        <b>{{$code}}</b>
+        {{$code}}
     </p>
-    <p>Вы получили это сообщение, потому что зарегистрировались
-        чтобы пройти тестирование знаний об инструментах фондового рынка.
+    <br/>
+    <p class="signature">
         Если вы не регистрировались, проигнорируйте это письмо.
+        <br/>
+        Для вашей безопасности код действует только 10 минут.
     </p>
 </div>
 </body>
