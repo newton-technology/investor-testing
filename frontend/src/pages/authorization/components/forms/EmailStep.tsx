@@ -8,9 +8,10 @@ interface IProps {
     email: string;
     isError: boolean;
     isServerError: boolean;
+    isAuthLoading: boolean;
     setEmail: (email: string) => void;
 }
-export const EmailStep: React.FC<IProps> = ({email, isError, isServerError, setEmail}) => {
+export const EmailStep: React.FC<IProps> = ({email, isError, isAuthLoading, isServerError, setEmail}) => {
     return (
         <React.Fragment>
             <Description>
@@ -29,9 +30,13 @@ export const EmailStep: React.FC<IProps> = ({email, isError, isServerError, setE
                     }}
                 />
             </InputContainer>
-            <Button disabled={isError}>Продолжить</Button>
-            {isServerError && <ErrorMessage>Ошибка сервера, повторите позже.</ErrorMessage>}
-            {isError && !!email.length && <ErrorMessage>Неправильно введен email.</ErrorMessage>}
+            <ButtonContainer>
+                <StyledButton disabled={isError || isAuthLoading} isLoading={isAuthLoading}>
+                    Продолжить
+                </StyledButton>
+                {isServerError && <ErrorMessage>Ошибка сервера, повторите позже.</ErrorMessage>}
+                {isError && !!email.length && <ErrorMessage>Неправильно введен email.</ErrorMessage>}
+            </ButtonContainer>
             <EULADescription>
                 Нажимая кнопку Продолжить, вы соглашаетесь с условиями <u>пользовательского соглашения</u> и даете{' '}
                 <u>согласие</u> на обработку ваших персональных данных
@@ -57,15 +62,18 @@ const Input = styled.input<{isError: boolean}>`
     padding-left: 32px;
     width: 100%;
 `;
+
 const Description = styled.span`
     padding-bottom: 24px;
 `;
 
-const ErrorMessage = styled.span`
+const ErrorMessage = styled.div`
     color: ${({theme}) => theme.palette.error};
-    padding-top: 16px;
+    position: absolute;
     text-align: center;
+    top: 70px;
 `;
+
 const StyledIcon = styled(Icon)`
     left: 32px;
     position: absolute;
@@ -74,8 +82,19 @@ const StyledIcon = styled(Icon)`
 
 const EULADescription = styled.span`
     color: #a9a9a9;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 130%;
     padding-bottom: 32px;
-    padding-top: 16px;
+    padding-top: 54px;
+`;
+
+const StyledButton = styled(Button)`
+    width: 100%;
+`;
+
+const ButtonContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    position: relative;
+    width: 100%;
 `;

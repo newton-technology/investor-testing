@@ -29,19 +29,29 @@ export const Authorization: React.FC = () => {
     const [isError, setIsError] = useState<boolean>(false);
     const [isServerError, setIsServerError] = useState<boolean>(false);
     const [isWrongCode, setIsWrongCode] = useState<boolean>(false);
+    const [isAuthLoading, setIsAuthLoading] = useState<boolean>(false);
     const [step, setStep] = useState<'email' | 'code'>('email');
 
     const sendCode = () => {
-        authService
-            .sendCode({
-                email,
-                grant_type: 'code',
-            })
-            .then(() => {
-                setStep('code');
-                setIsServerError(false);
-            })
-            .catch(() => setIsServerError(true));
+        const isValid = emailValidate(email);
+
+        if (isValid) {
+            setIsAuthLoading(true);
+            authService
+                .sendCode({
+                    email,
+                    grant_type: 'code',
+                })
+                .then(() => {
+                    setStep('code');
+                    setIsServerError(false);
+                })
+                .catch(() => setIsServerError(true))
+                .finally(() => setIsAuthLoading(false));
+        } else {
+            setIsError(true);
+            setIsServerError(false);
+        }
     };
 
     const login = () => {
@@ -63,8 +73,17 @@ export const Authorization: React.FC = () => {
         setStep('email');
     };
 
+    const onSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (step === 'email') {
+            sendCode();
+        } else {
+            login();
+        }
+    };
+
     useEffect(() => {
-        setIsError(!emailValidate(email));
+        setIsError(false);
     }, [email]);
 
     useEffect(() => {
@@ -77,19 +96,17 @@ export const Authorization: React.FC = () => {
         <Container>
             <AuthPageBackground style={{position: 'fixed'}} />
             <FormContainer>
-                <Form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        if (step === 'email') {
-                            sendCode();
-                        } else {
-                            login();
-                        }
-                    }}>
+                <Form onSubmit={onSubmit}>
                     {step === 'email' && <FormHeader />}
                     <Title>{steps[step].title}</Title>
                     {step === 'email' ? (
-                        <EmailStep email={email} isError={isError} isServerError={isServerError} setEmail={setEmail} />
+                        <EmailStep
+                            email={email}
+                            isError={isError}
+                            isServerError={isServerError}
+                            isAuthLoading={isAuthLoading}
+                            setEmail={setEmail}
+                        />
                     ) : (
                         <CodeStep
                             email={email}
@@ -143,8 +160,5 @@ const Title = styled.h1`
     font-weight: bold;
     margin-bottom: 16px;
     margin-top: 15px;
-
-    ${({theme}) => theme.breakpoint('md')`
-        font-size: 32px;
-    `}
+    text-align: center;
 `;
