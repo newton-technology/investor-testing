@@ -8,7 +8,7 @@ import {Navbar} from './Navbar';
 export const Layout: React.FC = ({children}) => {
     return (
         <LayoutContainer>
-            <Navbar isAdmin />
+            <Navbar />
             <Container>{children}</Container>
             <Footer />
         </LayoutContainer>

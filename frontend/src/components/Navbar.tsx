@@ -41,10 +41,12 @@ export const Navbar: React.FC<IProps> = ({isAdmin}) => {
                             ))}
                         </NavLinks>
                     )}
-                    <DownloadButton>
-                        <IconContainer name='download' />
-                        Скачать файл
-                    </DownloadButton>
+                    {isAdmin && (
+                        <DownloadButton>
+                            <IconContainer name='download' />
+                            Скачать файл
+                        </DownloadButton>
+                    )}
                     <LogoutButton onClick={logout}>
                         <IconContainer name='arrow_right' />
                         Выйти

@@ -1,11 +1,12 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
 import styled from 'styled-components';
 
 import {Icon} from '../../../components/Icon';
+import {PageType} from '../AllTestsPage';
 
 interface IProps {
-    currentPage: number;
-    onChangePage: (newPage: number | string) => void;
+    currentPage: PageType;
+    onChangePage: (newPage: PageType) => void;
     maxPage: number;
 }
 
@@ -16,19 +17,38 @@ const paginatorWith = (page: number) => {
 };
 
 const Paginator: React.FC<IProps> = ({currentPage, maxPage, onChangePage = () => null}) => {
-    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const [localPageState, setLocalPageState] = useState<PageType>(currentPage);
+    const pageValue = typeof localPageState === 'number' ? localPageState : 0;
+
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const value = Number(e.target.value) || '';
-        if (onChangePage && value) onChangePage(value);
+        if (value <= maxPage) setLocalPageState(value);
     };
+    const onSubmitHandler = (e: FormEvent) => {
+        e.preventDefault();
+        if (onChangePage) onChangePage(localPageState);
+    };
+
+    useEffect(() => {
+        setLocalPageState(currentPage);
+    }, [currentPage]);
 
     return (
         <PaginatorContainer>
-            <PaginatorInput value={currentPage} onChange={onChange} style={{width: paginatorWith(currentPage)}} />
+            <form action='' onSubmit={onSubmitHandler}>
+                <PaginatorInput
+                    value={localPageState}
+                    onChange={onChangeHandler}
+                    style={{width: paginatorWith(currentPage || 0)}}
+                />
+            </form>
             <MaxPagesLabel>из {maxPage}</MaxPagesLabel>
-            <PaginationButton disabled={currentPage === 1} onClick={() => onChangePage(-1)}>
+            <PaginationButton
+                disabled={currentPage === 1 || currentPage === ''}
+                onClick={() => onChangePage(pageValue - 1)}>
                 <Chevron name='chevron_right' />
             </PaginationButton>
-            <PaginationButton disabled={currentPage >= maxPage} onClick={() => onChangePage(1)}>
+            <PaginationButton disabled={currentPage >= maxPage} onClick={() => onChangePage(pageValue + 1)}>
                 <Chevron name='chevron_right' />
             </PaginationButton>
         </PaginatorContainer>

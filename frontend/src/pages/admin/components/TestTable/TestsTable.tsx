@@ -5,6 +5,7 @@ import {IAllTestsResponse, Status} from '../../../../api/ManagmentApi';
 import {Icon} from '../../../../components/Icon';
 import {Loader} from '../../../../components/Loader';
 import {dateFormatter, Direction, sortComparator} from '../../../../utils/tableUtils';
+import NoReslt from './components/NoReslt';
 
 interface IProps {
     tests: IAllTestsResponse[];
@@ -31,6 +32,10 @@ const TestsTable: React.FC<IProps> = ({tests, isLoading, selectEmail}) => {
     const changeSortDirection = useCallback(() => {
         setSortDirection((prevValue) => (prevValue === 'asc' ? 'desc' : 'asc'));
     }, []);
+
+    if (!isLoading && !tests.length) {
+        return <NoReslt />;
+    }
 
     return (
         <Table>
@@ -62,7 +67,7 @@ const TestsTable: React.FC<IProps> = ({tests, isLoading, selectEmail}) => {
                         const isPassed = test.status === Status.PASSED;
                         return (
                             <TableRow key={test.id}>
-                                <TD>{dateFormatter(test.createdAt)}</TD>
+                                <TD>{dateFormatter(test.createdAt, 'D MMMM в H:m')}</TD>
                                 <TD>
                                     <BodyContent pointer onClick={() => selectEmail(test.userEmail)}>
                                         {test.userEmail}

@@ -11,7 +11,7 @@ import {emailValidate} from './components/utils';
 type IForm = {username: string; password: string};
 type isErrorType = {username: boolean; password: boolean};
 
-const AdminAuthorization: React.FC = () => {
+export const AdminAuthorization: React.FC = () => {
     const [form, setForm] = useState<IForm>({username: 'test1@exanple.com', password: '123456'});
     const [isError, setIsError] = useState<isErrorType>({username: false, password: false});
 
@@ -20,7 +20,6 @@ const AdminAuthorization: React.FC = () => {
         const {username, password} = form;
         const requestData = {username, password, scope: 'admin', grant_type: 'password'};
         authService.sendCode(requestData).catch((e) => {
-            // console.log(e);
             setIsError({username: true, password: true});
         });
     };
@@ -134,5 +133,3 @@ const ErrorMessage = styled.span`
     padding-top: 16px;
     text-align: center;
 `;
-
-export default AdminAuthorization;

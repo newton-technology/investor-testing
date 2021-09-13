@@ -1,3 +1,4 @@
+import isEqual from 'lodash.isequal';
 import React, {useState, useCallback, SyntheticEvent, memo} from 'react';
 import styled from 'styled-components';
 
@@ -33,11 +34,11 @@ const Select: React.FC<IProps> = ({options, onChange, value}) => {
             {isOpen && (
                 <OptionsContainer>
                     {options
-                        .filter((option) => option.value !== selected.value)
+                        .filter((option) => !isEqual(option.value, value))
                         .map((option) => (
-                            <div key={option.value.toString()} onClick={selectOption(option)}>
+                            <StyledOption key={option.value.toString()} onClick={selectOption(option)}>
                                 {option.title}
-                            </div>
+                            </StyledOption>
                         ))}
                 </OptionsContainer>
             )}
@@ -47,7 +48,7 @@ const Select: React.FC<IProps> = ({options, onChange, value}) => {
 
 const Container = styled.div<{$isOpen: boolean}>`
     align-items: center;
-    background: ${({theme, $isOpen}) => ($isOpen ? theme.palette.bg.darkBlue : theme.palette.bg.secondary)};
+    background: ${({theme}) => theme.palette.bg.secondary};
     border-radius: 4px;
     cursor: pointer;
     display: flex;
@@ -57,7 +58,7 @@ const Container = styled.div<{$isOpen: boolean}>`
 `;
 
 const SelectLabel = styled.label<{$isOpen: boolean}>`
-    color: ${({theme, $isOpen}) => ($isOpen ? theme.palette.bg.secondary : theme.palette.bg.darkBlue)};
+    color: ${({theme}) => theme.palette.regular};
     cursor: pointer;
     font-size: 17px;
     line-height: 22px;
@@ -65,10 +66,10 @@ const SelectLabel = styled.label<{$isOpen: boolean}>`
 `;
 
 const OptionsContainer = styled.div`
-    background: ${({theme}) => theme.palette.bg.darkBlue};
+    background: ${({theme}) => theme.palette.bg.secondary};
     border-radius: 0px 0px 4px 4px;
-    bottom: -36px;
-    color: ${({theme}) => theme.palette.bg.secondary};
+    top: 52px;
+    color: ${({theme}) => theme.palette.regular};
     font-size: 17px;
     left: 0;
     line-height: 22px;
@@ -82,10 +83,12 @@ const StyledIcon = styled(Icon)<{$isOpen: boolean}>`
     transform: ${({$isOpen}) => ($isOpen ? 'rotate(90deg)' : 'rotate(0deg)')};
 
     & path {
-        ${({$isOpen, theme}) => ($isOpen ? `fill: ${theme.palette.bg.secondary}` : '')};
+        // ${({$isOpen, theme}) => ($isOpen ? `fill: ${theme.palette.bg.secondary}` : '')};
     }
 `;
 
-// const;
+const StyledOption = styled.div`
+    margin-bottom: 14px;
+`;
 
 export default memo(Select);

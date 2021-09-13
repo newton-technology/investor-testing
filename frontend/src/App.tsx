@@ -6,6 +6,8 @@ import {ErrorBoundary} from './components/ErrorBoundary';
 import {Layout} from './components/Layout';
 import {Loader} from './components/Loader';
 import {useAuthorization} from './hooks/useAuthorization';
+import {AllTestsPage} from './pages/admin/AllTestsPage';
+import {AdminAuthorization} from './pages/authorization/AdminAuthorization';
 import {Authorization} from './pages/authorization/Authorization';
 import {CategoryList} from './pages/category_list/CategoryList';
 import {CategoryTest} from './pages/category_test/CategoryTest';
@@ -43,6 +45,9 @@ const App: React.FC = () => {
                             <Route path='/tests/:categoryId' exact>
                                 <CategoryTest />
                             </Route>
+                            <Route path='/admin/tests'>
+                                <AllTestsPage />
+                            </Route>
                             <Route path='*'>
                                 <PageNotFound />
                             </Route>
@@ -52,6 +57,9 @@ const App: React.FC = () => {
                     <Switch>
                         <Route path='/' exact>
                             <Authorization />
+                        </Route>
+                        <Route path='/admin' exact>
+                            <AdminAuthorization />
                         </Route>
                         <Route path='*'>
                             <Redirect to='/' />
