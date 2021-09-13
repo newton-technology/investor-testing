@@ -51,7 +51,7 @@ $ docker-compose up -d
 
 Сервис должен заработать.
 
-10. Залить тестовые данные в БД (Необходимо подключиться к БД)
+10. Залить тестовые данные в БД 
 
 ```
 $ docker exec backend "php /var/www/projects/php/investor_testing/artisan import categories /var/www/projects/php/investor_testing/resources/demodata/categories.csv"
