@@ -54,9 +54,9 @@ $ docker-compose up -d
 10. Залить тестовые данные в БД (Необходимо подключиться к БД)
 
 ```
-$ docker exec backend "php /var/www/projects/php/investor_testing/artisan import categories ./resources/demodata/categories.csv"
-$ docker exec backend "php /var/www/projects/php/investor_testing/artisan import categories ./resources/demodata/questions.csv
-$ docker exec backend "php /var/www/projects/php/investor_testing/artisan import categories ./resources/demodata/answers.csv
+$ docker exec backend "php /var/www/projects/php/investor_testing/artisan import categories /var/www/projects/php/investor_testing/resources/demodata/categories.csv"
+$ docker exec backend "php /var/www/projects/php/investor_testing/artisan import categories /var/www/projects/php/investor_testing/resources/demodata/questions.csv
+$ docker exec backend "php /var/www/projects/php/investor_testing/artisan import categories /var/www/projects/php/investor_testing/resources/demodata/answers.csv
 ```
 
 В БД будут импортированы тестовые данные из файлов внутри контейнера:
