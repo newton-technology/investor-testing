@@ -1,0 +1,51 @@
+{
+    "name": "newton-technology/investor_testing",
+    "description": "InvestorTesting Service",
+    "keywords": [
+        "investor_testing"
+    ],
+    "license": "Newton Technology",
+    "type": "project",
+    "version": "1.70.0",
+    "extra": {
+        "stage": "DEV"
+    },
+    "require": {
+        "php": "^7.4",
+        "fideloper/proxy": "^4.4",
+        "firebase/php-jwt": "5.2.0",
+        "guzzlehttp/guzzle": "^7.0.1",
+        "illuminate/mail": "^8.53",
+        "laravel/lumen-framework": "^8.0",
+        "ramsey/uuid": "^4.1"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.3.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Newton\\InvestorTesting\\": "app/",
+            "Common\\": "../common/",
+            "Plugins\\": "plugins/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/"
+        ]
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ]
+    }
+}

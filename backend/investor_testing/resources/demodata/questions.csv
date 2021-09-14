@@ -1,0 +1,18 @@
+id;group_code;category_code;text;answers_count_min;answers_count_max;answers_count_to_choose_min;answers_count_to_choose_max;weight;status
+1;evaluation;category1;Случайный вопрос блока самооценки (категория 1)?;3;3;1;;0;enabled
+2;evaluation;category1;Случайный вопрос блока самооценки (категория 1)?;5;5;1;;0;enabled
+3;evaluation;category1;ЭТОТ ВОПРОС ОТКЛЮЧЕН (категория 1);5;5;1;;0;disabled
+4;knowledge;category1;Один из вопросов блока знаний (категория 1)?;4;4;1;1;1;enabled
+5;knowledge;category1;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum (категория 1)?;4;4;1;1;1;enabled
+6;knowledge;category1;Один из вопросов блока знаний (категория 1)?;4;4;1;1;1;enabled
+7;knowledge;category2;Один из вопросов блока знаний (категория 2)?;4;4;1;1;2;enabled
+8;knowledge;category2;Один из вопросов блока знаний (категория 2)?;4;4;1;1;1;enabled
+9;knowledge;category2;Один из вопросов блока знаний (категория 2)?;5;5;1;1;1;enabled
+10;knowledge;category3;Один из вопросов блока знаний (категория 3)?;4;4;1;1;3;enabled
+11;knowledge;category3;Один из вопросов блока знаний (категория 3)?;4;4;1;1;1;enabled
+12;knowledge;category3;Один из вопросов блока знаний (категория 3)?;4;4;1;1;1;enabled
+13;knowledge;category4;Один из вопросов блока знаний (категория 4)?;4;4;1;1;1;enabled
+14;knowledge;category4;Один из вопросов блока знаний (категория 4)?;4;4;1;1;1;enabled
+15;knowledge;category4;Один из вопросов блока знаний (категория 4)?;5;5;1;1;1;enabled
+16;knowledge;category4;Один из вопросов блока знаний (категория 4)?;5;5;1;1;1;enabled
+17;knowledge;category5;Один из вопросов блока знаний (категория 5)?;4;4;1;1;1;enabled

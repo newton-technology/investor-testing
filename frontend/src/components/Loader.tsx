@@ -12,8 +12,8 @@ interface IProps {
 export const Loader: React.FC<IProps> = ({isInline, className, isFullScreen}) => {
     return (
         <LoaderContainer isInline={isInline} isFullScreen={isFullScreen} className={className}>
-            <svg viewBox='0 0 79 79' xmlns='http://www.w3.org/2000/svg'>
-                <path d='M48.2919 8.10005C31.221 3.52592 13.6742 13.6566 9.10005 30.7275C4.52591 47.7984 14.6566 65.3452 31.7275 69.9193C48.7984 74.4934 66.3452 64.3628 70.9193 47.2919L77.6808 49.1036C72.1061 69.9088 50.7209 82.2555 29.9157 76.6808C9.11056 71.1061 -3.23616 49.7209 2.33857 28.9157C7.9133 8.11056 29.2984 -4.23616 50.1036 1.33857C55.373 2.7505 60.1076 5.18082 64.1453 8.36364L59.8119 13.861C56.5065 11.2555 52.6268 9.2616 48.2919 8.10005Z' />
+            <svg viewBox='0 0 80 80' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                <path d='M49.2919 9.10005C32.221 4.52592 14.6742 14.6566 10.1001 31.7275C5.52591 48.7984 15.6566 66.3452 32.7275 70.9193C49.7984 75.4934 67.3452 65.3628 71.9193 48.2919L78.6808 50.1036C73.1061 70.9088 51.7209 83.2555 30.9157 77.6808C10.1106 72.1061 -2.23616 50.7209 3.33857 29.9157C8.9133 9.11056 30.2984 -3.23616 51.1036 2.33857C56.373 3.7505 61.1076 6.18082 65.1453 9.36364L60.8119 14.861C57.5065 12.2555 53.6268 10.2616 49.2919 9.10005Z' />
             </svg>
         </LoaderContainer>
     );
@@ -36,7 +36,7 @@ const LoaderContainer = styled.span<{isInline?: boolean; isFullScreen?: boolean}
         `
     align-items: center;
     justify-content: center;
-    height: ${isFullScreen ? '100vh' : '100px'};
+    height: ${isFullScreen ? '100vh' : '300px'};
 `}
 
     svg {

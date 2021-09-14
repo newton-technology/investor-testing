@@ -1,0 +1,8 @@
+code;name;description;description_short;status
+category1;Категория 1;Описание категории 1;Описание;enabled
+category2;Категория 2;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.;Описание;enabled
+category3;Категория Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum;"Описание категории 3 ""фраза в кавычках""";Описание;enabled
+category4;Категория 4;Описание категории 4;Описание;enabled
+category5;Категория 5;Описание категории 5;Описание;enabled
+category6;Категория 6;Описание категории 6 (категория отключена);Описание;disabled
+category7;Категория 7;Описание категории 7;Описание;enabled

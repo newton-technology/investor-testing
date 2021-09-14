@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import {Segment} from './components/Segment';
 
 interface IProps {
+    value: string;
+    setValue: React.Dispatch<React.SetStateAction<string>>;
     length: number;
     error?: boolean;
     onComplete?: (value: string) => void;
@@ -12,8 +14,7 @@ interface IProps {
 }
 
 export const CodeInput = React.forwardRef<HTMLInputElement, IProps>(
-    ({length, error, onComplete, onChange, className}, ref) => {
-        const [value, setValue] = useState<string>('');
+    ({value, setValue, length, error, onComplete, onChange, className}, ref) => {
         const positions = new Array(length).fill(0);
 
         const changeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,17 +46,17 @@ export const CodeInput = React.forwardRef<HTMLInputElement, IProps>(
 
         return (
             <Container className={className} htmlFor='code'>
-                <Input
-                    id='code'
-                    ref={ref}
-                    positionIndex={Math.min(length - 1, value.length)}
-                    onChange={changeHandle}
-                    onKeyUp={handleKeyUp}
-                    onPaste={handlePaste}
-                    error={error}
-                    type='text'
-                />
                 <SegmentContainer>
+                    <Input
+                        id='code'
+                        ref={ref}
+                        positionIndex={Math.min(length - 1, value.length)}
+                        onChange={changeHandle}
+                        onKeyUp={handleKeyUp}
+                        onPaste={handlePaste}
+                        error={error}
+                        type='text'
+                    />
                     {positions.map((_, index) => (
                         <Segment key={index} error={error}>
                             {value.slice(index, index + 1)}
@@ -70,8 +71,7 @@ export const CodeInput = React.forwardRef<HTMLInputElement, IProps>(
 const Container = styled.label`
     align-items: center;
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    margin: 0 auto;
     position: relative;
 
     div:not(:last-child) {
@@ -84,12 +84,12 @@ const Input = styled.input<{positionIndex?: number; error?: boolean}>`
     border: none;
     box-sizing: border-box;
     font-size: 42px;
-    height: 52px;
-    left: ${({positionIndex = 1}) => (positionIndex + 1) * 42 + positionIndex * 8}px;
+    height: 32px;
+    left: ${({positionIndex = 0}) => positionIndex * 52 + 21}px;
     outline: none;
-    padding: 0 5px;
+    padding: 0;
     position: absolute;
-    top: 0;
+    top: 10px;
     width: 42px;
 
     &:focus ~ div > div {

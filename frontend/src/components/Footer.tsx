@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {Container} from './Container';
-import {breakpoint} from '../theme/breakpont';
 import customize from '../customize.json';
+import {Container} from './Container';
 
 const {phones, site, license} = customize.content || {};
 
@@ -40,14 +39,12 @@ export const Footer: React.FC = () => {
 };
 
 const FooterContainer = styled.div`
-    margin-top: 64px;
     color: ${({theme}) => theme.palette.bg.secondary};
     padding-top: 38px;
     padding-bottom: 32px;
     background-color: ${({theme}) => theme.palette.bg.footer};
 
-    ${breakpoint('md')`
-        margin-top: 100px;
+    ${({theme}) => theme.breakpoint('md')`
         padding-top: 48px;
         padding-bottom: 48px;
     `}
@@ -68,7 +65,7 @@ const Phones = styled.div`
     grid-gap: 20px;
     margin-bottom: 32px;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         grid-gap: 32px;
         grid-template-columns: auto auto;
     `}
@@ -89,7 +86,7 @@ const FooterMiddle = styled.div`
     p + p {
         margin-top: 16px;
 
-        ${breakpoint('md')`
+        ${({theme}) => theme.breakpoint('md')`
             margin-top: 0px;
         `}
     }
@@ -101,7 +98,7 @@ const FooterBottom = styled.div`
     display: flex;
     flex-direction: column;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         flex-direction: row;
         justify-content: space-between;
     `}
@@ -115,7 +112,7 @@ const FooterBottom = styled.div`
 const BrokerSiteLink = styled.a`
     margin-bottom: 60px;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         margin-bottom: 0;
     `}
 `;
@@ -123,7 +120,7 @@ const BrokerSiteLink = styled.a`
 const NewtonSiteLink = styled.a`
     font-size: 16px;
 
-    ${breakpoint('md')`
+    ${({theme}) => theme.breakpoint('md')`
         font-size: inherit;
         margin-top: 0;
     `}
