@@ -32,13 +32,13 @@ _WIP_
 [NodeJS LTS](https://nodejs.org/)
 
 ```
-npm i --save-d
+yarn install --save-d
 ```
 
 ## Запуск приложения
 
 ```
-npm start
+yarn start
 ```
 
 ## Кастомизация
@@ -57,8 +57,8 @@ content - основной контент приложения
 Для смены логотипа нужно заменить файлы в папке /src/assets/img
 
 ```
-logo.svg - основной логотип
-logoOnLogin.svg - логотип при авторизации
+logo.(png/jp(e)g/svg) - основной логотип
+logoOnLogin.(png/jp(e)g/svg) - логотип при авторизации
 ```
 
 ### Настройка
