@@ -65,8 +65,8 @@ $ docker-compose up -d
 
 ```
 $ docker exec backend "php /var/www/projects/php/investor_testing/artisan import categories /var/www/projects/php/investor_testing/resources/demodata/categories.csv"
-$ docker exec backend "php /var/www/projects/php/investor_testing/artisan import categories /var/www/projects/php/investor_testing/resources/demodata/questions.csv
-$ docker exec backend "php /var/www/projects/php/investor_testing/artisan import categories /var/www/projects/php/investor_testing/resources/demodata/answers.csv
+$ docker exec backend "php /var/www/projects/php/investor_testing/artisan import questions /var/www/projects/php/investor_testing/resources/demodata/questions.csv
+$ docker exec backend "php /var/www/projects/php/investor_testing/artisan import answers /var/www/projects/php/investor_testing/resources/demodata/answers.csv
 ```
 
 В БД будут импортированы тестовые данные из файлов внутри контейнера:
