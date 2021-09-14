@@ -62,6 +62,7 @@ $app->singleton(
 $configs = [
     'app',
     'authorization',
+    'broker',
     'database',
     'kafka',
     'logging',

@@ -12,6 +12,8 @@ use Throwable;
 
 use Newton\InvestorTesting\Packages\Common\Exception\ExceptionWithoutReport;
 
+use Illuminate\Support\Facades\Mail;
+
 class TestItemService
 {
     protected CategoryRepository $categoryRepository;
@@ -21,6 +23,7 @@ class TestItemService
     protected TestQuestionRepository $testQuestionRepository;
     protected TestAnswerRepository $testAnswerRepository;
     protected TestResultHandler $testResultHandler;
+    protected UserRepository $userRepository;
 
     public function __construct(
         CategoryRepository $categoryRepository,
@@ -29,7 +32,8 @@ class TestItemService
         TestRepository $testRepository,
         TestQuestionRepository $testQuestionRepository,
         TestAnswerRepository $testAnswerRepository,
-        TestResultHandler $testResultHandler
+        TestResultHandler $testResultHandler,
+        UserRepository $userRepository
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->questionRepository = $questionRepository;
@@ -38,6 +42,7 @@ class TestItemService
         $this->testQuestionRepository = $testQuestionRepository;
         $this->testAnswerRepository = $testAnswerRepository;
         $this->testResultHandler = $testResultHandler;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -143,6 +148,8 @@ class TestItemService
         }
 
         $this->handleTestResult($test, $testQuestionsById, $testAnswersById);
+        $this->notification($test);
+
         return $this->getTestItem($userId, $testId);
     }
 
@@ -331,5 +338,33 @@ class TestItemService
             ->setUpdatedAt($test->getUpdatedAt())
             ->setCategory($this->getTestCategory($category))
             ->setQuestions(array_values($testItemQuestions));
+    }
+
+    /**
+     * Отправляет пользователю письмо с результатом о
+     * прохождении тестирования
+     *
+     * @param Test $test
+     */
+    protected function notification(Test $test): void
+    {
+        if (in_array(
+            $test->getStatus(),
+            [
+                Test::STATUS_PASSED,
+                Test::STATUS_FAILED
+            ]
+        )) {
+            Mail::to($this->userRepository->getUserById($test->getUserId())->getEmail())
+                ->send(
+                    new TestResultMail(
+                        $this->categoryRepository
+                            ->getCategoryById($test->getCategoryId())
+                            ->getDescription(),
+                        $test->getStatus(),
+                        config('broker.test_result.broker_name')
+                    )
+                );
+        }
     }
 }
