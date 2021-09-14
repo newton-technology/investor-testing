@@ -39,14 +39,12 @@ export const Footer: React.FC = () => {
 };
 
 const FooterContainer = styled.div`
-    margin-top: 64px;
     color: ${({theme}) => theme.palette.bg.secondary};
     padding-top: 38px;
     padding-bottom: 32px;
     background-color: ${({theme}) => theme.palette.bg.footer};
 
     ${({theme}) => theme.breakpoint('md')`
-        margin-top: 100px;
         padding-top: 48px;
         padding-bottom: 48px;
     `}

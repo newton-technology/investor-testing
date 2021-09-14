@@ -8,11 +8,22 @@ import {Navbar} from './Navbar';
 export const Layout: React.FC = ({children}) => {
     return (
         <LayoutContainer>
-            <Navbar />
-            <Container>{children}</Container>
+            <MainContainer>
+                <Navbar />
+                <Container>{children}</Container>
+            </MainContainer>
             <Footer />
         </LayoutContainer>
     );
 };
 
 const LayoutContainer = styled.div``;
+
+const MainContainer = styled.div`
+    min-height: 100vh;
+    padding-bottom: 64px;
+
+    ${({theme}) => theme.breakpoint('md')`
+        padding-bottom: 100px;
+    `}
+`;
