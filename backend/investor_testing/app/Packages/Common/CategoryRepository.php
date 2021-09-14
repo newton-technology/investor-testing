@@ -69,4 +69,9 @@ class CategoryRepository
     {
         $this->deleteEntities([]);
     }
+
+    public function getCategoryById(int $categoryId): Category
+    {
+        return $this->getEntityById($categoryId);
+    }
 }
