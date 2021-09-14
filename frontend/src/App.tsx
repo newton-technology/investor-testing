@@ -45,7 +45,10 @@ const App: React.FC = () => {
                             <Route path='/tests/:categoryId' exact>
                                 <CategoryTest />
                             </Route>
-                            <Route path='/admin/tests'>
+                            <Route path='/admin' exact>
+                                <Redirect to='/admin/tests' />
+                            </Route>
+                            <Route path='/admin/tests' exact>
                                 <AllTestsPage />
                             </Route>
                             <Route path='*'>

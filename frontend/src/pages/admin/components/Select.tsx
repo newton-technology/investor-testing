@@ -68,27 +68,27 @@ const SelectLabel = styled.label<{$isOpen: boolean}>`
 const OptionsContainer = styled.div`
     background: ${({theme}) => theme.palette.bg.secondary};
     border-radius: 0px 0px 4px 4px;
-    top: 52px;
     color: ${({theme}) => theme.palette.regular};
     font-size: 17px;
     left: 0;
     line-height: 22px;
     padding: 2px 24px 14px 24px;
     position: absolute;
+    top: 52px;
     width: 100%;
 `;
 
 const StyledIcon = styled(Icon)<{$isOpen: boolean}>`
     margin-left: auto;
     transform: ${({$isOpen}) => ($isOpen ? 'rotate(90deg)' : 'rotate(0deg)')};
-
-    & path {
-        // ${({$isOpen, theme}) => ($isOpen ? `fill: ${theme.palette.bg.secondary}` : '')};
-    }
 `;
 
 const StyledOption = styled.div`
     margin-bottom: 14px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
 `;
 
 export default memo(Select);

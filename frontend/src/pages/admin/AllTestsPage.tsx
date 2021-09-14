@@ -1,7 +1,7 @@
 import React, {useState, useCallback, ChangeEvent, useEffect, useMemo, useRef} from 'react';
 import styled from 'styled-components';
 
-import {Status} from '../../api/ManagmentApi';
+import {Sort, Status} from '../../api/ManagmentApi';
 import {useAllTestsByParams} from '../../hooks/useAdmin';
 import DatePicker from './components/DatePicker';
 import Paginator from './components/Paginator';
@@ -30,12 +30,15 @@ export const AllTestsPage: React.FC = () => {
     const [status, setStatus] = useState<Status[]>(options[0].value);
     const [page, setPage] = useState<TPage>(1);
     const [date, setDate] = useState<TDate>({dateStart: '', dateEnd: ''});
+    const [sort, setSort] = useState<Sort>(Sort.UPDATED_ASC);
     const isInitialRender = useRef<boolean>(true);
 
     const email = tableValue || inputValue || undefined;
+
     const offsetValue = useMemo(() => {
         return page !== '' ? (page - 1) * limitPerRequest : 0;
     }, [page]);
+
     const dates = useMemo(() => {
         return {
             dateStart: new Date(date.dateStart).getTime() || undefined,
@@ -47,7 +50,14 @@ export const AllTestsPage: React.FC = () => {
         data: tests = [],
         isLoading,
         refetch,
-    } = useAllTestsByParams({limit: limitPerRequest, offset: offsetValue, status: status, email, ...dates});
+    } = useAllTestsByParams({
+        limit: limitPerRequest,
+        offset: offsetValue,
+        status: status,
+        email,
+        sort: [sort],
+        ...dates,
+    });
 
     const selectEmail = useCallback((value: string) => {
         setTablueValue(value);
@@ -92,7 +102,7 @@ export const AllTestsPage: React.FC = () => {
 
     useEffect(() => {
         if (!isInitialRender.current) refetch();
-    }, [status, tableValue, page, date]);
+    }, [status, tableValue, page, date, sort]);
 
     useEffect(() => {
         isInitialRender.current = false;
@@ -114,7 +124,7 @@ export const AllTestsPage: React.FC = () => {
                 Найдено: <ResultCount>{tests.length}</ResultCount> совпадений
                 {!tests.length && <ShowAllResultsButton onClick={reset}>Показать все результаты</ShowAllResultsButton>}
             </ResultSection>
-            <TestsTable isLoading={isLoading} tests={tests} selectEmail={selectEmail} />
+            <TestsTable isLoading={isLoading} tests={tests} selectEmail={selectEmail} sort={sort} setSort={setSort} />
             {!!tests.length && <Paginator onChangePage={onChangePage} currentPage={page} maxPage={10} />}
         </>
     );

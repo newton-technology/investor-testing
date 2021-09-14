@@ -1,16 +1,18 @@
 import React, {memo, useState, useCallback} from 'react';
 import styled from 'styled-components';
 
-import {IAllTestsResponse, Status} from '../../../../api/ManagmentApi';
+import {IAllTestsResponse, Sort, Status} from '../../../../api/ManagmentApi';
 import {Icon} from '../../../../components/Icon';
 import {Loader} from '../../../../components/Loader';
-import {dateFormatter, Direction, sortComparator} from '../../../../utils/tableUtils';
+import {dateFormatter} from '../../../../utils/tableUtils';
 import NoReslt from './components/NoReslt';
 
 interface IProps {
     tests: IAllTestsResponse[];
     isLoading?: boolean;
     selectEmail: (email: string) => void;
+    sort: Sort;
+    setSort: (value: Sort) => void;
 }
 
 interface ITableColumn {
@@ -26,16 +28,16 @@ const columns: ITableColumn[] = [
     {title: 'Результат', value: 'status'},
 ];
 
-const TestsTable: React.FC<IProps> = ({tests, isLoading, selectEmail}) => {
-    const [sortDirection, setSortDirection] = useState<Direction>('desc');
-
-    const changeSortDirection = useCallback(() => {
-        setSortDirection((prevValue) => (prevValue === 'asc' ? 'desc' : 'asc'));
-    }, []);
-
+const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEmail}) => {
     if (!isLoading && !tests.length) {
         return <NoReslt />;
     }
+
+    const changeSortDirection = () => {
+        setSort(sort === Sort.UPDATED_ASC ? Sort.UPDATED_DESC : Sort.UPDATED_ASC);
+    };
+
+    const isDesc = sort === Sort.UPDATED_DESC;
 
     return (
         <Table>
@@ -47,9 +49,7 @@ const TestsTable: React.FC<IProps> = ({tests, isLoading, selectEmail}) => {
                                 pointer={column.sortable}
                                 onClick={column.sortable ? changeSortDirection : undefined}>
                                 <HeaderTitle sortable={column?.sortable}>{column.title}</HeaderTitle>
-                                {column.sortable && (
-                                    <SortChevron size={24} direction={sortDirection} name='chevron_right' />
-                                )}
+                                {column.sortable && <SortChevron size={24} isDesc={isDesc} name='chevron_right' />}
                             </HeadContent>
                         </TH>
                     ))}
@@ -63,7 +63,7 @@ const TestsTable: React.FC<IProps> = ({tests, isLoading, selectEmail}) => {
                         </td>
                     </LoaderContainer>
                 ) : (
-                    tests.sort(sortComparator(sortDirection)).map((test) => {
+                    tests.map((test) => {
                         const isPassed = test.status === Status.PASSED;
                         return (
                             <TableRow key={test.id}>
@@ -149,8 +149,8 @@ const HeadContent = styled.div<{pointer?: boolean}>`
     display: flex;
 `;
 
-const SortChevron = styled(Icon)<{direction: Direction}>`
-    transform: rotate(${({direction}) => (direction === 'desc' ? '90' : '-90')}deg);
+const SortChevron = styled(Icon)<{isDesc: boolean}>`
+    transform: rotate(${({isDesc}) => (isDesc ? '90' : '-90')}deg);
 
     & path {
         fill: ${({theme}) => theme.palette.regular};
