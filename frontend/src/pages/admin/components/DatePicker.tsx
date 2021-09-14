@@ -3,10 +3,10 @@ import styled from 'styled-components';
 
 import {Icon} from '../../../components/Icon';
 import {todayDay} from '../../../utils/tableUtils';
-import {DateType} from '../AllTestsPage';
+import {TDate} from '../AllTestsPage';
 
 interface IProps {
-    date: DateType;
+    date: TDate;
     dateHandler: (event: ChangeEvent<HTMLInputElement>) => void;
     clear: () => void;
 }
@@ -23,7 +23,7 @@ const DatePicker: React.FC<IProps> = ({date, dateHandler, clear}) => {
                     <StyledLabel>До</StyledLabel>
                     <DateInput value={date.dateEnd} name='dateEnd' max={todayDay} onChange={dateHandler} />
                 </DateInputWrapper>
-                {(date?.dateEnd || date?.dateStart) && (
+                {(date.dateEnd || date.dateStart) && (
                     <ClearButton onClick={clear}>
                         <CloseIcon size={20} />
                     </ClearButton>

@@ -2,11 +2,11 @@ import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
 import styled from 'styled-components';
 
 import {Icon} from '../../../components/Icon';
-import {PageType} from '../AllTestsPage';
+import {TPage} from '../AllTestsPage';
 
 interface IProps {
-    currentPage: PageType;
-    onChangePage: (newPage: PageType) => void;
+    currentPage: TPage;
+    onChangePage: (newPage: TPage) => void;
     maxPage: number;
 }
 
@@ -17,7 +17,7 @@ const paginatorWith = (page: number) => {
 };
 
 const Paginator: React.FC<IProps> = ({currentPage, maxPage, onChangePage = () => null}) => {
-    const [localPageState, setLocalPageState] = useState<PageType>(currentPage);
+    const [localPageState, setLocalPageState] = useState<TPage>(currentPage);
     const pageValue = typeof localPageState === 'number' ? localPageState : 0;
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
