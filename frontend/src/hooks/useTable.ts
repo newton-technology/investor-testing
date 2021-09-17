@@ -1,0 +1,115 @@
+import {useState, useCallback, useMemo, ChangeEvent, SyntheticEvent} from 'react';
+
+import {Status} from '../api/ManagmentApi';
+
+interface IUseTableSearch {
+    email: string | undefined;
+    tableValue: string;
+    value: string;
+    onChangeTableValue: (value: string) => void;
+    onChangeInputValue: (event: ChangeEvent<HTMLInputElement>) => void;
+    OnInputValueSubmit: (callBack: () => void) => void;
+    resetTableSearch: () => void;
+}
+
+export const useTableSearch = (initialValue: string = ''): IUseTableSearch => {
+    const [inputValue, setInputValue] = useState<string>(initialValue);
+    const [tableValue, setTableValue] = useState<string>(initialValue);
+
+    const onChangeTableValue = useCallback((value: string) => {
+        setTableValue(value);
+        setInputValue('');
+    }, []);
+
+    const onChangeInputValue = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            if (tableValue) setTableValue('');
+            setInputValue(event.target.value);
+        },
+        [tableValue],
+    );
+
+    const OnInputValueSubmit = (cb: () => void): void => {
+        if (inputValue) cb();
+        setInputValue('');
+    };
+
+    const resetTableSearch = (): void => {
+        setInputValue('');
+        setTableValue('');
+    };
+
+    return {
+        email: tableValue || inputValue || undefined,
+        value: tableValue || inputValue,
+        tableValue,
+        onChangeTableValue,
+        onChangeInputValue,
+        OnInputValueSubmit,
+        resetTableSearch,
+    };
+};
+
+interface IUseTableStatus {
+    status: Status[];
+    setStatus: (value: Status[]) => void;
+    statusHandler: (event: SyntheticEvent, data: {title: string; value: Status[]}) => void;
+    resetTableStatus: () => void;
+}
+
+const statusInitialValue = [Status.PASSED, Status.FAILED];
+
+export const useTableStatus = (initialValue: Status[] = statusInitialValue): IUseTableStatus => {
+    const [status, setStatus] = useState<Status[]>(initialValue);
+
+    const statusHandler = useCallback((_, {value}) => {
+        setStatus(value);
+    }, []);
+
+    const resetTableStatus = (): void => {
+        setStatus(initialValue);
+    };
+
+    return {
+        status,
+        setStatus,
+        statusHandler,
+        resetTableStatus,
+    };
+};
+
+export type TDate = {dateStart: string; dateEnd: string};
+type TFormattedDates = {dateStart: number | undefined; dateEnd: number | undefined};
+
+interface IUseTableDates {
+    datesValue: TDate;
+    formattedDates: TFormattedDates;
+    onDateChange: (event: ChangeEvent<HTMLInputElement>) => void;
+    clearTableDates: () => void;
+}
+
+export const useTableDates = (): IUseTableDates => {
+    const [date, setDate] = useState<TDate>({dateStart: '', dateEnd: ''});
+
+    const dates = useMemo<TFormattedDates>(() => {
+        return {
+            dateStart: new Date(date.dateStart).getTime() || undefined,
+            dateEnd: new Date(date.dateEnd).getTime() || undefined,
+        };
+    }, [date]);
+
+    const onDateChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+        setDate((prev) => ({...prev, [event.target.name]: event.target.value}));
+    }, []);
+
+    const clearTableDates = (): void => {
+        setDate({dateStart: '', dateEnd: ''});
+    };
+
+    return {
+        datesValue: date,
+        formattedDates: dates,
+        onDateChange,
+        clearTableDates,
+    };
+};

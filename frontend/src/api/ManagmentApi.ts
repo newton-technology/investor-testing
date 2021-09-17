@@ -25,7 +25,7 @@ export interface IFilterParams {
     sort: Sort[];
 }
 
-export interface IAllTestsResponse {
+export interface ITestResponse {
     userId: number;
     userEmail: string;
     id: number;
@@ -39,13 +39,24 @@ export interface IAllTestsResponse {
     status: Status;
 }
 
+export interface IAllTestsResponse {
+    tests: ITestResponse[];
+    limit: number;
+    offset: number;
+    total: number;
+}
+
 export const ManagmentApi = {
-    getAllTestsByParams(filterParams?: Partial<IFilterParams>): Promise<IAllTestsResponse[]> {
+    getAllTestsByParams(filterParams?: Partial<IFilterParams>): Promise<IAllTestsResponse> {
         return axiosWithToken
-            .get<IAllTestsResponse[]>(`${process.env.REACT_APP_API_URL}/management/tests`, {params: filterParams})
+            .get<ITestResponse[]>(`${process.env.REACT_APP_API_URL}/management/tests`, {params: filterParams})
             .then((response) => {
-                console.log(response);
-                return response.data;
+                return {
+                    tests: response.data,
+                    limit: response.headers['x-list-limit'] ?? 0,
+                    offset: response.headers['x-list-offset'] ?? 0,
+                    total: response.headers['x-list-total'] ?? 0,
+                };
             });
     },
 };

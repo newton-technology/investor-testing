@@ -1,4 +1,4 @@
-import {useState, useCallback} from 'react';
+import {useState} from 'react';
 
 interface IResult {
     state: boolean;
@@ -10,17 +10,17 @@ interface IResult {
 export const useToggle = (initialValue: boolean = false): IResult => {
     const [state, setState] = useState<boolean>(initialValue);
 
-    const toggle = useCallback(() => {
+    const toggle = () => {
         setState((prevValue) => !prevValue);
-    }, []);
+    };
 
-    const setActive = useCallback(() => {
+    const setActive = () => {
         setState(true);
-    }, []);
+    };
 
-    const setDisabled = useCallback(() => {
+    const setDisabled = () => {
         setState(false);
-    }, []);
+    };
 
     return {state, toggle, setActive, setDisabled};
 };

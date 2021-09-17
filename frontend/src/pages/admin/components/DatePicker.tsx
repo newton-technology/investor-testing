@@ -2,9 +2,8 @@ import React, {ChangeEvent} from 'react';
 import styled from 'styled-components';
 
 import {Icon} from '../../../components/Icon';
+import {TDate} from '../../../hooks/useTable';
 import {todayDay} from '../../../utils/tableUtils';
-import {TDate} from '../AllTestsPage';
-
 interface IProps {
     date: TDate;
     dateHandler: (event: ChangeEvent<HTMLInputElement>) => void;

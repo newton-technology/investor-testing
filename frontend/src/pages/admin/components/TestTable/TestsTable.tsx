@@ -1,14 +1,15 @@
-import React, {memo, useState, useCallback} from 'react';
+import React, {memo} from 'react';
+import {useHistory} from 'react-router';
 import styled from 'styled-components';
 
-import {IAllTestsResponse, Sort, Status} from '../../../../api/ManagmentApi';
+import {ITestResponse, Sort, Status} from '../../../../api/ManagmentApi';
 import {Icon} from '../../../../components/Icon';
 import {Loader} from '../../../../components/Loader';
 import {dateFormatter} from '../../../../utils/tableUtils';
 import NoReslt from './components/NoReslt';
 
 interface IProps {
-    tests: IAllTestsResponse[];
+    tests: ITestResponse[];
     isLoading?: boolean;
     selectEmail: (email: string) => void;
     sort: Sort;
@@ -29,12 +30,18 @@ const columns: ITableColumn[] = [
 ];
 
 const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEmail}) => {
+    const {push} = useHistory();
+
     if (!isLoading && !tests.length) {
         return <NoReslt />;
     }
 
     const changeSortDirection = () => {
         setSort(sort === Sort.UPDATED_ASC ? Sort.UPDATED_DESC : Sort.UPDATED_ASC);
+    };
+
+    const selectTest = (id: number) => {
+        return null;
     };
 
     const isDesc = sort === Sort.UPDATED_DESC;
@@ -66,7 +73,7 @@ const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEm
                     tests.map((test) => {
                         const isPassed = test.status === Status.PASSED;
                         return (
-                            <TableRow key={test.id}>
+                            <TableRow key={test.id} onClick={() => selectTest(test.id)}>
                                 <TD>{dateFormatter(test.createdAt, 'D MMMM в H:m')}</TD>
                                 <TD>
                                     <BodyContent pointer onClick={() => selectEmail(test.userEmail)}>
@@ -172,7 +179,9 @@ const BodyContent = styled.div<{pointer?: boolean}>`
     overflow: hidden;
 `;
 
-const TableRow = styled.tr``;
+const TableRow = styled.tr`
+    cursor: pointer;
+`;
 
 const TableHead = styled.thead`
     border-bottom: 4px transparent;

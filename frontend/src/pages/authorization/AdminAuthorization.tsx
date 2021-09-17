@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FormEvent, useCallback, useEffect, useState} from 'react';
+import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
 import styled from 'styled-components';
 
 import {authService} from '../../api/AuthService';
@@ -12,7 +12,7 @@ type IForm = {username: string; password: string};
 type isErrorType = {username: boolean; password: boolean};
 
 export const AdminAuthorization: React.FC = () => {
-    const [form, setForm] = useState<IForm>({username: 'test1@exanple.com', password: '123456'});
+    const [form, setForm] = useState<IForm>({username: '', password: ''});
     const [isError, setIsError] = useState<isErrorType>({username: false, password: false});
 
     const onSubmit = (e: FormEvent) => {
@@ -61,7 +61,6 @@ export const AdminAuthorization: React.FC = () => {
                             onChange={onChange}
                         />
                     </InputContainer>
-                    {/* {isError.password && isError.username && } */}
                     <Button disabled={isError.username || isError.password} type='submit'>
                         Продолжить
                     </Button>
