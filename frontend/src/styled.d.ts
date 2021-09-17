@@ -11,7 +11,15 @@ declare module 'styled-components' {
                 primary: string;
                 secondary: string;
                 footer: string;
+                darkBlue: string;
                 authorization: string;
+            };
+            border: {
+                input: string;
+                authorization: string;
+                primary: string;
+                secondary: string;
+                footer: string;
             };
         };
         breakpoints: {
