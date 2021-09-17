@@ -31,7 +31,7 @@ export const EmailStep: React.FC<IProps> = ({email, isError, isAuthLoading, isSe
                 />
             </InputContainer>
             <ButtonContainer>
-                <StyledButton disabled={isError || isAuthLoading} isLoading={isAuthLoading}>
+                <StyledButton disabled={isError || isAuthLoading || email.length < 1} isLoading={isAuthLoading}>
                     Продолжить
                 </StyledButton>
                 {isServerError && <ErrorMessage>Ошибка сервера, повторите позже.</ErrorMessage>}

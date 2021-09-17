@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components';
 
 import {Segment} from './components/Segment';
@@ -18,18 +18,8 @@ export const CodeInput = React.forwardRef<HTMLInputElement, IProps>(
         const positions = new Array(length).fill(0);
 
         const changeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
-            const newValue = (value + e.target.value).trim().slice(0, length);
-            onChange(newValue);
-            e.target.value = '';
-            setValue(newValue);
-        };
-
-        const handleKeyUp = (e: React.KeyboardEvent) => {
-            if (e.key === 'Backspace') {
-                const newValue = value.slice(0, value.length - 1);
-                setValue(newValue);
-                onChange(newValue);
-            }
+            setValue(e.target.value);
+            onChange(e.target.value);
         };
 
         const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
@@ -50,12 +40,15 @@ export const CodeInput = React.forwardRef<HTMLInputElement, IProps>(
                     <Input
                         id='code'
                         ref={ref}
+                        value={value}
                         positionIndex={Math.min(length - 1, value.length)}
                         onChange={changeHandle}
-                        onKeyUp={handleKeyUp}
                         onPaste={handlePaste}
                         error={error}
                         type='text'
+                        maxLength={length}
+                        inputMode='numeric'
+                        autoComplete='false'
                     />
                     {positions.map((_, index) => (
                         <Segment key={index} error={error}>
@@ -86,11 +79,18 @@ const Input = styled.input<{positionIndex?: number; error?: boolean}>`
     font-size: 42px;
     height: 32px;
     left: ${({positionIndex = 0}) => positionIndex * 52 + 21}px;
+    max-width: 0.5px;
     outline: none;
     padding: 0;
     position: absolute;
+    -webkit-text-fill-color: transparent;
     top: 10px;
-    width: 42px;
+    user-select: none;
+    width: 0.5px;
+
+    &::selection {
+        background: black;
+    }
 
     &:focus ~ div > div {
         ${(props) => !props.error && 'border-color: #0057B6;'}
