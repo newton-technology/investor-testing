@@ -11,14 +11,6 @@ export const theme: DefaultTheme = {
         secondary: palette.secondary || '#2F6FEB',
         error: '#E30B17',
         bg: {
-            primary: '#F2F6F8',
-            secondary: '#FFF',
-            footer: '#1F1B30',
-            darkBlue: '#3A3463',
-            authorization: 'linear-gradient(139.02deg, #65dfe7 -19.37%, #587cfc 116.76%)',
-        },
-        border: {
-            input: '#C4C8DB',
             primary: palette.bg.primary || '#F2F6F8',
             secondary: palette.bg.secondary || '#FFF',
             footer: palette.bg.footer || '#1F1B30',

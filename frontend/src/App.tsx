@@ -2,16 +2,14 @@ import React from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import {ThemeProvider} from 'styled-components';
 
-import {ErrorBoundary} from './components/ErrorBoundary';
 import {Layout} from './components/Layout';
 import {Loader} from './components/Loader';
 import {useAuthorization} from './hooks/useAuthorization';
-import {AllTestsPage} from './pages/admin/AllTestsPage';
-import {AdminAuthorization} from './pages/authorization/AdminAuthorization';
 import {Authorization} from './pages/authorization/Authorization';
 import {CategoryList} from './pages/category_list/CategoryList';
 import {CategoryTest} from './pages/category_test/CategoryTest';
 import {PageNotFound} from './pages/PageNotFound';
+import {ErrorBoundary} from './components/ErrorBoundary';
 import {GlobalStyle} from './theme/GlobalStyle';
 import {theme} from './theme/theme';
 
@@ -45,12 +43,6 @@ const App: React.FC = () => {
                             <Route path='/tests/:categoryId' exact>
                                 <CategoryTest />
                             </Route>
-                            <Route path='/admin' exact>
-                                <Redirect to='/admin/tests' />
-                            </Route>
-                            <Route path='/admin/tests' exact>
-                                <AllTestsPage />
-                            </Route>
                             <Route path='*'>
                                 <PageNotFound />
                             </Route>
@@ -60,9 +52,6 @@ const App: React.FC = () => {
                     <Switch>
                         <Route path='/' exact>
                             <Authorization />
-                        </Route>
-                        <Route path='/admin' exact>
-                            <AdminAuthorization />
                         </Route>
                         <Route path='*'>
                             <Redirect to='/' />

@@ -1,26 +1,16 @@
 import React from 'react';
-import {Link, useHistory, useLocation} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 
 import {authService} from '../api/AuthService';
 import {Container} from './Container';
 import {Icon} from './Icon';
-interface IProps {
-    isAdmin?: boolean;
-}
+
 const logos = require.context('../assets/img', false, /logo\.(svg|png|jpe?g)$/);
 
-const pages = [
-    {title: 'Первая страница', link: '/1'},
-    {title: 'Вторая страница', link: '/2'},
-    {title: 'Третья страница', link: '/3'},
-];
-
-export const Navbar: React.FC<IProps> = ({isAdmin}) => {
+export const Navbar: React.FC = () => {
     const history = useHistory();
-    const {pathname} = useLocation();
     const module = logos.keys().map(logos)[0] as any;
-    const logoUrl = isAdmin ? '/admin/tests' : '/tests';
 
     const logout = () => {
         authService.logout();
@@ -31,22 +21,7 @@ export const Navbar: React.FC<IProps> = ({isAdmin}) => {
         <NavContainer>
             <Container>
                 <Nav>
-                    <Logo to={logoUrl}>{module && <img src={module.default} />}</Logo>
-                    {isAdmin && (
-                        <NavLinks>
-                            {pages.map((page) => (
-                                <StyledNavLink key={page.link} to={page.link} $isActive={pathname === page.link}>
-                                    {page.title}
-                                </StyledNavLink>
-                            ))}
-                        </NavLinks>
-                    )}
-                    {isAdmin && (
-                        <DownloadButton>
-                            <IconContainer name='download' />
-                            Скачать файл
-                        </DownloadButton>
-                    )}
+                    <Logo to='/tests'>{module && <img src={module.default} />}</Logo>
                     <LogoutButton onClick={logout}>
                         <IconContainer name='arrow_right' />
                         Выйти
@@ -86,28 +61,6 @@ const LogoutButton = styled.div`
     font-size: 17px;
 `;
 
-const DownloadButton = styled(LogoutButton)`
-    margin-right: 32px;
-`;
-
 const IconContainer = styled(Icon)`
     margin-right: 8px;
-`;
-
-const NavLinks = styled.div`
-    align-items: center;
-    display: flex;
-    margin: 0 auto;
-`;
-
-const StyledNavLink = styled(Link)<{$isActive: boolean}>`
-    color: ${({$isActive, theme}) => ($isActive ? theme.palette.primary : theme.palette.regular)};
-    font-size: 17px;
-    font-weight: 500;
-    line-height: 22px;
-    margin: 0 12px;
-
-    &:hover {
-        color: ${({theme}) => theme.palette.primary};
-    }
 `;

@@ -12,13 +12,6 @@ interface IBaseAuth {
     grant_type: 'code';
 }
 
-interface IAdminBaseAuth {
-    grant_type: 'password';
-    username: string;
-    password: string;
-    scope: 'admin';
-}
-
 interface ILogin extends IBaseAuth {
     code: string;
     access_token: string;
@@ -37,7 +30,7 @@ class AuthService {
         this.setToken(data);
     }
 
-    public async sendCode<T = IBaseAuth | IAdminBaseAuth>(payload: T) {
+    public async sendCode(payload: IBaseAuth) {
         const data = await this.request('signin', payload);
         this.setToken(data);
     }
