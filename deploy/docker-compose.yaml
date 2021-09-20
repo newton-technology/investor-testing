@@ -6,10 +6,11 @@ networks:
 
 services:
   frontend:
-    image: nwtndevops/deploy_frontend:latest
+    build: ../frontend/
     container_name: frontend
     volumes:
       - ./frontend.conf:/etc/nginx/conf.d/default.conf
+      - ../frontend/build/:/var/www/projects/web/
   backend:
     image: nwtndevops/deploy_backend:latest
     container_name: backend
