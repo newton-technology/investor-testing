@@ -82,7 +82,7 @@ $ openssl rsa -in private.pem -pubout -out public.pem
 - Запустить загрузку контейнеров. Для этого запустить команду
 
 ```
-$ docker-compose up -d --build
+$ docker-compose up -d
 ```
 
 Сервис должен заработать.

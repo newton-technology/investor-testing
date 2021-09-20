@@ -1,3 +1,0 @@
-FROM nginx
-
-USER root
