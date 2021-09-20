@@ -6,7 +6,7 @@ networks:
 
 services:
   frontend:
-    build: ../frontend/
+    image: nginx
     container_name: frontend
     volumes:
       - ./frontend.conf:/etc/nginx/conf.d/default.conf
