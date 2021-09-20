@@ -2,7 +2,7 @@ import React from 'react';
 import styled, {css} from 'styled-components';
 
 import {Icon} from '../../../components/Icon';
-import {HintIcon} from './HintIcon';
+import {HintedText} from './HintedText';
 
 export interface IAnswerControl {
     id: number;
@@ -14,13 +14,12 @@ interface IProps {
     answer: string;
     questionId: number;
     isMultipleAnswers: boolean;
-    hint?: string;
     getIsChecked: (questionId: number, answerId: number) => boolean;
     changeValue: (questionId: number, answerId: number, isMultipleAnswers: boolean) => void;
 }
 
 export const AnswerControl: React.FC<IProps> = (props) => {
-    const {id, answer: text, questionId, isMultipleAnswers, hint, getIsChecked, changeValue} = props;
+    const {id, answer: text, questionId, isMultipleAnswers, getIsChecked, changeValue} = props;
     const isChecked = getIsChecked(questionId, id);
 
     const handleClick = () => {
@@ -37,7 +36,7 @@ export const AnswerControl: React.FC<IProps> = (props) => {
                 <RadioControl isChecked={isChecked} />
             )}
             <Text>
-                {text} {hint && <HintIcon>{hint}</HintIcon>}
+                <HintedText text={text} />
             </Text>
         </Container>
     );
@@ -45,12 +44,12 @@ export const AnswerControl: React.FC<IProps> = (props) => {
 
 const Container = styled.div`
     display: flex;
-    font-size: 17px;
+    font-size: 16px;
     line-height: 1.4;
     cursor: pointer;
 
     & + & {
-        margin-top: 24px;
+        margin-top: 16px;
     }
 `;
 
