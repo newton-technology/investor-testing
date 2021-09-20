@@ -40,7 +40,7 @@ const App: React.FC = () => {
                             <Route path='/tests' exact>
                                 <AllTestsPage />
                             </Route>
-                            <Route path='/test/:id'>
+                            <Route path='/test/:id' exact>
                                 <UserTestsPage />
                             </Route>
                             <Route path='*'>
@@ -54,7 +54,7 @@ const App: React.FC = () => {
                             <AdminAuthorization />
                         </Route>
                         <Route path='*'>
-                            <Redirect to='/admin' />
+                            <Redirect to='/' />
                         </Route>
                     </Switch>
                 )}
