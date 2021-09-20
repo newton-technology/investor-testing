@@ -6,9 +6,9 @@ import {ErrorBoundary} from './components/ErrorBoundary';
 import {Layout} from './components/Layout';
 import {Loader} from './components/Loader';
 import {useAuthorization} from './hooks/useAuthorization';
-import {Authorization} from './pages/authorization/Authorization';
-import {CategoryList} from './pages/category_list/CategoryList';
-import {CategoryTest} from './pages/category_test/CategoryTest';
+import {AllTestsPage} from './pages/admin/AllTestsPage';
+import {UserTestsPage} from './pages/admin/UserTestsPage';
+import {AdminAuthorization} from './pages/authorization/AdminAuthorization';
 import {PageNotFound} from './pages/PageNotFound';
 import {GlobalStyle} from './theme/GlobalStyle';
 import {theme} from './theme/theme';
@@ -32,16 +32,16 @@ const App: React.FC = () => {
             <GlobalStyle />
             <ErrorBoundary>
                 {isAuthenticated ? (
-                    <Layout>
+                    <Layout isAdmin>
                         <Switch>
                             <Route path='/' exact>
                                 <Redirect to='/tests' />
                             </Route>
                             <Route path='/tests' exact>
-                                <CategoryList />
+                                <AllTestsPage />
                             </Route>
-                            <Route path='/tests/:categoryId' exact>
-                                <CategoryTest />
+                            <Route path='/test/:id' exact>
+                                <UserTestsPage />
                             </Route>
                             <Route path='*'>
                                 <PageNotFound />
@@ -51,7 +51,7 @@ const App: React.FC = () => {
                 ) : (
                     <Switch>
                         <Route path='/' exact>
-                            <Authorization />
+                            <AdminAuthorization />
                         </Route>
                         <Route path='*'>
                             <Redirect to='/' />

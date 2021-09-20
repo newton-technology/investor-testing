@@ -46,6 +46,32 @@ export interface IAllTestsResponse {
     total: number;
 }
 
+export interface IAnswerControl {
+    id: number;
+    answer: string;
+}
+
+export interface IQuestion {
+    id: number;
+    question: string;
+    answersCountToChooseMin: number;
+    answersCountToChooseMax: number;
+    answers: IAnswerControl[];
+    hint?: string;
+}
+
+export interface ITest {
+    id: number;
+    status: string | null;
+    category: {
+        id: number;
+        name: string;
+        description: string;
+        descriptionShort: string;
+    };
+    questions: IQuestion[];
+}
+
 export const ManagmentApi = {
     getAllTestsByParams(filterParams?: Partial<IFilterParams>): Promise<IAllTestsResponse> {
         return axiosWithToken
@@ -57,6 +83,13 @@ export const ManagmentApi = {
                     offset: response.headers['x-list-offset'] ?? 0,
                     total: response.headers['x-list-total'] ?? 0,
                 };
+            });
+    },
+    getTestById(testId: string): Promise<ITest> {
+        return axiosWithToken
+            .get<ITest>(`${process.env.REACT_APP_API_URL}/management/tests/${testId}`)
+            .then((response) => {
+                return response.data;
             });
     },
 };

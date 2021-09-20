@@ -1,9 +1,16 @@
 import React from 'react';
+import {useParams} from 'react-router';
 import styled from 'styled-components';
 
+import {useUserTestById} from '../../hooks/useAdmin';
 import {dateFormatter} from '../../utils/tableUtils';
 
 export const UserTestsPage: React.FC = () => {
+    const {id} = useParams<{id: string}>();
+    const {data: test} = useUserTestById(id);
+
+    console.log(test);
+
     return (
         <Container>
             <Title>Klivjv89zzQыS7@gmail.com</Title>
