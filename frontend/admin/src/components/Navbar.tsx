@@ -8,6 +8,7 @@ import {Icon} from './Icon';
 interface IProps {
     isAdmin?: boolean;
 }
+
 const logos = require.context('../assets/img', false, /logo\.(svg|png|jpe?g)$/);
 
 const pages = [
@@ -20,7 +21,6 @@ export const Navbar: React.FC<IProps> = ({isAdmin}) => {
     const history = useHistory();
     const {pathname} = useLocation();
     const module = logos.keys().map(logos)[0] as any;
-    const logoUrl = isAdmin ? '/admin/tests' : '/tests';
 
     const logout = () => {
         authService.logout();
@@ -31,7 +31,7 @@ export const Navbar: React.FC<IProps> = ({isAdmin}) => {
         <NavContainer>
             <Container>
                 <Nav>
-                    <Logo to={logoUrl}>{module && <img src={module.default} />}</Logo>
+                    <Logo to={'/tests'}>{module && <img src={module.default} />}</Logo>
                     {isAdmin && (
                         <NavLinks>
                             {pages.map((page) => (
