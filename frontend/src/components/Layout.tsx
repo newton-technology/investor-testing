@@ -5,11 +5,15 @@ import {Container} from './Container';
 import {Footer} from './Footer';
 import {Navbar} from './Navbar';
 
-export const Layout: React.FC = ({children}) => {
+interface IProps {
+    isAdmin?: boolean;
+}
+
+export const Layout: React.FC<IProps> = ({children, isAdmin = false}) => {
     return (
         <LayoutContainer>
             <MainContainer>
-                <Navbar />
+                <Navbar isAdmin={isAdmin} />
                 <Container>{children}</Container>
             </MainContainer>
             <Footer />
