@@ -41,7 +41,7 @@ const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEm
     };
 
     const selectTest = (id: number) => {
-        return null;
+        push(`/test/${id}`);
     };
 
     const isDesc = sort === Sort.UPDATED_DESC;

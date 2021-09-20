@@ -1,3 +1,4 @@
+import {ITest} from '../pages/category_test/CategoryTest';
 import axiosWithToken from './axios';
 
 export enum Status {
@@ -57,6 +58,13 @@ export const ManagmentApi = {
                     offset: response.headers['x-list-offset'] ?? 0,
                     total: response.headers['x-list-total'] ?? 0,
                 };
+            });
+    },
+    getTestById(testId: string): Promise<ITest> {
+        return axiosWithToken
+            .get<ITest>(`${process.env.REACT_APP_API_URL}/management/tests/${testId}`)
+            .then((response) => {
+                return response.data;
             });
     },
 };
