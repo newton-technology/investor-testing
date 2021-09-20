@@ -1,4 +1,3 @@
-import {ITest} from '../pages/category_test/CategoryTest';
 import axiosWithToken from './axios';
 
 export enum Status {
@@ -45,6 +44,32 @@ export interface IAllTestsResponse {
     limit: number;
     offset: number;
     total: number;
+}
+
+export interface IAnswerControl {
+    id: number;
+    answer: string;
+}
+
+export interface IQuestion {
+    id: number;
+    question: string;
+    answersCountToChooseMin: number;
+    answersCountToChooseMax: number;
+    answers: IAnswerControl[];
+    hint?: string;
+}
+
+export interface ITest {
+    id: number;
+    status: string | null;
+    category: {
+        id: number;
+        name: string;
+        description: string;
+        descriptionShort: string;
+    };
+    questions: IQuestion[];
 }
 
 export const ManagmentApi = {
