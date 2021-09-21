@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import styled from 'styled-components';
 
 import {AnswerControl, IAnswerControl} from './AnswerControl';
-import {HintIcon} from './HintIcon';
+import {HintedText} from './HintedText';
 
 export interface IQuestion {
     id: number;
@@ -10,7 +10,6 @@ export interface IQuestion {
     answersCountToChooseMin: number;
     answersCountToChooseMax: number;
     answers: IAnswerControl[];
-    hint?: string;
 }
 
 interface IProps {
@@ -20,15 +19,13 @@ interface IProps {
     index: number;
     questionsCount: number;
     isMultipleAnswers: boolean;
-    hint?: string;
     isError: boolean;
     getIsChecked: (questionId: number, answerId: number) => boolean;
     changeValue: (questionId: number, answerId: number, isMultipleAnswers: boolean) => void;
 }
 
 export const QuestionCard: React.FC<IProps> = (props) => {
-    const {title, id, answers, getIsChecked, changeValue, questionsCount, index, isMultipleAnswers, isError, hint} =
-        props;
+    const {title, id, answers, getIsChecked, changeValue, questionsCount, index, isMultipleAnswers, isError} = props;
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -41,7 +38,7 @@ export const QuestionCard: React.FC<IProps> = (props) => {
         <Container ref={ref}>
             <QuestionNumber>{`${index}/${questionsCount}`}</QuestionNumber>
             <Title>
-                {title} {hint && <HintIcon>{hint}</HintIcon>}
+                <HintedText text={title} />
             </Title>
             {isMultipleAnswers && <Subtitle>{'(возможно несколько вариантов ответа)'}</Subtitle>}
             {isError && <ErrorMessage>Пожалуйста, выберите вариант ответа</ErrorMessage>}
@@ -84,8 +81,32 @@ const QuestionNumber = styled.div`
 `;
 
 const Title = styled.div`
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 500;
+
+    ol,
+    ul {
+        margin: 24px 0;
+        font-weight: 400;
+        list-style-position: inside;
+
+        li + li {
+            margin-top: 16px;
+        }
+    }
+
+    ul {
+        list-style-type: disc;
+    }
+
+    ol li {
+        counter-increment: item;
+
+        &:before {
+            content: counter(item) '. ';
+            font-weight: 600;
+        }
+    }
 `;
 
 const Subtitle = styled.div`
@@ -108,5 +129,5 @@ const ErrorMessage = styled.div`
 `;
 
 const Answers = styled.div`
-    margin-top: 32px;
+    margin-top: 24px;
 `;
