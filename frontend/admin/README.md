@@ -16,4 +16,11 @@
 ```
 #  "proxy": "http://localhost:9000" - прокси для запросов
 REACT_APP_API_URL=/api/investor_testing - URL для запросов по API
+REACT_APP_ADMIN_URL=/admin - стандартный URL для отображения админки
+```
+
+package.json
+
+```
+"homepage": "/admin" - стандартный URL для отображения админки
 ```
