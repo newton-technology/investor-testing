@@ -1,4 +1,4 @@
-import React, {memo} from 'react';
+import React, {memo, MouseEvent} from 'react';
 import {useHistory} from 'react-router';
 import styled from 'styled-components';
 
@@ -44,6 +44,11 @@ const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEm
         push(`/test/${id}`);
     };
 
+    const emailHandler = (email: string) => (event: MouseEvent<HTMLElement>) => {
+        event.stopPropagation();
+        selectEmail(email);
+    };
+
     const isDesc = sort === Sort.UPDATED_DESC;
 
     return (
@@ -75,10 +80,8 @@ const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEm
                         return (
                             <TableRow key={test.id} onClick={() => selectTest(test.id)}>
                                 <TD>{dateFormatter(test.createdAt, 'D MMMM в H:m')}</TD>
-                                <TD>
-                                    <BodyContent pointer onClick={() => selectEmail(test.userEmail)}>
-                                        {test.userEmail}
-                                    </BodyContent>
+                                <TD onClick={emailHandler(test.userEmail)}>
+                                    <BodyContent pointer>{test.userEmail}</BodyContent>
                                 </TD>
                                 <TD>
                                     <BodyContent>{test.category.description}</BodyContent>
