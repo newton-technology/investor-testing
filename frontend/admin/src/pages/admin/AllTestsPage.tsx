@@ -46,7 +46,7 @@ export const AllTestsPage: React.FC = () => {
         limit: limitPerRequest,
         offset: offsetValue,
         status: status,
-        email,
+        email: email ? `%${email}%` : undefined,
         sort: [sort],
         ...formattedDates,
     });
