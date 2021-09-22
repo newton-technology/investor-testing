@@ -184,6 +184,10 @@ const BodyContent = styled.div<{pointer?: boolean}>`
 
 const TableRow = styled.tr`
     cursor: pointer;
+
+    & > * {
+        cursor: pointer;
+    }
 `;
 
 const TableHead = styled.thead`
