@@ -31,7 +31,7 @@ export const AllTestsPage: React.FC = () => {
     const {status, statusHandler} = useTableStatus();
     const {datesValue, formattedDates, onDateChange, clearTableDates} = useTableDates();
     const [page, setPage] = useState<TPage>(1);
-    const [sort, setSort] = useState<Sort>(Sort.UPDATED_ASC);
+    const [sort, setSort] = useState<Sort>(Sort.UPDATED_DESC);
     const isInitialRender = useRef<boolean>(true);
 
     const offsetValue = useMemo(() => {
