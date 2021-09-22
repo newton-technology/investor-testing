@@ -24,6 +24,7 @@ class TestItemService
     protected TestAnswerRepository $testAnswerRepository;
     protected TestResultHandler $testResultHandler;
     protected UserRepository $userRepository;
+    protected TestItemFactory $testItemFactory;
 
     public function __construct(
         CategoryRepository $categoryRepository,
@@ -33,7 +34,8 @@ class TestItemService
         TestQuestionRepository $testQuestionRepository,
         TestAnswerRepository $testAnswerRepository,
         TestResultHandler $testResultHandler,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        TestItemFactory $testItemFactory
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->questionRepository = $questionRepository;
@@ -43,6 +45,7 @@ class TestItemService
         $this->testAnswerRepository = $testAnswerRepository;
         $this->testResultHandler = $testResultHandler;
         $this->userRepository = $userRepository;
+        $this->testItemFactory = $testItemFactory;
     }
 
     /**
@@ -50,24 +53,12 @@ class TestItemService
      */
     public function getTestItem(int $userId, int $testId): TestItem
     {
-        $test = $this->testRepository->getTest($userId, $testId);
+        $test = $this->testRepository->getTestForUserById($userId, $testId);
         if (empty($test)) {
             throw ExceptionWithoutReport::testNotFound();
         }
 
-        $category = $this->categoryRepository->getCategory($test->getCategoryId());
-        if (empty($category)) {
-            throw ExceptionWithoutReport::categoryNotFound();
-        }
-
-        $testQuestions = [];
-        $testQuestionsIterator = $this->testQuestionRepository->getQuestionsByTestIdIterator($testId);
-        foreach ($testQuestionsIterator as $testQuestion) {
-            $testQuestionsIds[] = $testQuestion->getId();
-            $testQuestions[] = $testQuestion;
-        }
-
-        return $this->fillTestItem($category, $test, $testQuestions);
+        return $this->testItemFactory->fromTest($test);
     }
 
     /**
@@ -109,7 +100,7 @@ class TestItemService
 
         $this->testRepository->commitTransaction();
 
-        return $this->fillTestItem($category, $test, $testQuestions);
+        return $this->testItemFactory->fillTestItem($category, $test, $testQuestions);
     }
 
     /**
@@ -121,7 +112,7 @@ class TestItemService
      */
     public function addTestAnswers(int $userId, int $testId, array $selectedAnswersIds): TestItem
     {
-        $test = $this->testRepository->getTest($userId, $testId);
+        $test = $this->testRepository->getTestForUserById($userId, $testId);
         if (empty($test)) {
             throw ExceptionWithoutReport::testNotFound();
         }
@@ -288,56 +279,6 @@ class TestItemService
             ->setAnswerId($answer->getId())
             ->setAnswerText($answer->getText())
             ->setCorrect($answer->isCorrect());
-    }
-
-    /**
-     * @throws Throwable
-     */
-    protected function getTestCategory(Category $category): CategoryItemCategory
-    {
-        return (new CategoryItemCategory())->applyPropertiesArray($category->toArray());
-    }
-
-    /**
-     * @param Category $category
-     * @param Test $test
-     * @param TestQuestion[] $testQuestions
-     * @return TestItem
-     * @throws Throwable
-     */
-    protected function fillTestItem(
-        Category $category,
-        Test $test,
-        array $testQuestions
-    ): TestItem {
-        $testQuestionsIds = [];
-        $testItemQuestions = [];
-        foreach ($testQuestions as $testQuestion) {
-            $testQuestionsIds[] = $testQuestion->getId();
-            $testItemQuestions[$testQuestion->getId()] = (new TestItemQuestion())
-                ->setId($testQuestion->getId())
-                ->setQuestion($testQuestion->getQuestionText())
-                ->setAnswersCountToChooseMin($testQuestion->getAnswersCountToChooseMin())
-                ->setAnswersCountToChooseMax($testQuestion->getAnswersCountToChooseMax());
-        }
-
-        $testAnswersIterator = $this->testAnswerRepository->getAnswersByQuestionIdsIterator($testQuestionsIds);
-        foreach ($testAnswersIterator as $testAnswer) {
-            $testItemQuestions[$testAnswer->getTestQuestionId()]->addAnswer(
-                (new TestItemQuestionAnswer())
-                    ->setId($testAnswer->getId())
-                    ->setAnswer($testAnswer->getAnswerText())
-                    ->setSelected($testAnswer->isSelected())
-            );
-        }
-
-        return (new TestItem())
-            ->setId($test->getId())
-            ->setStatus($test->getStatus())
-            ->setCreatedAt($test->getCreatedAt())
-            ->setUpdatedAt($test->getUpdatedAt())
-            ->setCategory($this->getTestCategory($category))
-            ->setQuestions(array_values($testItemQuestions));
     }
 
     /**

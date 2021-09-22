@@ -7,7 +7,6 @@ namespace Plugins\Example\ExampleTestResultView\App\Packages\Common;
 use Newton\InvestorTesting\Packages\Common\Test;
 use Newton\InvestorTesting\Packages\Common\TestItemService as CommonTestItemService;
 use Newton\InvestorTesting\Packages\Common\TestResultMail;
-use Newton\InvestorTesting\Packages\Common\UserRepository;
 
 use Illuminate\Support\Facades\Mail;
 

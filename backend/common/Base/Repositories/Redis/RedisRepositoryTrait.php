@@ -137,19 +137,22 @@ trait RedisRepositoryTrait
     }
 
     /**
-     * @param $key string
+     * Достает данные из кеша
+     *
+     * @param string $key
+     * @param bool $associative - достать данные как ассоциативный массив или объект
      * @return mixed|null
      */
-    public function get(string $key) {
+    public function get(string $key, bool $associative = false) {
         $data = $this->connectionInstance->get($key);
         if (empty($data)) {
             return null;
         }
-        return json_decode($data);
+        return json_decode($data, $associative);
     }
 
     /**
-     * @param $keys string[]
+     * @param string[] $keys
      * @return array
      * @throws Exception
      */

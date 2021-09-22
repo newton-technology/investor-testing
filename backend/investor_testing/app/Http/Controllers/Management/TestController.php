@@ -10,6 +10,7 @@ namespace Newton\InvestorTesting\Http\Controllers\Management;
 
 use Throwable;
 
+use Common\Base\Http\Headers;
 use Common\Base\Http\JsonResponse;
 use Common\Base\Http\Request;
 use Common\Base\Http\Response;
@@ -17,14 +18,15 @@ use Common\Base\Utils\DateTimeUtils;
 use Common\Base\Utils\TransformationUtils;
 use Newton\InvestorTesting\Http\Controllers\Controller;
 use Newton\InvestorTesting\Packages\Common\Test;
-use Newton\InvestorTesting\Packages\Management\TestRepository;
+use Newton\InvestorTesting\Packages\Management\TestItemService;
+use Newton\InvestorTesting\Packages\Management\TestListRepository;
 
 class TestController extends Controller
 {
     /**
      * @throws Throwable
      */
-    public function getTests(Request $request, TestRepository $testRepository): JsonResponse
+    public function getTests(Request $request, TestListRepository $testListRepository): JsonResponse
     {
         $allowedSort = [
             'updatedAt,asc',
@@ -75,11 +77,39 @@ class TestController extends Controller
         $limit = $validatedInput['limit'] ?? 20;
         $offset = $validatedInput['offset'] ?? 0;
 
-        return Response::success(
+        $testsCount = $testListRepository->getTestsCount($filters);
+
+        $response = Response::success()
+            ->header(Headers::X_LIST_LIMIT, $limit)
+            ->header(Headers::X_LIST_OFFSET, $offset)
+            ->header(Headers::X_LIST_TOTAL, $testsCount);
+
+        if ($testsCount === 0) {
+            return $response;
+        }
+
+        return $response->setData(
             array_map(
                 fn($test) => $test->toResponse(),
-                $testRepository->getTests($filters, $limit, $offset, $orderBy),
+                $testListRepository->getTests($filters, $limit, $offset, $orderBy),
             )
+        );
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function getTestItemById(Request $request, TestItemService $testItemService): JsonResponse
+    {
+        $validatedInput = $this->validateRoute(
+            $request,
+            [
+                'id' => 'required|int|min:1',
+            ]
+        );
+        return Response::success(
+            $testItemService->getTestById($validatedInput['id'])
+                ->toResponse(),
         );
     }
 }
