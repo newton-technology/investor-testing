@@ -56,14 +56,19 @@ const Input = styled.input<{isError: boolean}>`
     border-radius: 4px;
     box-sizing: border-box;
     color: ${({isError, theme}) => (isError ? theme.palette.error : theme.palette.regular)};
-    margin-bottom: 16px;
+    margin-bottom: 8px;
     outline: none;
     padding: 16px;
     padding-left: 32px;
     width: 100%;
+
+    ${({theme}) => theme.breakpoint('md')`
+        margin-bottom: 16px;
+    `}
 `;
 
 const Description = styled.span`
+    font-size: 16px;
     padding-bottom: 24px;
 `;
 
@@ -84,11 +89,15 @@ const EULADescription = styled.span`
     color: #a9a9a9;
     font-size: 14px;
     line-height: 130%;
-    padding-top: 54px;
+    padding-top: 50px;
 
     a {
         text-decoration: underline;
     }
+
+    ${({theme}) => theme.breakpoint('md')`
+        padding-top: 54px;
+    `}
 `;
 
 const StyledButton = styled(Button)`

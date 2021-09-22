@@ -64,6 +64,7 @@ const StyledCodeInput = styled(CodeInput)`
 `;
 
 const Description = styled.span`
+    font-size: 16px;
     padding-bottom: 35px;
     text-align: center;
 `;

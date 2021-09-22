@@ -20,11 +20,18 @@ export const FormHeader: React.FC = () => {
 const Container = styled.div`
     display: flex;
     justify-content: center;
-    padding-bottom: 17px;
     padding-top: 32px;
 
     img {
         max-height: 100px;
-        max-width: 100%;
+        max-width: 31%;
     }
+
+    ${({theme}) => theme.breakpoint('md')`
+        padding-bottom: 17px;
+        
+        img {
+            max-width: 100%;
+        }
+    `}
 `;

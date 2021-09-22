@@ -158,9 +158,13 @@ const FormContainer = styled.div`
 `;
 
 const Title = styled.h1`
-    font-size: 28px;
+    font-size: 20px;
     font-weight: bold;
     margin-bottom: 16px;
     margin-top: 15px;
     text-align: center;
+
+    ${({theme}) => theme.breakpoint('md')`
+        font-size: 28px;
+    `}
 `;
