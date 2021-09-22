@@ -6,6 +6,7 @@
 - СУБД `postgresql` + клиент (psql, например)
 - SMTP-сервер для рассылки почты.
 - Возможно понадобятся доменное имя, запись в DNS и сертификат (при выводе приложения на прод).
+- Будет необходим одтельный домен для админки. Рекомендуется ограничить доступ к этому домену с использованием VPN. 
 
 ## Порядок установки
 1. Подготовка БД:
@@ -46,7 +47,7 @@ $ psql -h host -U admin -W -f ./make-database.sql investor_testing
 - ОПЦИОНАЛЬНО: если на вашем сервере уже есть веб сервер, пробросить 80 порт сервиса `proxy` на другой порт хоста и проксировать трафик на этот порт.
 
 4. В директории `frontend` скомпилировать проект, для этого:
-из директории `frontend`
+### Из директории `frontend/`
 
 -  Скопировать файл `.env.example` в файл `.env` и заполнить переменные значениями
 
@@ -68,7 +69,29 @@ $ yarn build
 
 > Note: Предусмотрена возможность кастомизации контента на фронте. Для этого необходимо перед компиляцией фронта внести изменения в файл `customize.json`. Подробнее в frontend/README.md
 
-5. Деплой:
+5. Скомпилировать админку, для этого:
+
+### Из директории `frontend/admin/`
+
+-  Скопировать файл `.env.example` в файл `.env` и заполнить переменные значениями
+
+```
+$ cp .env.example .env
+```
+
+- Установить зависимости
+
+```
+$ yarn install
+```
+
+- Скомпилировать проект
+
+```
+$ yarn build
+```
+
+6. Деплой:
 
 В директории `deploy`:
 
@@ -87,7 +110,7 @@ $ docker-compose up -d
 
 Сервис должен заработать.
 
-10. Заполнить БД тестовыми данными
+7. Заполнить БД тестовыми данными
 
 ```
 $ docker exec backend "php /var/www/projects/php/investor_testing/artisan import categories /var/www/projects/php/investor_testing/resources/demodata/categories.csv"
@@ -100,3 +123,26 @@ $ docker exec backend "php /var/www/projects/php/investor_testing/artisan import
 - /var/www/projects/php/investor_testing/resources/demodata/questions.csv
 - /var/www/projects/php/investor_testing/resources/demodata/answers.csv
 (Если необходимо залить другие данные, можно пробросить директорию со своими файлами внутрь контейнера)
+
+8. Создать пользователя с админискими правами. Для этого:
+
+- Создать пользователя с паролем:
+
+```
+$ docker exec backend "php /var/www/projects/php/investor_testing/artisan user:password:add admin@example.com"
+```
+
+Далее подтвердить создание
+
+- Добавить роль администратора к существующей учетной записи можно при помощи следующей команды:
+
+```
+$ php /var/www/projects/php/investor_testing/artisan user:role:add admin@example.com admin
+```
+
+Подробнее читайте в `backend/investor_testing/README.md`
+
+> ВНИМАНИЕ: Пока нет возможности добавить пароль для уже существующего пользователя
+> ВНИМАНИЕ: У пользователя, вошедшего без пароля (вошедшего по ОТП) не будет прав на испольщование API админки
+
+
