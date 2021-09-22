@@ -32,7 +32,7 @@ export const Navbar: React.FC<IProps> = ({isAdmin}) => {
             <Container>
                 <Nav>
                     <Logo to={'/tests'}>{module && <img src={module.default} />}</Logo>
-                    {isAdmin && (
+                    {/* {isAdmin && (
                         <NavLinks>
                             {pages.map((page) => (
                                 <StyledNavLink key={page.link} to={page.link} $isActive={pathname === page.link}>
@@ -40,7 +40,7 @@ export const Navbar: React.FC<IProps> = ({isAdmin}) => {
                                 </StyledNavLink>
                             ))}
                         </NavLinks>
-                    )}
+                    )} */}
                     {isAdmin && (
                         <DownloadButton>
                             <IconContainer name='download' />
@@ -87,6 +87,7 @@ const LogoutButton = styled.div`
 `;
 
 const DownloadButton = styled(LogoutButton)`
+    margin-left: auto;
     margin-right: 32px;
 `;
 

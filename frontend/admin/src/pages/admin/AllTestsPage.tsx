@@ -52,7 +52,7 @@ export const AllTestsPage: React.FC = () => {
     });
 
     const {tests, total} = data;
-    const totalPages = total / limitPerRequest || 1;
+    const totalPages = Math.ceil(total / limitPerRequest);
 
     const onChangePage = useCallback((nextPage: TPage) => {
         setPage(nextPage);
@@ -65,7 +65,10 @@ export const AllTestsPage: React.FC = () => {
     }, [resetTableSearch, clearTableDates]);
 
     useEffect(() => {
-        if (!isInitialRender.current) refetch();
+        if (!isInitialRender.current) {
+            refetch();
+            window.scrollTo(0, 0);
+        }
     }, [status, page, tableValue, formattedDates, sort]);
 
     useEffect(() => {
@@ -85,7 +88,7 @@ export const AllTestsPage: React.FC = () => {
                 <Select options={options} value={status} onChange={statusHandler} />
             </FiltersWrapper>
             <ResultSection>
-                Найдено: <ResultCount>{tests.length}</ResultCount> совпадений
+                Найдено: <ResultCount>{total}</ResultCount> совпадений
                 {!tests.length && <ShowAllResultsButton onClick={reset}>Показать все результаты</ShowAllResultsButton>}
             </ResultSection>
             <TestsTable

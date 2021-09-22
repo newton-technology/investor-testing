@@ -48,6 +48,7 @@ export interface IAllTestsResponse {
 
 export interface IAnswerControl {
     id: number;
+    selected: boolean;
     answer: string;
 }
 
@@ -62,7 +63,9 @@ export interface IQuestion {
 
 export interface ITest {
     id: number;
-    status: string | null;
+    userEmail: string;
+    status: Status;
+    updatedAt: number;
     category: {
         id: number;
         name: string;
