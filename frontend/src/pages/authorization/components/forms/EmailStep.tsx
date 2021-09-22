@@ -3,6 +3,9 @@ import styled from 'styled-components';
 
 import {Button} from '../../../../components/Button';
 import {Icon} from '../../../../components/Icon';
+import customize from '../../../../customize.json';
+
+const {eula} = customize.content || {};
 
 interface IProps {
     email: string;
@@ -37,10 +40,7 @@ export const EmailStep: React.FC<IProps> = ({email, isError, isAuthLoading, isSe
                 {isServerError && <ErrorMessage>Ошибка сервера, повторите позже.</ErrorMessage>}
                 {isError && !!email.length && <ErrorMessage>Неправильно введен email.</ErrorMessage>}
             </ButtonContainer>
-            <EULADescription>
-                Нажимая кнопку Продолжить, вы соглашаетесь с условиями <u>пользовательского соглашения</u> и даете{' '}
-                <u>согласие</u> на обработку ваших персональных данных
-            </EULADescription>
+            {eula && <EULADescription dangerouslySetInnerHTML={{__html: eula}} />}
         </React.Fragment>
     );
 };
@@ -86,6 +86,10 @@ const EULADescription = styled.span`
     line-height: 130%;
     padding-bottom: 32px;
     padding-top: 54px;
+
+    a {
+        text-decoration: underline;
+    }
 `;
 
 const StyledButton = styled(Button)`
