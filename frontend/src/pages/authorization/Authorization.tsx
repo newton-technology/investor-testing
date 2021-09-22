@@ -139,10 +139,12 @@ const Form = styled.form`
     flex-direction: column;
     justify-content: center;
     padding: 0 24px;
+    padding-bottom: 32px;
     width: 100%;
 
     ${({theme}) => theme.breakpoint('md')`
         padding: 0 32px;
+        padding-bottom: 32px;
     `}
 `;
 

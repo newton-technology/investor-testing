@@ -79,7 +79,6 @@ const ChangeEmailButton = styled.button`
     display: flex;
     font-weight: 500;
     justify-content: center;
-    padding-bottom: 32px;
 
     & > span {
         margin-right: 8px;
