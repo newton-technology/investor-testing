@@ -84,6 +84,6 @@ REACT_APP_ADMIN_URL=http://localhost:8000/admin - URL на котором нах
 ### Пример авторизация с паролем
 
 ```
-Логин - exanple@mail.ru
+Логин - example@mail.ru
 Пароль - 1234567
 ```
