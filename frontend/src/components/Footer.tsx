@@ -30,8 +30,8 @@ export const Footer: React.FC = () => {
                     </FooterMiddle>
                 )}
                 <FooterBottom>
-                    {site && <BrokerSiteLink href={site}>Перейти на официальный сайт</BrokerSiteLink>}
-                    <NewtonSiteLink href='https://nwtn.io/'>Разработано Ньютон Технологии © 2021</NewtonSiteLink>
+                    {site && <a href={site}>Перейти на официальный сайт</a>}
+                    <a href='https://nwtn.io/'>Разработано Ньютон Технологии © 2021</a>
                 </FooterBottom>
             </Container>
         </FooterContainer>
@@ -40,47 +40,62 @@ export const Footer: React.FC = () => {
 
 const FooterContainer = styled.div`
     color: ${({theme}) => theme.palette.bg.secondary};
-    padding-top: 38px;
-    padding-bottom: 32px;
+    padding: 32px 0;
     background-color: ${({theme}) => theme.palette.bg.footer};
 
     ${({theme}) => theme.breakpoint('md')`
-        padding-top: 48px;
-        padding-bottom: 48px;
+        padding: 48px 0;
     `}
 `;
 
 const FooterTop = styled.div``;
 
 const PhonesTitle = styled.div`
-    font-size: 24px;
-    margin-bottom: 20px;
-    font-weight: 500;
+    font-size: 17px;
+    margin-bottom: 16px;
+    font-weight: 700;
+
+    ${({theme}) => theme.breakpoint('md')`
+        font-size: 24px;
+        font-weight: 500;
+        margin-bottom: 20px;
+    `}
 `;
 
 const Phones = styled.div`
-    font-size: 32px;
-    font-weight: 700;
     display: inline-grid;
-    grid-gap: 20px;
-    margin-bottom: 32px;
+    font-size: 16px;
+    grid-template-columns: auto auto;
+    grid-gap: 54px;
+    margin-bottom: 24px;
 
     ${({theme}) => theme.breakpoint('md')`
+        margin-bottom: 32px;
+        font-size: 32px;
+        font-weight: 700;
         grid-gap: 32px;
-        grid-template-columns: auto auto;
     `}
 `;
 
 const Phone = styled.a``;
 
 const FooterMiddle = styled.div`
-    font-size: 17px;
-    padding-bottom: 32px;
+    font-size: 14px;
+    padding-bottom: 24px;
     line-height: 1.7;
+
+    ${({theme}) => theme.breakpoint('md')`
+        font-size: 17px;
+        padding-bottom: 32px;
+    `}
 
     &:not(:first-child) {
         border-top: 1px solid #c4c8db;
-        padding-top: 32px;
+        padding-top: 24px;
+
+        ${({theme}) => theme.breakpoint('md')`
+            padding-bottom: 32px;
+        `}
     }
 
     p + p {
@@ -93,12 +108,13 @@ const FooterMiddle = styled.div`
 `;
 
 const FooterBottom = styled.div`
-    font-size: 20px;
+    font-size: 16px;
     color: ${({theme}) => theme.palette.primary};
     display: flex;
     flex-direction: column;
 
     ${({theme}) => theme.breakpoint('md')`
+        font-size: 20px;
         flex-direction: row;
         justify-content: space-between;
     `}
@@ -107,21 +123,12 @@ const FooterBottom = styled.div`
         color: ${({theme}) => theme.palette.secondary};
         transition: color 0.2s ease-in-out;
     }
-`;
 
-const BrokerSiteLink = styled.a`
-    margin-bottom: 60px;
+    a + a {
+        margin-top: 16px;
 
-    ${({theme}) => theme.breakpoint('md')`
-        margin-bottom: 0;
-    `}
-`;
-
-const NewtonSiteLink = styled.a`
-    font-size: 16px;
-
-    ${({theme}) => theme.breakpoint('md')`
-        font-size: inherit;
-        margin-top: 0;
-    `}
+        ${({theme}) => theme.breakpoint('md')`
+            margin-top: 0;
+        `}
+    }
 `;
