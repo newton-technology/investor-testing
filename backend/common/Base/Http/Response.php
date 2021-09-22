@@ -189,6 +189,30 @@ class Response
     }
 
     /**
+     * Запрос конфликтует с текущим состоянием изменяемого ресурса
+     *
+     * @param array $data
+     * @param array $headers
+     * @return JsonResponse
+     */
+    public static function conflict(array $data = [], array $headers = []): JsonResponse
+    {
+        return self::response(\Illuminate\Http\Response::HTTP_CONFLICT, $data, $headers);
+    }
+
+    /**
+     * Ошибка клиента при обращении к эндпойнту
+     *
+     * @param array $data
+     * @param array $headers
+     * @return JsonResponse
+     */
+    public static function badRequest($data = [], $headers = [])
+    {
+        return self::response(\Illuminate\Http\Response::HTTP_BAD_REQUEST, $data, $headers);
+    }
+
+    /**
      * @param array $headers
      */
     private static function applyHeaders(array &$headers)

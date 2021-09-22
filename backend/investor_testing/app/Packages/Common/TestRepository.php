@@ -36,7 +36,12 @@ class TestRepository
         $this->updateEntityWithApplyResult($test);
     }
 
-    public function getTest(int $userId, int $id): ?Test
+    public function getTestById(int $id): ?Test
+    {
+        return $this->getEntityById($id);
+    }
+
+    public function getTestForUserById(int $userId, int $id): ?Test
     {
         return $this->getEntityByKey(
             [

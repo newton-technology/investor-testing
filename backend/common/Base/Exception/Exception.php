@@ -155,4 +155,8 @@ class Exception extends \Exception
         return new self($message, Response::HTTP_SERVICE_UNAVAILABLE, 0, $previous);
     }
 
+    public static function conflict($message = 'conflict with current state', Throwable $previous = null): self
+    {
+        return new self($message,Response::HTTP_CONFLICT, 0, $previous);
+    }
 }

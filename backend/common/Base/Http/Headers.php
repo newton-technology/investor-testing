@@ -17,4 +17,8 @@ class Headers
     public const X_REQUEST_ID = 'X-Request-ID';
 
     public const X_TOKEN_REVOKED = 'X-Token-Revoked';
+
+    public const X_LIST_LIMIT = 'X-List-Limit';
+    public const X_LIST_OFFSET = 'X-List-Offset';
+    public const X_LIST_TOTAL = 'X-List-Total';
 }

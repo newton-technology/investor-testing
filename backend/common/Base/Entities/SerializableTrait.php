@@ -58,6 +58,33 @@ trait SerializableTrait
         $metaInformation = $this->getMetaInformation($this);
 
         foreach ($object as $propertyName => $value) {
+            $propertyInfo = $metaInformation->getPropertyByName($propertyName);
+            if (
+                !empty($propertyInfo)
+                && !empty($propertyInfo->getType())
+                && !in_array($propertyInfo->getType()->getName(), ['string', 'int', 'float', 'bool'])
+            ) {
+                if ($propertyInfo->getType()->getName() === 'array') {
+                    if (is_array($value)) {
+                        preg_match('~var ([\w\\\]+)\[\]~', $propertyInfo->getDocComment(), $matches);
+                        $class = $matches[1] ?? null;
+                        if (!empty($class) && $class !== 'stdClass') {
+                            $value = array_map(
+                                fn($v) => (is_null($v) || !is_object($v) || get_class($v) !== 'stdClass')
+                                    ? $v
+                                    : $matches[1]::fromObject($v),
+                                $value
+                            );
+                        }
+                    }
+                } else {
+                    if (!is_null($value) && get_class($value) === 'stdClass') {
+                        $class = $propertyInfo->getType()->getName();
+                        $value = ($class !== 'stdClass') ? $class::fromObject($value) : $value;
+                    }
+                }
+            }
+
             if (($setter = $metaInformation->getSetter($propertyName))) {
                 $this->$setter($value, $propertyName);
             } elseif ($metaInformation->getPropertyByName($propertyName)) {
