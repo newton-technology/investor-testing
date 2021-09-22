@@ -79,7 +79,7 @@ const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEm
                         const isPassed = test.status === Status.PASSED;
                         return (
                             <TableRow key={test.id} onClick={() => selectTest(test.id)}>
-                                <TD>{dateFormatter(test.createdAt, 'D MMMM в H:m')}</TD>
+                                <TD>{dateFormatter(test.updatedAt, 'D MMMM в H:m')}</TD>
                                 <TD onClick={emailHandler(test.userEmail)}>
                                     <BodyContent pointer>{test.userEmail}</BodyContent>
                                 </TD>
