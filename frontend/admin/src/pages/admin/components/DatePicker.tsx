@@ -60,7 +60,6 @@ const DateInput = styled.input.attrs({type: 'date', required: true})`
     font-size: 17px;
     font-weight: 22px;
     margin-right: 24px;
-    max-width: 142px;
     padding: 3px 8px 4px 8px;
     width: 100%;
 
