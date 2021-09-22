@@ -41,9 +41,14 @@ const Container = styled.div`
     align-items: center;
     color: ${({theme}) => theme.palette.regular};
     display: flex;
+    font-size: 16px;
     font-weight: 500;
     justify-content: center;
-    padding-bottom: 24px;
+    padding-bottom: 54px;
+
+    ${({theme}) => theme.breakpoint('md')`
+        font-size: 17px;
+    `}
 `;
 
 const SendCode = styled.button`
@@ -52,5 +57,5 @@ const SendCode = styled.button`
     display: flex;
     font-size: 17px;
     justify-content: center;
-    padding-bottom: 24px;
+    padding-bottom: 54px;
 `;
