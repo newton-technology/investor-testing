@@ -84,7 +84,6 @@ const EULADescription = styled.span`
     color: #a9a9a9;
     font-size: 14px;
     line-height: 130%;
-    padding-bottom: 32px;
     padding-top: 54px;
 
     a {
