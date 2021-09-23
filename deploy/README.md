@@ -156,6 +156,7 @@ $ php /var/www/projects/php/investor_testing/artisan user:role:add admin@example
 Подробнее читайте в `backend/investor_testing/README.md`
 
 > ВНИМАНИЕ: Пока нет возможности добавить пароль для уже существующего пользователя
+> 
 > ВНИМАНИЕ: У пользователя, вошедшего без пароля (вошедшего по ОТП) не будет прав на испольщование API админки
 
 
