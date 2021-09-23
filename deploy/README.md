@@ -42,7 +42,7 @@ $ psql -h host -U admin -W -f ./make-database.sql investor_testing
 
 - В директории `deploy` скопировать файл `env.example` в `env`
 
-- Заполнить значения env-переменных в файле `env`. Инструкция по заполнению (описании бекенда)[/backend/investor_testing/README.md].
+- Заполнить значения env-переменных в файле `env`. Инструкция по заполнению[описании бекенда](/../backend/investor_testing/README.md]).
 
 ### Подготовка веб сервера:
 
