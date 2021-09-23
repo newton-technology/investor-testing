@@ -46,6 +46,6 @@ Newton TONI - сервис тестирования неквалифициров
 
 Для развертывания каждой части приложения (бекенд, фронтент, дашборд администратора) необходимо обратиться к соответсвующему описанию:
 
-[Настройка бекенда](/backend/investor_testing/README.md)
-
-[Сборка и настройка фронтенда](/backend/investor_testing/README.md)
+- [Развертывание приложения](/deploy/README.md)
+- [Настройка бекенда](/backend/investor_testing/README.md)
+- [Настройка фронтенда](/backend/investor_testing/README.md)
