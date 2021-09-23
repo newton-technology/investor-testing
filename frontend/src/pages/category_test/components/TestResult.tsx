@@ -15,8 +15,8 @@ const title = {
 };
 
 const subtitle = {
-    success: 'Уведомление об оценке результатов\nскоро придет на вашу почту',
-    fail: 'Наберите максимальный балл для\nпрохождения теста',
+    success: 'Уведомление об оценке результата\nскоро придет на вашу почту',
+    fail: 'Уведомление об оценке результата\nскоро придет на вашу почту',
 };
 
 export const TestResult: React.FC<IProps> = (props) => {
@@ -36,7 +36,7 @@ export const TestResult: React.FC<IProps> = (props) => {
     return (
         <Container ref={ref}>
             <Content>
-                <IconContainer name='planet' size={112} isSuccess={isSuccess} />
+                <IconContainer name={isSuccess ? 'check_circle' : 'cross'} size={46} isSuccess={isSuccess} />
                 <Title isSuccess={isSuccess}>{isSuccess ? title.success : title.fail}</Title>
                 <Subtitle>{isSuccess ? subtitle.success : subtitle.fail}</Subtitle>
                 {isSuccess ? (
@@ -79,13 +79,21 @@ const Content = styled.div`
 `;
 
 const IconContainer = styled(Icon)<{isSuccess: boolean}>`
+    background-color: #fff;
+    padding: 27px;
     color: ${({theme, isSuccess}) => (isSuccess ? theme.palette.primary : theme.palette.regular)};
+    position: relative;
 
-    svg {
-        ${({theme}) => theme.breakpoint('md')`
-            width: 142px;
-            height: 142px;
-        `}
+    &:before {
+        background-color: ${({theme, isSuccess}) => (isSuccess ? theme.palette.primary : theme.palette.regular)};
+        content: '';
+        opacity: 0.2;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
     }
 `;
 
