@@ -60,6 +60,8 @@ class TestListRepository
 
     public function getTestsCount(array $filters): int
     {
+        $this->transformTestsFilters($filters);
+
         return $this->getCollectionQuery($filters)->count();
     }
 
