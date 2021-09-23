@@ -93,8 +93,8 @@ export const useTableDates = (): IUseTableDates => {
 
     const dates = useMemo<TFormattedDates>(() => {
         return {
-            dateStart: new Date(date.dateStart).getTime() || undefined,
-            dateEnd: new Date(date.dateEnd).getTime() || undefined,
+            dateStart: new Date(date.dateStart).getTime() / 1000 || undefined,
+            dateEnd: new Date(date.dateEnd).getTime() / 1000 || undefined,
         };
     }, [date]);
 
