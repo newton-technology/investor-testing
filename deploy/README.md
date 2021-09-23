@@ -42,7 +42,13 @@ $ psql -h host -U admin -W -f ./make-database.sql investor_testing
 
 3. Подготовка веб сервера:
 
-- В файле `proxy_nginx.conf` задать домен в поле `server_name`.
+- Скопировать proxy_nginx.conf.example в файл proxy_nginx.conf
+
+```
+cp proxy_nginx.conf.example proxy_nginx.conf 
+```
+
+- В файле `proxy_nginx.conf` задать домены в поле `server_name`.
 
 - ОПЦИОНАЛЬНО: если на вашем сервере уже есть веб сервер, пробросить 80 порт сервиса `proxy` на другой порт хоста и проксировать трафик на этот порт.
 
