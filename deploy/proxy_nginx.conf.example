@@ -1,6 +1,6 @@
 server {
     listen 0.0.0.0:80;
-    server_name toni.nwtn.io; # <- внешний домен
+    server_name <external.domain.io>; # <- внешний домен
     index index.php;
 
     location / {
@@ -25,7 +25,7 @@ server {
 
 server {
     listen 0.0.0.0:80;
-    server_name 10.0.2.49; # <- домен адмики
+    server_name <admin.domain.io>; # <- домен адмики
     index index.php;
 
     location / {

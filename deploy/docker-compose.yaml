@@ -25,7 +25,7 @@ services:
       - ./public.pem:/var/www/projects/php/investor_testing/public.pem
       - ./private.pem:/var/www/projects/php/investor_testing/private.pem
       - ./php-fpm.conf:/etc/opt/remi/php74/php-fpm.conf
-      # - ./demodata:/var/www/projects/php/investor_testing/resources/demodata/ # <- Сюда можно подложить файлы со своими данными
+      - ../demodata:/var/www/projects/php/investor_testing/resources/demodata/ # <- Сюда можно подложить файлы со своими данными
   backend_nginx:
     image: nginx
     container_name: backend-nginx

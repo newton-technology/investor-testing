@@ -1,3 +1,4 @@
 public.pem 
 private.pem 
 env
+proxy_nginx.conf

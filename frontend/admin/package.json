@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:9000",
-  "homepage": "/admin",
+  "homepage": "/",
   "dependencies": {
     "axios": "0.21.1",
     "dayjs": "1.10.6",

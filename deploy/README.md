@@ -42,7 +42,13 @@ $ psql -h host -U admin -W -f ./make-database.sql investor_testing
 
 3. Подготовка веб сервера:
 
-- В файле `proxy_nginx.conf` задать домен в поле `server_name`.
+- Скопировать proxy_nginx.conf.example в файл proxy_nginx.conf
+
+```
+cp proxy_nginx.conf.example proxy_nginx.conf 
+```
+
+- В файле `proxy_nginx.conf` задать домены в поле `server_name`.
 
 - ОПЦИОНАЛЬНО: если на вашем сервере уже есть веб сервер, пробросить 80 порт сервиса `proxy` на другой порт хоста и проксировать трафик на этот порт.
 
@@ -113,9 +119,10 @@ $ docker-compose up -d
 7. Заполнить БД тестовыми данными
 
 ```
-$ docker exec backend "php /var/www/projects/php/investor_testing/artisan import categories /var/www/projects/php/investor_testing/resources/demodata/categories.csv"
-$ docker exec backend "php /var/www/projects/php/investor_testing/artisan import questions /var/www/projects/php/investor_testing/resources/demodata/questions.csv"
-$ docker exec backend "php /var/www/projects/php/investor_testing/artisan import answers /var/www/projects/php/investor_testing/resources/demodata/answers.csv"
+$ docker exec -it backend bash
+# php /var/www/projects/php/investor_testing/artisan import categories /var/www/projects/php/investor_testing/resources/demodata/categories.csv
+# php /var/www/projects/php/investor_testing/artisan import questions /var/www/projects/php/investor_testing/resources/demodata/questions.csv
+# php /var/www/projects/php/investor_testing/artisan import answers /var/www/projects/php/investor_testing/resources/demodata/answers.csv
 ```
 
 В БД будут импортированы тестовые данные из файлов внутри контейнера:
