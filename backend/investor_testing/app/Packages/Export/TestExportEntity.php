@@ -14,11 +14,23 @@ class TestExportEntity
 {
     use SerializableTrait;
 
+    protected int $id;
     protected int $userId;
     protected ?string $email = null;
     protected ?string $category = null;
     protected ?string $status = null;
-    protected int $updatedAt;
+    protected int $completedAt;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): TestExportEntity
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     public function getUserId(): int
     {
@@ -64,14 +76,14 @@ class TestExportEntity
         return $this;
     }
 
-    public function getUpdatedAt(): int
+    public function getCompletedAt(): int
     {
-        return $this->updatedAt;
+        return $this->completedAt;
     }
 
-    public function setUpdatedAt(int $updatedAt): TestExportEntity
+    public function setCompletedAt(int $completedAt): TestExportEntity
     {
-        $this->updatedAt = $updatedAt;
+        $this->completedAt = $completedAt;
         return $this;
     }
 }

@@ -20,8 +20,8 @@ class TestRepository
     protected string $table = 'tests';
     protected string $entity = Test::class;
 
-    protected array $dates = ['created_at', 'updated_at'];
-    protected array $generatedFields = ['created_at', 'updated_at'];
+    protected array $dates = ['created_at', 'updated_at', 'completed_at'];
+    protected array $generatedFields = ['created_at', 'updated_at', 'completed_at'];
 
     /**
      * @throws Throwable

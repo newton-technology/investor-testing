@@ -51,6 +51,7 @@ class TestItemService
             ->setCategory($raw->getCategory())
             ->setQuestions($raw->getQuestions())
             ->setCreatedAt($raw->getCreatedAt())
-            ->setUpdatedAt($raw->getUpdatedAt());
+            ->setUpdatedAt($raw->getUpdatedAt())
+            ->setCompletedAt($raw->getCompletedAt());
     }
 }

@@ -19,7 +19,7 @@ use Illuminate\Database\Query\Builder;
 class TestExportRepository
 {
     use IlluminateRepositoryTrait {
-        getCollectionQuery as traitGetCollectionQuery;
+        IlluminateRepositoryTrait::getCollectionQuery as traitGetCollectionQuery;
     }
 
     protected string $connection = 'investor_testing';
@@ -27,14 +27,15 @@ class TestExportRepository
     protected string $entity = TestExportEntity::class;
 
     protected array $fields = [
+        'tests.id',
         'user_id',
         'email',
         'category' => 'categories.code',
         "tests.status",
-        'tests.updated_at',
+        'tests.completed_at',
     ];
-    protected array $dates = ['created_at', 'updated_at'];
-    protected array $generatedFields = ['created_at', 'updated_at'];
+    protected array $dates = ['created_at', 'updated_at', 'completed_at'];
+    protected array $generatedFields = ['created_at', 'updated_at', 'completed_at'];
 
     /**
      * @return Generator|TestExportEntity[]

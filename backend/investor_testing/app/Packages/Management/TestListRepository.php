@@ -22,13 +22,14 @@ class TestListRepository
     protected string $table = 'tests';
     protected string $entity = TestListItem::class;
 
-    protected array $dates = ['created_at', 'updated_at'];
-    protected array $generatedFields = ['created_at', 'updated_at'];
+    protected array $dates = ['created_at', 'updated_at', 'completed_at'];
+    protected array $generatedFields = ['created_at', 'updated_at', 'completed_at'];
 
     protected array $fields = [
         'tests.id',
         'tests.created_at',
         'tests.updated_at',
+        'tests.completed_at',
         'tests.status',
         'user_id' => 'users.id',
         'user_email' => 'users.email'

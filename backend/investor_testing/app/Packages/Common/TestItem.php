@@ -35,6 +35,11 @@ class TestItem
     protected ?int $updatedAt = null;
 
     /**
+     * Время прохождения теста
+     */
+    protected ?int $completedAt = null;
+
+    /**
      * Описание категории
      */
     protected CategoryItemCategory $category;
@@ -45,90 +50,66 @@ class TestItem
      */
     protected array $questions = [];
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     * @return TestItem
-     */
     public function setId(int $id): TestItem
     {
         $this->id = $id;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getStatus(): string
     {
         return $this->status;
     }
 
-    /**
-     * @param string $status
-     * @return TestItem
-     */
     public function setStatus(string $status): TestItem
     {
         $this->status = $status;
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getCreatedAt(): int
     {
         return $this->createdAt;
     }
 
-    /**
-     * @param int $createdAt
-     * @return TestItem
-     */
     public function setCreatedAt(int $createdAt): TestItem
     {
         $this->createdAt = $createdAt;
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getUpdatedAt(): ?int
     {
         return $this->updatedAt;
     }
 
-    /**
-     * @param int|null $updatedAt
-     * @return TestItem
-     */
     public function setUpdatedAt(?int $updatedAt): TestItem
     {
         $this->updatedAt = $updatedAt;
         return $this;
     }
 
-    /**
-     * @return CategoryItemCategory
-     */
+    public function getCompletedAt(): ?int
+    {
+        return $this->completedAt;
+    }
+
+    public function setCompletedAt(?int $completedAt): TestItem
+    {
+        $this->completedAt = $completedAt;
+        return $this;
+    }
+
     public function getCategory(): CategoryItemCategory
     {
         return $this->category;
     }
 
-    /**
-     * @param CategoryItemCategory $category
-     * @return TestItem
-     */
     public function setCategory(CategoryItemCategory $category): TestItem
     {
         $this->category = $category;
@@ -153,10 +134,6 @@ class TestItem
         return $this;
     }
 
-    /**
-     * @param TestItemQuestion $question
-     * @return TestItem
-     */
     public function addQuestion(TestItemQuestion $question): TestItem
     {
         $this->questions[] = $question;
