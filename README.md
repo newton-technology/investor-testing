@@ -57,3 +57,7 @@ Newton TONI - сервис тестирования неквалифициров
 - [Развертывание приложения](/deploy/README.md)
 - [Настройка бекенда](/backend/investor_testing/README.md)
 - [Настройка фронтенда](/frontend/README.md)
+
+# Контакты
+
+Email для обратной связи: investor_testing@nwtn.io
