@@ -42,7 +42,7 @@ $ psql -h host -U admin -W -f ./make-database.sql investor_testing
 
 - В директории `deploy` скопировать файл `env.example` в `env`
 
-- Заполнить значения env-переменных в файле `env`. Инструкция по заполнению в [описании бекенда](/../backend/investor_testing/README.md]).
+- Заполнить значения env-переменных в файле `env`. Инструкция по заполнению в [описании бекенда](/../backend/investor_testing/README.md).
 
 ### Подготовка веб сервера:
 
@@ -154,7 +154,7 @@ $ docker exec backend "php /var/www/projects/php/investor_testing/artisan user:p
 $ php /var/www/projects/php/investor_testing/artisan user:role:add admin@example.com admin
 ```
 
-Подробнее читайте в [описании бекенда](/../backend/investor_testing/README.md])
+Подробнее читайте в [описании бекенда](/../backend/investor_testing/README.md)
  
 > ВНИМАНИЕ: У пользователя, вошедшего без пароля (вошедшего по ОТП) не будет прав на использование API админки
 
