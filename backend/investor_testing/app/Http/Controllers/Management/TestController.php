@@ -29,10 +29,12 @@ class TestController extends Controller
     public function getTests(Request $request, TestListRepository $testListRepository): JsonResponse
     {
         $allowedSort = [
-            'updatedAt,asc',
-            'updatedAt,desc',
+            'completedAt,asc',
+            'completedAt,desc',
             'createdAt,asc',
             'createdAt,desc',
+            'updatedAt,asc',
+            'updatedAt,desc'
         ];
 
         $validatedInput = $this->validate(

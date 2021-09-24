@@ -86,6 +86,7 @@ class TestItemFactory
             ->setStatus($test->getStatus())
             ->setCreatedAt($test->getCreatedAt())
             ->setUpdatedAt($test->getUpdatedAt())
+            ->setCompletedAt($test->getCompletedAt())
             ->setCategory($this->getTestCategory($category))
             ->setQuestions(array_values($testItemQuestions));
     }

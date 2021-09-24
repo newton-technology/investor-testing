@@ -416,3 +416,29 @@ alter table users add column password text;
 comment on column users.password is 'Хэш пароля пользователя';
 
 --rollback alter table users drop column password;
+
+--changeset 2021-09-24-completed-at splitStatements:false logicalFilePath:release-1.2/2021-09-24-completed-at.sql
+
+alter table tests add column completed_at timestamp without time zone;
+comment on column tests.completed_at is 'Время прохождения теста';
+
+update tests set completed_at = updated_at;
+
+create function tests__completed_at()
+    returns trigger language 'plpgsql' as $$
+begin
+    if OLD.status = 'draft' and NEW.status != 'draft' then
+        NEW.completed_at = now();
+    end if;
+    return NEW;
+end;
+$$;
+
+create trigger tests__update_completed_at
+    before update on tests
+    for each row
+execute procedure tests__completed_at();
+
+--rollback alter table tests drop column completed_at;
+--rollback drop trigger tests__update_completed_at on tests;
+--rollback drop function tests__completed_at;

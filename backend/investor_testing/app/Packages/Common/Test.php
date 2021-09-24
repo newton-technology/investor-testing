@@ -51,6 +51,11 @@ class Test
     protected ?int $updatedAt = null;
 
     /**
+     * Время прохождения теста
+     */
+    protected ?int $completedAt = null;
+
+    /**
      * @return string[]
      */
     public static function getAvailableStatuses(): array
@@ -121,6 +126,24 @@ class Test
     public function setUpdatedAt(?int $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCompletedAt(): ?int
+    {
+        return $this->completedAt;
+    }
+
+    /**
+     * @param int|null $completedAt
+     * @return Test
+     */
+    public function setCompletedAt(?int $completedAt): Test
+    {
+        $this->completedAt = $completedAt;
         return $this;
     }
 }
