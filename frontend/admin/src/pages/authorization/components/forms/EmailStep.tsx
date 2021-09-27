@@ -15,7 +15,8 @@ export const EmailStep: React.FC<IProps> = ({email, isError, isAuthLoading, isSe
     return (
         <React.Fragment>
             <Description>
-                Пожалуйста укажите адрес электронной почты, которую используете для авторизации в личном кабинете или уведомлений.
+                Пожалуйста укажите адрес электронной почты, которую используете для авторизации в личном кабинете или
+                уведомлений.
             </Description>
             <InputContainer>
                 {!email.length && <StyledIcon name='email' size={16} />}
