@@ -32,7 +32,7 @@ export const CategoryList: React.FC = () => {
 
     return (
         <Container>
-            <Title>Выбери категорию теста</Title>
+            <Title>Выберите категорию теста</Title>
             <List>
                 {data?.map((test: ICategory) => {
                     return <CategoryCard key={test.category.id} status={test.status} {...test.category} />;
