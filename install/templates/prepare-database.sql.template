@@ -1,0 +1,5 @@
+create role admins;
+create user admin with password '${INVESTOR_TESTING_ADMIN_PASSWORD}';
+grant admins to admin;
+create user terminal with password '${INVESTOR_TESTING_TERMINAL_PASSWORD}';
+create database ${INVESTOR_TESTING_DATABASE} owner admins;
