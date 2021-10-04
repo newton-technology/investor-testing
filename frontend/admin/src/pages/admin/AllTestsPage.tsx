@@ -1,14 +1,15 @@
 import React, {useState, useCallback, useEffect, useMemo, useRef} from 'react';
 import styled from 'styled-components';
 
-import {Sort, Status} from '../../api/ManagmentApi';
-import {useAllTestsByParams} from '../../hooks/useAdmin';
-import {useTableDates, useTableSearch, useTableStatus} from '../../hooks/useTable';
 import DatePicker from './components/DatePicker';
 import Paginator from './components/Paginator';
 import SearchInput from './components/SearchInput';
 import Select from './components/Select';
 import TestsTable from './components/TestTable/TestsTable';
+
+import {Sort, Status} from '../../api/ManagmentApi';
+import {useAllTestsByParams} from '../../hooks/useAdmin';
+import {useTableDates, useTableSearch, useTableStatus} from '../../hooks/useTable';
 
 export type Option = {
     title: string;
@@ -31,7 +32,7 @@ export const AllTestsPage: React.FC = () => {
     const {status, statusHandler} = useTableStatus();
     const {datesValue, formattedDates, onDateChange, clearTableDates} = useTableDates();
     const [page, setPage] = useState<TPage>(1);
-    const [sort, setSort] = useState<Sort>(Sort.UPDATED_DESC);
+    const [sort, setSort] = useState<Sort>(Sort.COMPLETED_DESC);
     const isInitialRender = useRef<boolean>(true);
 
     const offsetValue = useMemo(() => {
