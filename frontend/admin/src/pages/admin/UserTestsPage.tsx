@@ -2,9 +2,10 @@ import React from 'react';
 import {useParams} from 'react-router';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components';
-import {Status} from '../../api/ManagmentApi';
+
 import {Icon} from '../../components/Icon';
 
+import {Status} from '../../api/ManagmentApi';
 import {useUserTestById} from '../../hooks/useAdmin';
 import {useScrollToTop} from '../../hooks/useScrollToTop';
 import {dateFormatter} from '../../utils/tableUtils';
@@ -27,9 +28,7 @@ export const UserTestsPage: React.FC = () => {
         return null;
     }
 
-    const {userEmail, updatedAt, category, questions} = test;
-
-    console.log(test);
+    const {userEmail, completedAt, category, questions} = test;
 
     return (
         <Container>
@@ -47,7 +46,7 @@ export const UserTestsPage: React.FC = () => {
             <Paper>
                 <PaperContent isFlex>
                     <Label>Дата и время прохождения:</Label>
-                    <Text>{dateFormatter(updatedAt, 'D MMMM YYYY; H:m (МСК)')}</Text>
+                    <Text>{dateFormatter(completedAt, 'D MMMM YYYY; HH:mm (МСК)')}</Text>
                 </PaperContent>
                 <PaperContent isFlex>
                     <Label>Результат:</Label>
