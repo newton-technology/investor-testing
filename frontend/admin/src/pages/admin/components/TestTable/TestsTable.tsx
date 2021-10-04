@@ -198,12 +198,16 @@ const LoaderContainer = styled(TableRow)`
     position: relative;
 
     & span {
-        position: absolute;
         left: 50%;
+        position: absolute;
         top: 0px;
     }
 `;
 
-const TableBody = styled.tbody``;
+const TableBody = styled.tbody`
+    & tr:hover {
+        transform: translateY(-2px);
+    }
+`;
 
 export default memo(TestsTable);
