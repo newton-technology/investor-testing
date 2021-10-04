@@ -173,7 +173,7 @@ const HeaderTitle = styled.div<{sortable?: boolean}>`
 
 const BodyContent = styled.div<{pointer?: boolean}>`
     color: ${({theme, pointer}) => (pointer ? theme.palette.primary : theme.palette.regular)};
-    cursor: ${({pointer}) => (pointer ? 'pointer' : 'initial')};
+    cursor: ${({pointer}) => (pointer ? 'pointer' : 'inherit')};
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
