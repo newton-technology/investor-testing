@@ -85,7 +85,6 @@ const Input = styled.input<{positionIndex?: number; error?: boolean}>`
     position: absolute;
     -webkit-text-fill-color: transparent;
     top: 10px;
-    user-select: none;
     width: 0.5px;
 
     &::selection {
