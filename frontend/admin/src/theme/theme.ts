@@ -10,6 +10,7 @@ export const theme: DefaultTheme = {
         primary: palette.primary || '#0DAAEC',
         secondary: palette.secondary || '#2F6FEB',
         error: '#E30B17',
+        warning: `#ffc107`,
         bg: {
             primary: '#F2F6F8',
             secondary: '#FFF',

@@ -7,6 +7,7 @@ declare module 'styled-components' {
             primary: string;
             secondary: string;
             error: string;
+            warning: string;
             bg: {
                 primary: string;
                 secondary: string;

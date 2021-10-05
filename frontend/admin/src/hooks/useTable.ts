@@ -31,7 +31,6 @@ export const useTableSearch = (initialValue: string = ''): IUseTableSearch => {
 
     const OnInputValueSubmit = (cb: () => void): void => {
         if (inputValue) cb();
-        setInputValue('');
     };
 
     const resetTableSearch = (): void => {

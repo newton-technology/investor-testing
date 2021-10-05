@@ -7,6 +7,7 @@ import {Icon} from '../../../../components/Icon';
 import {Loader} from '../../../../components/Loader';
 import {dateFormatter} from '../../../../utils/tableUtils';
 import NoReslt from './components/NoReslt';
+import HightLightText from './components/HighlightText';
 
 interface IProps {
     tests: ITestResponse[];
@@ -14,6 +15,7 @@ interface IProps {
     selectEmail: (email: string) => void;
     sort: Sort;
     setSort: (value: Sort) => void;
+    filter: string;
 }
 
 interface ITableColumn {
@@ -29,7 +31,7 @@ const columns: ITableColumn[] = [
     {title: 'Результат', value: 'status'},
 ];
 
-const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEmail}) => {
+const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEmail, filter}) => {
     const {push} = useHistory();
 
     if (!isLoading && !tests.length) {
@@ -81,7 +83,9 @@ const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEm
                             <TableRow key={test.id} onClick={() => selectTest(test.id)}>
                                 <TD>{dateFormatter(test.updatedAt, 'D MMMM в H:m')}</TD>
                                 <TD onClick={emailHandler(test.userEmail)}>
-                                    <BodyContent pointer>{test.userEmail}</BodyContent>
+                                    <BodyContent pointer>
+                                        <HightLightText filter={filter} text={test.userEmail} />
+                                    </BodyContent>
                                 </TD>
                                 <TD>
                                     <BodyContent>{test.category.description}</BodyContent>

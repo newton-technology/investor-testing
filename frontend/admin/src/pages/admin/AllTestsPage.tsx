@@ -97,6 +97,7 @@ export const AllTestsPage: React.FC = () => {
                 selectEmail={onChangeTableValue}
                 sort={sort}
                 setSort={setSort}
+                filter={value}
             />
             {!!tests.length && <Paginator onChangePage={onChangePage} currentPage={page} maxPage={totalPages} />}
         </>
