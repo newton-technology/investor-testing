@@ -15,6 +15,7 @@ export const theme: DefaultTheme = {
             secondary: '#FFF',
             footer: '#1F1B30',
             darkBlue: '#3A3463',
+            lightBlue: '#DBE9FF',
             authorization: 'linear-gradient(139.02deg, #65dfe7 -19.37%, #587cfc 116.76%)',
         },
         border: {
