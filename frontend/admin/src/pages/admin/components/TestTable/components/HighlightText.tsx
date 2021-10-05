@@ -32,7 +32,9 @@ const HightLightText: React.FC<IProps> = ({text, filter}) => {
 };
 
 const HiLight = styled.span`
-    background-color: ${({theme}) => theme.palette.warning};
+    background-color: #dbe9ff;
 `;
+
+// background-color: ${({theme}) => theme.palette.warning};
 
 export default memo(HightLightText);
