@@ -2,11 +2,12 @@ import React, {memo, MouseEvent} from 'react';
 import {useHistory} from 'react-router';
 import styled from 'styled-components';
 
+import NoReslt from './components/NoReslt';
+
 import {ITestResponse, Sort, Status} from '../../../../api/ManagmentApi';
 import {Icon} from '../../../../components/Icon';
 import {Loader} from '../../../../components/Loader';
 import {dateFormatter} from '../../../../utils/tableUtils';
-import NoReslt from './components/NoReslt';
 import HightLightText from './components/HighlightText';
 
 interface IProps {
@@ -25,7 +26,7 @@ interface ITableColumn {
 }
 
 const columns: ITableColumn[] = [
-    {title: 'Дата', value: 'updatedAt', sortable: true},
+    {title: 'Дата', value: 'completedAt', sortable: true},
     {title: 'Email', value: 'userEmail'},
     {title: 'Название теста', value: 'name'},
     {title: 'Результат', value: 'status'},
@@ -39,7 +40,7 @@ const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEm
     }
 
     const changeSortDirection = () => {
-        setSort(sort === Sort.UPDATED_ASC ? Sort.UPDATED_DESC : Sort.UPDATED_ASC);
+        setSort(sort === Sort.COMPLETED_ASC ? Sort.COMPLETED_DESC : Sort.COMPLETED_ASC);
     };
 
     const selectTest = (id: number) => {
@@ -51,7 +52,7 @@ const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEm
         selectEmail(email);
     };
 
-    const isDesc = sort === Sort.UPDATED_DESC;
+    const isDesc = sort === Sort.COMPLETED_DESC;
 
     return (
         <Table>
@@ -81,7 +82,7 @@ const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEm
                         const isPassed = test.status === Status.PASSED;
                         return (
                             <TableRow key={test.id} onClick={() => selectTest(test.id)}>
-                                <TD>{dateFormatter(test.updatedAt, 'D MMMM в H:m')}</TD>
+                                <TD>{dateFormatter(test.updatedAt, 'D MMMM в HH:mm')}</TD>
                                 <TD onClick={emailHandler(test.userEmail)}>
                                     <BodyContent pointer>
                                         <HightLightText filter={filter} text={test.userEmail} />

@@ -13,6 +13,8 @@ export enum Sort {
     UPDATED_DESC = 'updatedAt,desc',
     CREATED_ASC = 'createdAt,asc',
     CREATED_DESC = 'createdAt,desc',
+    COMPLETED_ASC = 'completedAt,asc',
+    COMPLETED_DESC = 'completedAt,desc',
 }
 
 export interface IFilterParams {
@@ -31,6 +33,7 @@ export interface ITestResponse {
     id: number;
     createdAt: number;
     updatedAt: number;
+    completedAt: number;
     category: {
         id: number;
         description: string;
@@ -66,6 +69,7 @@ export interface ITest {
     userEmail: string;
     status: Status;
     updatedAt: number;
+    completedAt: number;
     category: {
         id: number;
         name: string;
