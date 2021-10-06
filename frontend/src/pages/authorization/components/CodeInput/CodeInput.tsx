@@ -18,11 +18,13 @@ export const CodeInput = React.forwardRef<HTMLInputElement, IProps>(
         const positions = new Array(length).fill(0);
 
         const changeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
+            e.preventDefault();
             setValue(e.target.value);
             onChange(e.target.value);
         };
 
         const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+            e.preventDefault();
             const newValue = e.clipboardData.getData('Text').trim().slice(0, length);
             setValue(newValue);
             onChange(newValue);

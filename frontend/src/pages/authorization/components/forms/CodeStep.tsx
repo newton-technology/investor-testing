@@ -89,6 +89,8 @@ const ErrorMessage = styled.div`
     color: ${({theme}) => theme.palette.error};
     display: flex;
     justify-content: center;
-    padding-bottom: 32px;
-    padding-top: 8px;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 70px;
 `;
