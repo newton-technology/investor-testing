@@ -54,6 +54,15 @@ export const Authorization: React.FC = () => {
         }
     };
 
+    const onChangeCode = (value: string) => {
+        setCode((prevCode: string) => {
+            if (isWrongCode && value.length < prevCode.length) {
+                setIsWrongCode(false);
+            }
+            return value;
+        });
+    };
+
     const login = () => {
         if (accessTokenStorage?.accessToken) {
             authService
@@ -111,7 +120,7 @@ export const Authorization: React.FC = () => {
                         <CodeStep
                             email={email}
                             changeEmail={changeEmail}
-                            setCode={setCode}
+                            setCode={onChangeCode}
                             sendCode={sendCode}
                             login={login}
                             isWrongCode={isWrongCode}
