@@ -143,7 +143,8 @@ $ docker exec -it backend bash
 - Создать пользователя с паролем:
 
 ```
-$ docker exec backend "php /var/www/projects/php/investor_testing/artisan user:password:add admin@example.com"
+$ docker exec -it backend bash
+# php /var/www/projects/php/investor_testing/artisan user:password:add admin@example.com
 ```
 
 Далее подтвердить создание
@@ -151,7 +152,8 @@ $ docker exec backend "php /var/www/projects/php/investor_testing/artisan user:p
 - Добавить роль администратора к существующей учетной записи можно при помощи следующей команды:
 
 ```
-$ php /var/www/projects/php/investor_testing/artisan user:role:add admin@example.com admin
+$ docker exec -it backend bash
+# php /var/www/projects/php/investor_testing/artisan user:role:add admin@example.com admin
 ```
 
 Подробнее читайте в [описании бекенда](../backend/investor_testing/README.md)
