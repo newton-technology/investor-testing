@@ -92,8 +92,8 @@ export const useTableDates = (): IUseTableDates => {
 
     const dates = useMemo<TFormattedDates>(() => {
         return {
-            dateStart: new Date(date.dateStart).getTime() / 1000 || undefined,
-            dateEnd: new Date(date.dateEnd).getTime() / 1000 || undefined,
+            dateStart: new Date(date.dateStart).setHours(0, 0) / 1000 || undefined,
+            dateEnd: new Date(date.dateEnd).setHours(23, 59) / 1000 || undefined,
         };
     }, [date]);
 
