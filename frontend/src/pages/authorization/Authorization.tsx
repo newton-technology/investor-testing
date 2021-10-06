@@ -141,6 +141,7 @@ const Form = styled.form`
     padding: 0 24px;
     padding-bottom: 32px;
     width: 100%;
+    position: relative;
 
     ${({theme}) => theme.breakpoint('md')`
         padding: 0 32px;
