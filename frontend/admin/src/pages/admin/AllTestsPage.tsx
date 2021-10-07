@@ -9,7 +9,7 @@ import TestsTable from './components/TestTable/TestsTable';
 
 import {Sort, Status} from '../../api/ManagmentApi';
 import {useAllTestsByParams} from '../../hooks/useAdmin';
-import {useTableDates, useTableSearch, useTableStatus} from '../../hooks/useTable';
+import {useTableDates, useTableSearch, useTableStatus, useTableFilter} from '../../hooks/useTable';
 
 export type Option = {
     title: string;
@@ -53,6 +53,12 @@ export const AllTestsPage: React.FC = () => {
         ...formattedDates,
     });
 
+    const {onEmailSubmit} = useTableFilter({
+        status: status,
+        email: email,
+        ...formattedDates,
+    });
+
     const {tests, total} = data;
     const totalPages = Math.ceil(total / limitPerRequest);
 
@@ -70,6 +76,7 @@ export const AllTestsPage: React.FC = () => {
 
     const onSearchSubmit = () => {
         OnInputValueSubmit(refetch);
+        onEmailSubmit();
         setIsFiltered(true);
     };
 

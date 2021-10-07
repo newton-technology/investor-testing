@@ -31,7 +31,6 @@ export const useTableSearch = (initialValue: string = ''): IUseTableSearch => {
 
     const OnInputValueSubmit = (cb: () => void): void => {
         if (inputValue) cb();
-        setInputValue('');
     };
 
     const resetTableSearch = (): void => {
@@ -111,5 +110,29 @@ export const useTableDates = (): IUseTableDates => {
         formattedDates: dates,
         onDateChange,
         clearTableDates,
+    };
+};
+
+interface IUseTableFilter {
+    isFiltered: boolean;
+    onEmailSubmit: () => void;
+}
+
+interface ITableFilterParams {
+    status: Status[];
+    dateStart: number;
+    dateEnd: number;
+    email: string;
+}
+
+export const useTableFilter = (params?: Partial<ITableFilterParams>): IUseTableFilter => {
+    console.log(params);
+    const [isFiltered, setisFiltered] = useState<boolean>(false);
+    const onEmailSubmit = () => {
+        console.log(`log`);
+    };
+    return {
+        isFiltered: false,
+        onEmailSubmit,
     };
 };
