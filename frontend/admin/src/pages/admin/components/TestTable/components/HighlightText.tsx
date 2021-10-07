@@ -6,7 +6,7 @@ interface IProps {
     filter: string;
 }
 
-const HightLightText: React.FC<IProps> = ({text, filter}) => {
+const HighlightText: React.FC<IProps> = ({text, filter}) => {
     if (!filter) return <>{text}</>;
     const regexp = new RegExp(filter, 'ig');
     const matchValue = text.match(regexp);
@@ -19,7 +19,7 @@ const HightLightText: React.FC<IProps> = ({text, filter}) => {
                         return (
                             <React.Fragment key={`${index}-${str}`}>
                                 {str}
-                                <HiLight>{foundString}</HiLight>
+                                <Highlight>{foundString}</Highlight>
                             </React.Fragment>
                         );
                     }
@@ -31,8 +31,8 @@ const HightLightText: React.FC<IProps> = ({text, filter}) => {
     return <>{text}</>;
 };
 
-const HiLight = styled.span`
+const Highlight = styled.span`
     background-color: ${({theme}) => theme.palette.bg.lightBlue};
 `;
 
-export default memo(HightLightText);
+export default memo(HighlightText);

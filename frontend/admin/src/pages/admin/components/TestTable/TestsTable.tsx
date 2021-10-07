@@ -8,7 +8,7 @@ import {ITestResponse, Sort, Status} from '../../../../api/ManagmentApi';
 import {Icon} from '../../../../components/Icon';
 import {Loader} from '../../../../components/Loader';
 import {dateFormatter} from '../../../../utils/tableUtils';
-import HightLightText from './components/HighlightText';
+import HighLightText from './components/HighlightText';
 
 interface IProps {
     tests: ITestResponse[];
@@ -85,7 +85,7 @@ const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEm
                                 <TD>{dateFormatter(test.updatedAt, 'D MMMM в HH:mm')}</TD>
                                 <TD onClick={emailHandler(test.userEmail)}>
                                     <BodyContent pointer>
-                                        <HightLightText filter={filter} text={test.userEmail} />
+                                        <HighLightText filter={filter} text={test.userEmail} />
                                     </BodyContent>
                                 </TD>
                                 <TD>
