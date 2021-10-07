@@ -8,6 +8,7 @@ import {ITestResponse, Sort, Status} from '../../../../api/ManagmentApi';
 import {Icon} from '../../../../components/Icon';
 import {Loader} from '../../../../components/Loader';
 import {dateFormatter} from '../../../../utils/tableUtils';
+import {HintedText} from './components/HintedText';
 
 interface IProps {
     tests: ITestResponse[];
@@ -82,7 +83,9 @@ const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEm
                             <TableRow key={test.id} onClick={() => selectTest(test.id)}>
                                 <TD>{dateFormatter(test.updatedAt, 'D MMMM в HH:mm')}</TD>
                                 <TD onClick={emailHandler(test.userEmail)}>
-                                    <BodyContent pointer>{test.userEmail}</BodyContent>
+                                    <BodyContent>
+                                        <HintedText text={`Все тесты ${test.userEmail}`}>{test.userEmail}</HintedText>
+                                    </BodyContent>
                                 </TD>
                                 <TD>
                                     <BodyContent>{test.category.description}</BodyContent>
@@ -117,14 +120,14 @@ const TH = styled.th`
     text-align: left;
 
     &:first-child {
-        border-radius: 10px 0px 0px 10px;
+        border-radius: 10px 0 0 10px;
         padding-left: 32px;
     }
 
-    &: last-child {
-        border-radius: 0px 10px 10px 0px;
+    &:last-child {
+        border-radius: 0 10px 10px 0;
         padding-right: 32px;
-        width: 0px;
+        width: 0;
     }
 `;
 
@@ -136,12 +139,12 @@ const TD = styled.td`
     width: max-content;
 
     &:first-child {
-        border-radius: 10px 0px 0px 10px;
+        border-radius: 10px 0 0 10px;
         padding-left: 32px;
     }
 
-    &: last-child {
-        border-radius: 0px 10px 10px 0px;
+    &:last-child {
+        border-radius: 0 10px 10px 0;
         padding-right: 32px;
     }
 `;
@@ -201,7 +204,7 @@ const LoaderContainer = styled(TableRow)`
     & span {
         position: absolute;
         left: 50%;
-        top: 0px;
+        top: 0;
     }
 `;
 
