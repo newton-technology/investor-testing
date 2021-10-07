@@ -8,6 +8,7 @@ import {ITestResponse, Sort, Status} from '../../../../api/ManagmentApi';
 import {Icon} from '../../../../components/Icon';
 import {Loader} from '../../../../components/Loader';
 import {dateFormatter} from '../../../../utils/tableUtils';
+import HighLightText from './components/HighlightText';
 
 interface IProps {
     tests: ITestResponse[];
@@ -15,6 +16,7 @@ interface IProps {
     selectEmail: (email: string) => void;
     sort: Sort;
     setSort: (value: Sort) => void;
+    filter: string;
 }
 
 interface ITableColumn {
@@ -30,7 +32,7 @@ const columns: ITableColumn[] = [
     {title: 'Результат', value: 'status'},
 ];
 
-const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEmail}) => {
+const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEmail, filter}) => {
     const {push} = useHistory();
 
     if (!isLoading && !tests.length) {
@@ -82,7 +84,9 @@ const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEm
                             <TableRow key={test.id} onClick={() => selectTest(test.id)}>
                                 <TD>{dateFormatter(test.updatedAt, 'D MMMM в HH:mm')}</TD>
                                 <TD onClick={emailHandler(test.userEmail)}>
-                                    <BodyContent pointer>{test.userEmail}</BodyContent>
+                                    <BodyContent pointer>
+                                        <HighLightText filter={filter} text={test.userEmail} />
+                                    </BodyContent>
                                 </TD>
                                 <TD>
                                     <BodyContent>{test.category.description}</BodyContent>
@@ -174,7 +178,7 @@ const HeaderTitle = styled.div<{sortable?: boolean}>`
 
 const BodyContent = styled.div<{pointer?: boolean}>`
     color: ${({theme, pointer}) => (pointer ? theme.palette.primary : theme.palette.regular)};
-    cursor: ${({pointer}) => (pointer ? 'pointer' : 'initial')};
+    cursor: ${({pointer}) => (pointer ? 'pointer' : 'inherit')};
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -199,12 +203,16 @@ const LoaderContainer = styled(TableRow)`
     position: relative;
 
     & span {
-        position: absolute;
         left: 50%;
+        position: absolute;
         top: 0px;
     }
 `;
 
-const TableBody = styled.tbody``;
+const TableBody = styled.tbody`
+    & tr:hover {
+        transform: translateY(-2px);
+    }
+`;
 
 export default memo(TestsTable);

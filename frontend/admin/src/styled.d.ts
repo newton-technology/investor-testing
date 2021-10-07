@@ -12,6 +12,7 @@ declare module 'styled-components' {
                 secondary: string;
                 footer: string;
                 darkBlue: string;
+                lightBlue: string;
                 authorization: string;
             };
             border: {
