@@ -83,6 +83,11 @@ export const AllTestsPage: React.FC = () => {
         setIsFiltered(true);
     };
 
+    const onTableValueChange = (value: string) => {
+        onChangeTableValue(value);
+        setIsFiltered(true);
+    };
+
     useEffect(() => {
         if (!isInitialRender.current) {
             refetch();
@@ -113,7 +118,7 @@ export const AllTestsPage: React.FC = () => {
             <TestsTable
                 isLoading={isLoading}
                 tests={tests}
-                selectEmail={onChangeTableValue}
+                selectEmail={onTableValueChange}
                 sort={sort}
                 setSort={setSort}
             />
