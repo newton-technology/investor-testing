@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect, useMemo, useRef, ChangeEvent, SyntheticEvent} from 'react';
+import React, {useState, useCallback, useEffect, useMemo, useRef} from 'react';
 import styled from 'styled-components';
 
 import DatePicker from './components/DatePicker';
@@ -33,7 +33,6 @@ export const AllTestsPage: React.FC = () => {
     const {datesValue, formattedDates, onDateChange, clearTableDates} = useTableDates();
     const [page, setPage] = useState<TPage>(1);
     const [sort, setSort] = useState<Sort>(Sort.COMPLETED_DESC);
-    const [isFiltered, setIsFiltered] = useState<boolean>(false);
     const isInitialRender = useRef<boolean>(true);
 
     const offsetValue = useMemo(() => {
@@ -53,7 +52,7 @@ export const AllTestsPage: React.FC = () => {
         ...formattedDates,
     });
 
-    const {onEmailSubmit} = useTableFilter({
+    const {onEmailSubmit, isFiltered} = useTableFilter({
         status: status,
         email: email,
         ...formattedDates,
@@ -71,28 +70,11 @@ export const AllTestsPage: React.FC = () => {
         clearTableDates();
         resetTableStatus();
         setPage(1);
-        setIsFiltered(false);
     }, [resetTableSearch, clearTableDates]);
 
     const onSearchSubmit = () => {
         OnInputValueSubmit(refetch);
         onEmailSubmit();
-        setIsFiltered(true);
-    };
-
-    const onDateSubmit = (e: ChangeEvent<HTMLInputElement>) => {
-        onDateChange(e);
-        setIsFiltered(true);
-    };
-
-    const onStatusHandler = (e: SyntheticEvent, data: Option) => {
-        statusHandler(e, data);
-        setIsFiltered(true);
-    };
-
-    const onTableValueChange = (value: string) => {
-        onChangeTableValue(value);
-        setIsFiltered(true);
     };
 
     useEffect(() => {
@@ -115,8 +97,8 @@ export const AllTestsPage: React.FC = () => {
                     value={value}
                     placeholder='        Поиск по email'
                 />
-                <DatePicker date={datesValue} dateHandler={onDateSubmit} clear={clearTableDates} />
-                <Select options={options} value={status} onChange={onStatusHandler} />
+                <DatePicker date={datesValue} dateHandler={onDateChange} clear={clearTableDates} />
+                <Select options={options} value={status} onChange={statusHandler} />
             </FiltersWrapper>
             <ResultSection>
                 Найдено: <ResultCount>{total}</ResultCount> совпадений
@@ -125,7 +107,7 @@ export const AllTestsPage: React.FC = () => {
             <TestsTable
                 isLoading={isLoading}
                 tests={tests}
-                selectEmail={onTableValueChange}
+                selectEmail={onChangeTableValue}
                 sort={sort}
                 setSort={setSort}
             />

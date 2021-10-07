@@ -125,14 +125,23 @@ interface ITableFilterParams {
     email: string;
 }
 
-export const useTableFilter = (params?: Partial<ITableFilterParams>): IUseTableFilter => {
+export const useTableFilter = (params: Partial<ITableFilterParams>): IUseTableFilter => {
     console.log(params);
-    const [isFiltered, setisFiltered] = useState<boolean>(false);
+    const [isFiltered, setIsFiltered] = useState<boolean>(false);
+
     const onEmailSubmit = () => {
         console.log(`log`);
     };
+
+    Object.keys(params).forEach((key: string) => {
+        // setIsFiltered(false);
+        // if (params[key]) {
+        //     setIsFiltered(true);
+        // }
+    });
+
     return {
-        isFiltered: false,
+        isFiltered: isFiltered,
         onEmailSubmit,
     };
 };
