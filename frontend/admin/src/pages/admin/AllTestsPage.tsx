@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {useState, useCallback, useEffect, useMemo, useRef, ChangeEvent, SyntheticEvent} from 'react';
 import styled from 'styled-components';
 
 import DatePicker from './components/DatePicker';
@@ -29,10 +29,11 @@ const reponseDefaultValue = {tests: [], limit: 0, offset: 0, total: 0};
 export const AllTestsPage: React.FC = () => {
     const {email, tableValue, value, onChangeInputValue, onChangeTableValue, OnInputValueSubmit, resetTableSearch} =
         useTableSearch();
-    const {status, statusHandler} = useTableStatus();
+    const {status, statusHandler, resetTableStatus} = useTableStatus();
     const {datesValue, formattedDates, onDateChange, clearTableDates} = useTableDates();
     const [page, setPage] = useState<TPage>(1);
     const [sort, setSort] = useState<Sort>(Sort.COMPLETED_DESC);
+    const [isFiltered, setIsFiltered] = useState<boolean>(false);
     const isInitialRender = useRef<boolean>(true);
 
     const offsetValue = useMemo(() => {
@@ -62,8 +63,25 @@ export const AllTestsPage: React.FC = () => {
     const reset = useCallback(() => {
         resetTableSearch();
         clearTableDates();
+        resetTableStatus();
         setPage(1);
+        setIsFiltered(false);
     }, [resetTableSearch, clearTableDates]);
+
+    const onSearchSubmit = () => {
+        OnInputValueSubmit(refetch);
+        setIsFiltered(true);
+    };
+
+    const onDateSubmit = (e: ChangeEvent<HTMLInputElement>) => {
+        onDateChange(e);
+        setIsFiltered(true);
+    };
+
+    const onStatusHandler = (e: SyntheticEvent, data: Option) => {
+        statusHandler(e, data);
+        setIsFiltered(true);
+    };
 
     useEffect(() => {
         if (!isInitialRender.current) {
@@ -81,16 +99,16 @@ export const AllTestsPage: React.FC = () => {
             <FiltersWrapper>
                 <SearchInput
                     onChange={onChangeInputValue}
-                    onSubmit={() => OnInputValueSubmit(refetch)}
+                    onSubmit={onSearchSubmit}
                     value={value}
                     placeholder='        Поиск по email'
                 />
-                <DatePicker date={datesValue} dateHandler={onDateChange} clear={clearTableDates} />
-                <Select options={options} value={status} onChange={statusHandler} />
+                <DatePicker date={datesValue} dateHandler={onDateSubmit} clear={clearTableDates} />
+                <Select options={options} value={status} onChange={onStatusHandler} />
             </FiltersWrapper>
             <ResultSection>
                 Найдено: <ResultCount>{total}</ResultCount> совпадений
-                {!tests.length && <ShowAllResultsButton onClick={reset}>Показать все результаты</ShowAllResultsButton>}
+                {isFiltered && <ShowAllResultsButton onClick={reset}>Очистить результаты поиска</ShowAllResultsButton>}
             </ResultSection>
             <TestsTable
                 isLoading={isLoading}

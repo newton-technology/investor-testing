@@ -1,5 +1,5 @@
 import isEqual from 'lodash.isequal';
-import React, {useState, useCallback, SyntheticEvent, memo} from 'react';
+import React, {useCallback, SyntheticEvent, memo, useMemo} from 'react';
 import styled from 'styled-components';
 
 import {Status} from '../../../api/ManagmentApi';
@@ -16,20 +16,23 @@ interface IProps {
 
 const Select: React.FC<IProps> = ({options, onChange, value}) => {
     const {state: isOpen, toggle, setDisabled} = useToggle(false);
-    const [selected, setSelected] = useState<Option>(options.find((option) => option.value === value) || options[0]);
     const selectRef = useClickOutside<HTMLDivElement>(setDisabled, isOpen);
 
     const selectOption = useCallback(
         (option: Option) => (e: SyntheticEvent) => {
-            setSelected(option);
             if (onChange) onChange(e, option);
         },
         [onChange],
     );
 
+    const title = useMemo(() => {
+        const option = options.find((option) => isEqual(option.value, value));
+        return option ? option.title : ``;
+    }, [value]);
+
     return (
         <Container ref={selectRef} $isOpen={isOpen} onClick={toggle}>
-            <SelectLabel $isOpen={isOpen}>{selected.title}</SelectLabel>
+            <SelectLabel $isOpen={isOpen}>{title}</SelectLabel>
             <StyledIcon name='chevron_right' size={24} $isOpen={isOpen} />
             {isOpen && (
                 <OptionsContainer>
@@ -67,7 +70,7 @@ const SelectLabel = styled.label<{$isOpen: boolean}>`
 
 const OptionsContainer = styled.div`
     background: ${({theme}) => theme.palette.bg.secondary};
-    border-radius: 0px 0px 4px 4px;
+    border-radius: 0 0 4px 4px;
     color: ${({theme}) => theme.palette.regular};
     font-size: 17px;
     left: 0;
