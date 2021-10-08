@@ -125,7 +125,7 @@ const ButtonsContainer = styled.div`
 
     ${({theme}) => theme.breakpoint('md')`
         display: inline-grid;
-        grid-gap: 4px;
+        grid-gap: 20px;
     `}
 `;
 
