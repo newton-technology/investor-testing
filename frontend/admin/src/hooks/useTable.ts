@@ -1,5 +1,5 @@
-import {useState, useCallback, useMemo, ChangeEvent, SyntheticEvent} from 'react';
 import isEqual from 'lodash.isequal';
+import {useState, useCallback, useMemo, ChangeEvent, SyntheticEvent} from 'react';
 
 import {Status} from '../api/ManagmentApi';
 import {Option} from '../pages/admin/AllTestsPage';
@@ -142,7 +142,7 @@ export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
     const isFilterApply = useMemo(() => {
         let isFilter = false;
 
-        if (data.dateStart || data.dateStart) {
+        if (data.dateEnd || data.dateStart) {
             isFilter = true;
         }
 
@@ -162,7 +162,7 @@ export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
         }
 
         return isFilter;
-    }, [params]);
+    }, [data, isEmailSubmit, options, resetTable]);
 
     return {
         isFiltered: isFilterApply,

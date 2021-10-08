@@ -1,15 +1,14 @@
 import React, {useState, useCallback, useEffect, useMemo, useRef} from 'react';
 import styled from 'styled-components';
 
+import {Sort, Status} from '../../api/ManagmentApi';
+import {useAllTestsByParams} from '../../hooks/useAdmin';
+import {useTableDates, useTableSearch, useTableStatus, useTableFilter} from '../../hooks/useTable';
 import DatePicker from './components/DatePicker';
 import Paginator from './components/Paginator';
 import SearchInput from './components/SearchInput';
 import Select from './components/Select';
 import TestsTable from './components/TestTable/TestsTable';
-
-import {Sort, Status} from '../../api/ManagmentApi';
-import {useAllTestsByParams} from '../../hooks/useAdmin';
-import {useTableDates, useTableSearch, useTableStatus, useTableFilter} from '../../hooks/useTable';
 
 export type Option = {
     title: string;
@@ -64,7 +63,7 @@ export const AllTestsPage: React.FC = () => {
         clearTableDates();
         resetTableStatus();
         setPage(1);
-    }, [resetTableSearch, clearTableDates]);
+    }, [resetTableSearch, clearTableDates, resetTableStatus]);
 
     const {onEmailSubmit, isFiltered} = useTableFilter({
         options: options,
