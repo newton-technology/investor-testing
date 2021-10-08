@@ -52,12 +52,6 @@ export const AllTestsPage: React.FC = () => {
         ...formattedDates,
     });
 
-    const {onEmailSubmit, isFiltered} = useTableFilter({
-        status: status,
-        email: email,
-        ...formattedDates,
-    });
-
     const {tests, total} = data;
     const totalPages = Math.ceil(total / limitPerRequest);
 
@@ -72,8 +66,23 @@ export const AllTestsPage: React.FC = () => {
         setPage(1);
     }, [resetTableSearch, clearTableDates]);
 
+    const {onEmailSubmit, isFiltered} = useTableFilter({
+        options: options,
+        data: {
+            status: status,
+            email: email,
+            ...formattedDates,
+        },
+        resetTable: reset,
+    });
+
     const onSearchSubmit = () => {
         OnInputValueSubmit(refetch);
+        onEmailSubmit();
+    };
+
+    const onChangeTableSubmit = (e: string) => {
+        onChangeTableValue(e);
         onEmailSubmit();
     };
 
@@ -107,7 +116,7 @@ export const AllTestsPage: React.FC = () => {
             <TestsTable
                 isLoading={isLoading}
                 tests={tests}
-                selectEmail={onChangeTableValue}
+                selectEmail={onChangeTableSubmit}
                 sort={sort}
                 setSort={setSort}
                 filter={value}
