@@ -33,7 +33,6 @@ export interface IValues {
 
 export const CategoryTest: React.FC = () => {
     const {categoryId} = useParams<{categoryId: string}>();
-    useScrollToTop();
 
     const {data, isLoading, isError, error} = useQuery<ITest, IResponseError>(() => {
         return CategoryTestApi.getTest(categoryId);
@@ -51,6 +50,8 @@ export const CategoryTest: React.FC = () => {
             setIncorrectQuestionId(undefined);
         },
     });
+
+    useScrollToTop([checkTestMutation.isError]);
 
     useEffect(() => {
         if (isTestVisible && testRef.current) {

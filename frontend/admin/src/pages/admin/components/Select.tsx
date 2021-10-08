@@ -1,5 +1,5 @@
 import isEqual from 'lodash.isequal';
-import React, {useState, useCallback, SyntheticEvent, memo} from 'react';
+import React, {useCallback, SyntheticEvent, memo, useMemo} from 'react';
 import styled from 'styled-components';
 
 import {Status} from '../../../api/ManagmentApi';
@@ -12,24 +12,28 @@ interface IProps {
     options: Option[];
     value?: Status[];
     onChange?: (e: SyntheticEvent, data: Option) => void;
+    outline: boolean;
 }
 
-const Select: React.FC<IProps> = ({options, onChange, value}) => {
+const Select: React.FC<IProps> = ({options, onChange, value, outline}) => {
     const {state: isOpen, toggle, setDisabled} = useToggle(false);
-    const [selected, setSelected] = useState<Option>(options.find((option) => option.value === value) || options[0]);
     const selectRef = useClickOutside<HTMLDivElement>(setDisabled, isOpen);
 
     const selectOption = useCallback(
         (option: Option) => (e: SyntheticEvent) => {
-            setSelected(option);
             if (onChange) onChange(e, option);
         },
         [onChange],
     );
 
+    const title = useMemo(() => {
+        const option = options.find((option) => isEqual(option.value, value));
+        return option ? option.title : ``;
+    }, [value, options]);
+
     return (
-        <Container ref={selectRef} $isOpen={isOpen} onClick={toggle}>
-            <SelectLabel $isOpen={isOpen}>{selected.title}</SelectLabel>
+        <Container ref={selectRef} $isOpen={isOpen} $outline={outline} onClick={toggle}>
+            <SelectLabel $isOpen={isOpen}>{title}</SelectLabel>
             <StyledIcon name='chevron_right' size={24} $isOpen={isOpen} />
             {isOpen && (
                 <OptionsContainer>
@@ -46,7 +50,7 @@ const Select: React.FC<IProps> = ({options, onChange, value}) => {
     );
 };
 
-const Container = styled.div<{$isOpen: boolean}>`
+const Container = styled.div<{$isOpen: boolean; $outline: boolean}>`
     align-items: center;
     background: ${({theme}) => theme.palette.bg.secondary};
     border-radius: 4px;
@@ -55,6 +59,7 @@ const Container = styled.div<{$isOpen: boolean}>`
     padding: 14px 24px;
     position: relative;
     width: 100%;
+    outline: ${({$outline, theme}) => ($outline ? `solid 2px ${theme.palette.secondary}` : 'none')}; ;
 `;
 
 const SelectLabel = styled.label<{$isOpen: boolean}>`
@@ -67,7 +72,7 @@ const SelectLabel = styled.label<{$isOpen: boolean}>`
 
 const OptionsContainer = styled.div`
     background: ${({theme}) => theme.palette.bg.secondary};
-    border-radius: 0px 0px 4px 4px;
+    border-radius: 0 0 4px 4px;
     color: ${({theme}) => theme.palette.regular};
     font-size: 17px;
     left: 0;

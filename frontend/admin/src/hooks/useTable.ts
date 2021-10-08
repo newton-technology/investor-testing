@@ -1,6 +1,8 @@
+import isEqual from 'lodash.isequal';
 import {useState, useCallback, useMemo, ChangeEvent, SyntheticEvent} from 'react';
 
 import {Status} from '../api/ManagmentApi';
+import {Option} from '../pages/admin/AllTestsPage';
 
 interface IUseTableSearch {
     email: string | undefined;
@@ -110,5 +112,66 @@ export const useTableDates = (): IUseTableDates => {
         formattedDates: dates,
         onDateChange,
         clearTableDates,
+    };
+};
+
+interface IUseTableFilter {
+    isFiltered: boolean;
+    statusOutline: boolean;
+    onEmailSubmit: () => void;
+}
+
+interface ITableFilterData {
+    status: Status[];
+    dateStart: number;
+    dateEnd: number;
+    email: string;
+}
+interface ITableFilterParams {
+    options: Option[];
+    data: Partial<ITableFilterData>;
+    resetTable: () => void;
+}
+
+export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
+    const {options, data, resetTable} = params;
+    const [isEmailSubmit, SetIsEmailSubmit] = useState<boolean>(false);
+
+    const onEmailSubmit = () => {
+        SetIsEmailSubmit(true);
+    };
+
+    let statusOutline: boolean = false;
+
+    const isFilterApply = useMemo(() => {
+        let isFilter = false;
+
+        if (data.dateEnd || data.dateStart) {
+            isFilter = true;
+        }
+
+        if (!isEqual(data.status, options[0].value)) {
+            isFilter = true;
+            statusOutline = true;
+        }
+
+        if (data.email && isEmailSubmit) {
+            isFilter = true;
+        }
+
+        if (isEmailSubmit && !data.email) {
+            SetIsEmailSubmit(false);
+            if (!isFilter) {
+                resetTable();
+            }
+        }
+
+        return isFilter;
+    }, [data, isEmailSubmit, options, resetTable]);
+
+    return {
+        isFiltered: isFilterApply,
+        onEmailSubmit,
+        statusOutline,
     };
 };
