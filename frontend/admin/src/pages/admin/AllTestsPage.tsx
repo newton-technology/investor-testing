@@ -1,15 +1,14 @@
 import React, {useState, useCallback, useEffect, useMemo, useRef} from 'react';
 import styled from 'styled-components';
 
+import {Sort, Status} from '../../api/ManagmentApi';
+import {useAllTestsByParams} from '../../hooks/useAdmin';
+import {useTableDates, useTableSearch, useTableStatus, useTableFilter} from '../../hooks/useTable';
 import DatePicker from './components/DatePicker';
 import Paginator from './components/Paginator';
 import SearchInput from './components/SearchInput';
 import Select from './components/Select';
 import TestsTable from './components/TestTable/TestsTable';
-
-import {Sort, Status} from '../../api/ManagmentApi';
-import {useAllTestsByParams} from '../../hooks/useAdmin';
-import {useTableDates, useTableSearch, useTableStatus} from '../../hooks/useTable';
 
 export type Option = {
     title: string;
@@ -29,7 +28,7 @@ const reponseDefaultValue = {tests: [], limit: 0, offset: 0, total: 0};
 export const AllTestsPage: React.FC = () => {
     const {email, tableValue, value, onChangeInputValue, onChangeTableValue, OnInputValueSubmit, resetTableSearch} =
         useTableSearch();
-    const {status, statusHandler} = useTableStatus();
+    const {status, statusHandler, resetTableStatus} = useTableStatus();
     const {datesValue, formattedDates, onDateChange, clearTableDates} = useTableDates();
     const [page, setPage] = useState<TPage>(1);
     const [sort, setSort] = useState<Sort>(Sort.COMPLETED_DESC);
@@ -62,8 +61,29 @@ export const AllTestsPage: React.FC = () => {
     const reset = useCallback(() => {
         resetTableSearch();
         clearTableDates();
+        resetTableStatus();
         setPage(1);
-    }, [resetTableSearch, clearTableDates]);
+    }, [resetTableSearch, clearTableDates, resetTableStatus]);
+
+    const {onEmailSubmit, isFiltered, statusOutline} = useTableFilter({
+        options: options,
+        data: {
+            status: status,
+            email: email,
+            ...formattedDates,
+        },
+        resetTable: reset,
+    });
+
+    const onSearchSubmit = () => {
+        OnInputValueSubmit(refetch);
+        onEmailSubmit();
+    };
+
+    const onChangeTableSubmit = (e: string) => {
+        onChangeTableValue(e);
+        onEmailSubmit();
+    };
 
     useEffect(() => {
         if (!isInitialRender.current) {
@@ -81,21 +101,21 @@ export const AllTestsPage: React.FC = () => {
             <FiltersWrapper>
                 <SearchInput
                     onChange={onChangeInputValue}
-                    onSubmit={() => OnInputValueSubmit(refetch)}
+                    onSubmit={onSearchSubmit}
                     value={value}
                     placeholder='        Поиск по email'
                 />
                 <DatePicker date={datesValue} dateHandler={onDateChange} clear={clearTableDates} />
-                <Select options={options} value={status} onChange={statusHandler} />
+                <Select options={options} value={status} onChange={statusHandler} outline={statusOutline} />
             </FiltersWrapper>
             <ResultSection>
                 Найдено: <ResultCount>{total}</ResultCount> совпадений
-                {!tests.length && <ShowAllResultsButton onClick={reset}>Показать все результаты</ShowAllResultsButton>}
+                {isFiltered && <ShowAllResultsButton onClick={reset}>Очистить результаты поиска</ShowAllResultsButton>}
             </ResultSection>
             <TestsTable
                 isLoading={isLoading}
                 tests={tests}
-                selectEmail={onChangeTableValue}
+                selectEmail={onChangeTableSubmit}
                 sort={sort}
                 setSort={setSort}
                 filter={value}

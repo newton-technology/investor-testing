@@ -8,6 +8,7 @@ import {ITestResponse, Sort, Status} from '../../../../api/ManagmentApi';
 import {Icon} from '../../../../components/Icon';
 import {Loader} from '../../../../components/Loader';
 import {dateFormatter} from '../../../../utils/tableUtils';
+import {HintedText} from './components/HintedText';
 import HighLightText from './components/HighlightText';
 
 interface IProps {
@@ -84,8 +85,10 @@ const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEm
                             <TableRow key={test.id} onClick={() => selectTest(test.id)}>
                                 <TD>{dateFormatter(test.updatedAt, 'D MMMM в HH:mm')}</TD>
                                 <TD onClick={emailHandler(test.userEmail)}>
-                                    <BodyContent pointer>
-                                        <HighLightText filter={filter} text={test.userEmail} />
+                                    <BodyContent>
+                                        <HintedText text={`Все тесты ${test.userEmail}`}>
+                                            <HighLightText filter={filter} text={test.userEmail} />
+                                        </HintedText>
                                     </BodyContent>
                                 </TD>
                                 <TD>
@@ -121,14 +124,14 @@ const TH = styled.th`
     text-align: left;
 
     &:first-child {
-        border-radius: 10px 0px 0px 10px;
+        border-radius: 10px 0 0 10px;
         padding-left: 32px;
     }
 
-    &: last-child {
-        border-radius: 0px 10px 10px 0px;
+    &:last-child {
+        border-radius: 0 10px 10px 0;
         padding-right: 32px;
-        width: 0px;
+        width: 0;
     }
 `;
 
@@ -140,12 +143,12 @@ const TD = styled.td`
     width: max-content;
 
     &:first-child {
-        border-radius: 10px 0px 0px 10px;
+        border-radius: 10px 0 0 10px;
         padding-left: 32px;
     }
 
-    &: last-child {
-        border-radius: 0px 10px 10px 0px;
+    &:last-child {
+        border-radius: 0 10px 10px 0;
         padding-right: 32px;
     }
 `;
@@ -205,7 +208,7 @@ const LoaderContainer = styled(TableRow)`
     & span {
         left: 50%;
         position: absolute;
-        top: 0px;
+        top: 0;
     }
 `;
 
