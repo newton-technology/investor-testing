@@ -65,7 +65,7 @@ export const AllTestsPage: React.FC = () => {
         setPage(1);
     }, [resetTableSearch, clearTableDates, resetTableStatus]);
 
-    const {onEmailSubmit, isFiltered} = useTableFilter({
+    const {onEmailSubmit, isFiltered, statusOutline} = useTableFilter({
         options: options,
         data: {
             status: status,
@@ -106,7 +106,7 @@ export const AllTestsPage: React.FC = () => {
                     placeholder='        Поиск по email'
                 />
                 <DatePicker date={datesValue} dateHandler={onDateChange} clear={clearTableDates} />
-                <Select options={options} value={status} onChange={statusHandler} />
+                <Select options={options} value={status} onChange={statusHandler} outline={statusOutline} />
             </FiltersWrapper>
             <ResultSection>
                 Найдено: <ResultCount>{total}</ResultCount> совпадений

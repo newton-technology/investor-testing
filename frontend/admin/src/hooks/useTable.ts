@@ -117,6 +117,7 @@ export const useTableDates = (): IUseTableDates => {
 
 interface IUseTableFilter {
     isFiltered: boolean;
+    statusOutline: boolean;
     onEmailSubmit: () => void;
 }
 
@@ -135,9 +136,12 @@ interface ITableFilterParams {
 export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
     const {options, data, resetTable} = params;
     const [isEmailSubmit, SetIsEmailSubmit] = useState<boolean>(false);
+
     const onEmailSubmit = () => {
         SetIsEmailSubmit(true);
     };
+
+    let statusOutline: boolean = false;
 
     const isFilterApply = useMemo(() => {
         let isFilter = false;
@@ -148,6 +152,7 @@ export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
 
         if (!isEqual(data.status, options[0].value)) {
             isFilter = true;
+            statusOutline = true;
         }
 
         if (data.email && isEmailSubmit) {
@@ -167,5 +172,6 @@ export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
     return {
         isFiltered: isFilterApply,
         onEmailSubmit,
+        statusOutline,
     };
 };

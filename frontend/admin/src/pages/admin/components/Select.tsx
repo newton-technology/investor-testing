@@ -12,9 +12,10 @@ interface IProps {
     options: Option[];
     value?: Status[];
     onChange?: (e: SyntheticEvent, data: Option) => void;
+    outline: boolean;
 }
 
-const Select: React.FC<IProps> = ({options, onChange, value}) => {
+const Select: React.FC<IProps> = ({options, onChange, value, outline}) => {
     const {state: isOpen, toggle, setDisabled} = useToggle(false);
     const selectRef = useClickOutside<HTMLDivElement>(setDisabled, isOpen);
 
@@ -28,10 +29,10 @@ const Select: React.FC<IProps> = ({options, onChange, value}) => {
     const title = useMemo(() => {
         const option = options.find((option) => isEqual(option.value, value));
         return option ? option.title : ``;
-    }, [value]);
+    }, [value, options]);
 
     return (
-        <Container ref={selectRef} $isOpen={isOpen} onClick={toggle}>
+        <Container ref={selectRef} $isOpen={isOpen} $outline={outline} onClick={toggle}>
             <SelectLabel $isOpen={isOpen}>{title}</SelectLabel>
             <StyledIcon name='chevron_right' size={24} $isOpen={isOpen} />
             {isOpen && (
@@ -49,7 +50,7 @@ const Select: React.FC<IProps> = ({options, onChange, value}) => {
     );
 };
 
-const Container = styled.div<{$isOpen: boolean}>`
+const Container = styled.div<{$isOpen: boolean; $outline: boolean}>`
     align-items: center;
     background: ${({theme}) => theme.palette.bg.secondary};
     border-radius: 4px;
@@ -58,6 +59,7 @@ const Container = styled.div<{$isOpen: boolean}>`
     padding: 14px 24px;
     position: relative;
     width: 100%;
+    outline: ${({$outline, theme}) => ($outline ? `solid 2px ${theme.palette.secondary}` : 'none')}; ;
 `;
 
 const SelectLabel = styled.label<{$isOpen: boolean}>`
