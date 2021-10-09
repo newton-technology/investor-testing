@@ -32,16 +32,16 @@ export const UserTestsPage: React.FC = () => {
 
     return (
         <Container>
-            <BreadcrumpsContainer>
-                <Breadcrump to='/'>
+            <BreadcrumbsContainer>
+                <Breadcrumb to='/'>
                     <Chevron name='chevron_right' />
                     Назад
-                </Breadcrump>
-                <Breadcrump to={`/test/${id}`}>
+                </Breadcrumb>
+                <Breadcrumb to={`/test/${id}`}>
                     <Chevron name='chevron_right' />
                     Все тесты пользователя
-                </Breadcrump>
-            </BreadcrumpsContainer>
+                </Breadcrumb>
+            </BreadcrumbsContainer>
             <Title>{userEmail}</Title>
             <Paper>
                 <PaperContent isFlex>
@@ -60,7 +60,7 @@ export const UserTestsPage: React.FC = () => {
             <SubTitle>Список вопросов и ответы на них</SubTitle>
             <Paper>
                 {questions.map((item, index) => (
-                    <QuestionContaoner key={item.id}>
+                    <QuestionContainer key={item.id}>
                         <QuestionTitle>
                             <span>{index + 1}.</span>
                             {item.question}
@@ -71,7 +71,7 @@ export const UserTestsPage: React.FC = () => {
                                 <AnswerText isSelected={answer.selected}>{answer.answer}</AnswerText>
                             </AnswerRow>
                         ))}
-                    </QuestionContaoner>
+                    </QuestionContainer>
                 ))}
             </Paper>
         </Container>
@@ -95,7 +95,7 @@ const Paper = styled.div`
     background: ${({theme}) => theme.palette.bg.secondary};
     border-radius: 10px;
     margin-bottom: 48px;
-    padding: 32px;
+    padding: 32px 32px 32px 36px;
 `;
 
 const PaperContent = styled.div<{isFlex?: boolean}>`
@@ -131,14 +131,14 @@ const SubTitle = styled.div`
     margin-bottom: 24px;
 `;
 
-const BreadcrumpsContainer = styled.div`
+const BreadcrumbsContainer = styled.div`
     align-items: center;
     display: flex;
     margin-bottom: 40px;
     width: 100%;
 `;
 
-const Breadcrump = styled(Link)`
+const Breadcrumb = styled(Link)`
     align-items: center;
     color: #2f6feb;
     display: flex;
@@ -157,8 +157,8 @@ const Chevron = styled(Icon)`
     }
 `;
 
-const QuestionContaoner = styled.div`
-    margin-bottom: 48px;
+const QuestionContainer = styled.div`
+    margin-bottom: 24px;
 
     :last-child {
         margin-bottom: 0;
@@ -179,7 +179,8 @@ const QuestionTitle = styled.div`
 const AnswerRow = styled.div`
     align-items: flex-start;
     display: flex;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
+    margin-left: 12px;
 
     :last-child {
         margin-bottom: 0;
@@ -205,11 +206,19 @@ const Dot = styled.div`
     }
 `;
 
-const CheckedIcon = styled(Icon).attrs({name: 'check', size: 21})``;
+const CheckedIcon = styled(Icon).attrs({name: 'check', size: 30})`
+    position: relative;
+    width: 17px;
+    height: 17px;
+    & svg {
+        position: absolute;
+        top: -5px;
+    }
+`;
 
 const AnswerText = styled.div<{isSelected: boolean}>`
     font-size: 17px;
     ${({isSelected}) => (isSelected ? 'font-weight: bold' : '')};
     line-height: 130%;
-    margin-left: 45px;
+    margin-left: ${({isSelected}) => (isSelected ? '26px' : '22px')}; ;
 `;
