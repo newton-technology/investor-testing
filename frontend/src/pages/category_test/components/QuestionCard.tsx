@@ -20,12 +20,24 @@ interface IProps {
     questionsCount: number;
     isMultipleAnswers: boolean;
     isError: boolean;
+    answersCountMessage: string;
     getIsChecked: (questionId: number, answerId: number) => boolean;
     changeValue: (questionId: number, answerId: number, isMultipleAnswers: boolean) => void;
 }
 
 export const QuestionCard: React.FC<IProps> = (props) => {
-    const {title, id, answers, getIsChecked, changeValue, questionsCount, index, isMultipleAnswers, isError} = props;
+    const {
+        title,
+        id,
+        answers,
+        getIsChecked,
+        changeValue,
+        questionsCount,
+        index,
+        isMultipleAnswers,
+        isError,
+        answersCountMessage,
+    } = props;
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -40,8 +52,7 @@ export const QuestionCard: React.FC<IProps> = (props) => {
             <Title>
                 <HintedText text={title} />
             </Title>
-            {isMultipleAnswers && <Subtitle>{'(возможно несколько вариантов ответа)'}</Subtitle>}
-            {isError && <ErrorMessage>Пожалуйста, выберите вариант ответа</ErrorMessage>}
+            <Subtitle isError={isError}>{answersCountMessage}</Subtitle>
             <Answers>
                 {answers.map((answer) => {
                     return (
@@ -109,23 +120,10 @@ const Title = styled.div`
     }
 `;
 
-const Subtitle = styled.div`
+const Subtitle = styled.div<{isError: boolean}>`
+    color: ${({theme, isError}) => isError && theme.palette.error};
     margin-top: 8px;
     font-size: 14px;
-
-    ${({theme}) => theme.breakpoint('md')`
-        font-size: inherit;
-    `}
-`;
-
-const ErrorMessage = styled.div`
-    color: ${({theme}) => theme.palette.error};
-    margin-top: 8px;
-    font-size: 14px;
-
-    ${({theme}) => theme.breakpoint('md')`
-        font-size: inherit;
-    `}
 `;
 
 const Answers = styled.div`

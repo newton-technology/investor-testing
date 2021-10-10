@@ -13,7 +13,13 @@ export const CategoryTestApi = {
                 categoryId,
             })
             .then((response) => {
-                return response.data;
+                const questions = response.data.questions.map((question) => {
+                    if (question.answersCountToChooseMax) {
+                        return question;
+                    }
+                    return {...question, answersCountToChooseMax: question.answers.length};
+                });
+                return {...response.data, questions};
             });
     },
     checkTest(testId: number, answers: number[]) {

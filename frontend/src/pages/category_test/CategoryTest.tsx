@@ -13,7 +13,7 @@ import {IQuestion, QuestionCard} from './components/QuestionCard';
 import {TestPreview} from './components/TestPreview';
 import {TestResult} from './components/TestResult';
 import {TestWarningModal} from './components/TestWarningModal';
-import {getAllAnswers, validate} from './utils';
+import {getAllAnswers, getAnswersCountMessage, validate} from './utils';
 
 export interface ITest {
     id: number;
@@ -86,8 +86,7 @@ export const CategoryTest: React.FC = () => {
     };
 
     const handleSubmit = async () => {
-        const questionsIds = questions.map((question: IQuestion) => question.id);
-        const incorrectId = validate(values, questionsIds);
+        const incorrectId = validate(questions, values);
 
         if (!incorrectId) {
             await checkTestMutation.mutate();
@@ -117,8 +116,15 @@ export const CategoryTest: React.FC = () => {
                 <TestContainer ref={testRef} isTestComplete={isTestResultVisible}>
                     <QuestionsList>
                         {questions.map((question: IQuestion, i: number) => {
-                            const isMultipleAnswers =
-                                question.answersCountToChooseMin !== question.answersCountToChooseMax;
+                            const isMultipleAnswers = !(
+                                question.answersCountToChooseMin === 1 && question.answersCountToChooseMax === 1
+                            );
+
+                            const answersCountMessage = getAnswersCountMessage(
+                                question.answersCountToChooseMin,
+                                question.answersCountToChooseMax,
+                                question.answers.length,
+                            );
 
                             return (
                                 <QuestionCard
@@ -129,6 +135,7 @@ export const CategoryTest: React.FC = () => {
                                     getIsChecked={getIsChecked}
                                     changeValue={changeValue}
                                     questionsCount={questions.length}
+                                    answersCountMessage={answersCountMessage}
                                     index={i + 1}
                                     isMultipleAnswers={isMultipleAnswers}
                                     isError={incorrectQuestionId === question.id}
