@@ -3,6 +3,7 @@ import {useState, useCallback, useMemo, ChangeEvent, SyntheticEvent} from 'react
 
 import {Status} from '../api/ManagmentApi';
 import {Option} from '../pages/admin/AllTestsPage';
+import {unixTime} from '../utils/tableUtils';
 
 interface IUseTableSearch {
     email: string | undefined;
@@ -94,8 +95,8 @@ export const useTableDates = (): IUseTableDates => {
 
     const dates = useMemo<TFormattedDates>(() => {
         return {
-            dateStart: new Date(date.dateStart).setHours(0, 0) / 1000 || undefined,
-            dateEnd: new Date(date.dateEnd).setHours(23, 59) / 1000 || undefined,
+            dateStart: unixTime(date.dateStart, `00:00`) || undefined,
+            dateEnd: unixTime(date.dateEnd, `23:59`) || undefined,
         };
     }, [date]);
 
