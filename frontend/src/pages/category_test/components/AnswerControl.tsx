@@ -27,13 +27,13 @@ export const AnswerControl: React.FC<IProps> = (props) => {
     };
 
     return (
-        <Container onClick={handleClick}>
+        <Container>
             {isMultipleAnswers ? (
-                <CheckboxControl isChecked={isChecked}>
+                <CheckboxControl isChecked={isChecked} onClick={handleClick}>
                     <Icon name='check' />
                 </CheckboxControl>
             ) : (
-                <RadioControl isChecked={isChecked} />
+                <RadioControl isChecked={isChecked} onClick={handleClick} />
             )}
             <Text>
                 <HintedText text={text} />
@@ -46,7 +46,6 @@ const Container = styled.div`
     display: flex;
     font-size: 16px;
     line-height: 1.4;
-    cursor: pointer;
 
     & + & {
         margin-top: 16px;
@@ -61,12 +60,13 @@ const controlCss = css`
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 
     ${({theme}) => theme.breakpoint('md')`
         margin-right: 28px;
     `}
 
-    ${Container}:hover & {
+    &:hover {
         border-color: ${({theme}) => theme.palette.primary};
     }
 `;

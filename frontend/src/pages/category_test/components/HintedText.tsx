@@ -17,6 +17,7 @@ export const HintedText: React.FC<IProps> = ({text}) => {
                     <Tooltip
                         overlay={domToReact(domNode.children, options)}
                         placement='bottom'
+                        trigger={['click']}
                         align={{offset: [0, 6]}}
                         transitionName={'fade'}>
                         <HintIconContainer>
@@ -35,7 +36,7 @@ const HintIconContainer = styled.span`
     cursor: pointer;
     color: ${({theme}) => theme.palette.secondary};
     margin: 0 4px;
-    top: -2px;
+    top: -1px;
 
     &:hover {
         color: ${({theme}) => theme.palette.regular};
