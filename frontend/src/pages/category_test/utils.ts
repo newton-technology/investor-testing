@@ -26,6 +26,9 @@ export const getAllAnswers = (values: IValues) => {
 };
 
 export const getAnswersCountMessage = (min: number, max: number, all: number) => {
+    if (min === 0) {
+        return;
+    }
     if (min === 1 && max === 1) {
         return '(возможен один вариант ответа)';
     }

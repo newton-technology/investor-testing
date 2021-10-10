@@ -20,7 +20,7 @@ interface IProps {
     questionsCount: number;
     isMultipleAnswers: boolean;
     isError: boolean;
-    answersCountMessage: string;
+    answersCountMessage?: string;
     getIsChecked: (questionId: number, answerId: number) => boolean;
     changeValue: (questionId: number, answerId: number, isMultipleAnswers: boolean) => void;
 }
@@ -52,7 +52,7 @@ export const QuestionCard: React.FC<IProps> = (props) => {
             <Title>
                 <HintedText text={title} />
             </Title>
-            <Subtitle isError={isError}>{answersCountMessage}</Subtitle>
+            {answersCountMessage && <Subtitle isError={isError}>{answersCountMessage}</Subtitle>}
             <Answers>
                 {answers.map((answer) => {
                     return (
