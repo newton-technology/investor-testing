@@ -58,11 +58,11 @@ class TestController extends Controller
         }
 
         if (isset($validatedInput['dateStart'])) {
-            $filters[] = ['created_at', '>=', DateTimeUtils::fromTimestamp($validatedInput['dateStart'])];
+            $filters[] = ['completed_at', '>=', DateTimeUtils::fromTimestamp($validatedInput['dateStart'])];
         }
 
         if (isset($validatedInput['dateEnd'])) {
-            $filters[] = ['created_at', '<=', DateTimeUtils::fromTimestamp($validatedInput['dateEnd'])];
+            $filters[] = ['completed_at', '<=', DateTimeUtils::fromTimestamp($validatedInput['dateEnd'])];
         }
 
         if (isset($validatedInput['email'])) {

@@ -17,6 +17,7 @@ class TestListItem
     protected int $id;
     protected int $createdAt;
     protected ?int $updatedAt = null;
+    protected ?int $completedAt = null;
     protected string $status;
     protected int $userId;
     protected ?string $userEmail = null;
@@ -52,6 +53,17 @@ class TestListItem
     public function setUpdatedAt(?int $updatedAt): TestListItem
     {
         $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    public function getCompletedAt(): ?int
+    {
+        return $this->completedAt;
+    }
+
+    public function setCompletedAt(?int $completedAt): TestListItem
+    {
+        $this->completedAt = $completedAt;
         return $this;
     }
 
