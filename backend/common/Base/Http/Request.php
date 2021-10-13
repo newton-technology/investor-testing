@@ -55,7 +55,8 @@ class Request extends \Laravel\Lumen\Http\Request
      */
     public function getUserId(): ?int
     {
-        return $this->attributes->get('userId');
+        $attribute = $this->attributes->get('userId');
+        return ctype_digit((string)$attribute) ? $attribute : null;
     }
 
     /**

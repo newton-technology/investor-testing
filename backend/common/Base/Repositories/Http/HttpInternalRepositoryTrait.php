@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Dmitry Loshmanov
- * Date: 26.08.2020
- * Time: 10:46
- */
 
 namespace Common\Base\Repositories\Http;
 
@@ -21,5 +15,5 @@ trait HttpInternalRepositoryTrait
 {
     use HttpRepositoryTrait;
 
-    protected array $proxyHeaders = [Headers::X_REQUEST_ID, 'Authorization'];
+    protected array $proxyHeaders = [Headers::X_REQUEST_ID, Headers::AUTHORIZATION];
 }
