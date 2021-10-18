@@ -12,7 +12,7 @@ interface IUseTableSearch {
     value: string;
     onChangeTableValue: (value: string) => void;
     onChangeInputValue: (event: ChangeEvent<HTMLInputElement>) => void;
-    OnInputValueSubmit: (callBack: () => void) => void;
+    onInputValueSubmit: (callBack: () => void) => void;
     resetTableSearch: () => void;
 }
 
@@ -42,7 +42,7 @@ export const useTableSearch = (searchParams: URLSearchParams, initialValue: stri
         [tableValue, history, searchParams],
     );
 
-    const OnInputValueSubmit = (cb: () => void): void => {
+    const onInputValueSubmit = (cb: () => void): void => {
         if (inputValue) cb();
     };
 
@@ -61,7 +61,7 @@ export const useTableSearch = (searchParams: URLSearchParams, initialValue: stri
         tableValue,
         onChangeTableValue,
         onChangeInputValue,
-        OnInputValueSubmit,
+        onInputValueSubmit,
         resetTableSearch,
     };
 };

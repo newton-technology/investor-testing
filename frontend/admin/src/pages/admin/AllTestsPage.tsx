@@ -30,7 +30,7 @@ export const AllTestsPage: React.FC = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
 
-    const {email, tableValue, value, onChangeInputValue, onChangeTableValue, OnInputValueSubmit, resetTableSearch} =
+    const {email, tableValue, value, onChangeInputValue, onChangeTableValue, onInputValueSubmit, resetTableSearch} =
         useTableSearch(searchParams);
     const {status, statusHandler, resetTableStatus} = useTableStatus();
     const {datesValue, formattedDates, onDateChange, clearTableDates} = useTableDates();
@@ -81,7 +81,7 @@ export const AllTestsPage: React.FC = () => {
     });
 
     const onSearchSubmit = () => {
-        OnInputValueSubmit(refetch);
+        onInputValueSubmit(refetch);
         onEmailSubmit();
     };
 
