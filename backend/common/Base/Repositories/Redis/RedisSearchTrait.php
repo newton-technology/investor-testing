@@ -82,7 +82,8 @@ trait RedisSearchTrait
      * @param array $aliases
      * @return array
      */
-    protected function getWords(string $string, $aliases = []): array {
+    protected function getWords(string $string, array $aliases = []): array
+    {
         $normalizedString = trim(mb_ereg_replace('[^а-яё\w_-]+', ' ', mb_strtolower($string)));
         $words = mb_split('\s+', $normalizedString);
         $filterCallback = function ($word) {
@@ -113,7 +114,8 @@ trait RedisSearchTrait
      * @param string $pattern
      * @return int
      */
-    protected function clearSearchIndexByPattern(string $pattern): int {
+    protected function clearSearchIndexByPattern(string $pattern): int
+    {
         $count = 0;
         $keyIterator = $this->scan($pattern);
         $chunks = [];
@@ -130,7 +132,8 @@ trait RedisSearchTrait
         return $count;
     }
 
-    public function addParam(string $name, array $param) {
+    public function addParam(string $name, array $param)
+    {
         $this->params[$name] = $param;
     }
 
@@ -141,7 +144,8 @@ trait RedisSearchTrait
      * @param array $aliases
      * @return array
      */
-    public function getNGrams(string $string, $aliases = []): array {
+    public function getNGrams(string $string, array $aliases = []): array
+    {
         $nGrams = [];
         foreach ($this->getWords($string, $aliases) as $word) {
             for ($i = 0; $i <= mb_strlen($word) - $this->minN; $i++) {
@@ -164,14 +168,19 @@ trait RedisSearchTrait
      * @param array $aliases
      * @return array
      */
-    public function getExtraNGrams(string $string, $aliases = []): array {
+    public function getExtraNGrams(string $string, array $aliases = []): array
+    {
         $extraNGrams = [];
         foreach ($this->getNGrams($string, $aliases) as $nGram) {
             for ($i = 0; $i < mb_strlen($nGram); $i++) {
                 if (mb_strlen($nGram) >= $this->minN) {
                     $extraNGrams[] = mb_substr($nGram, 0, $i) . '_' . mb_substr($nGram, $i, mb_strlen($nGram) - $i);
                     if ($i > 0) {
-                        $extraNGrams[] = mb_substr($nGram, 0, $i - 1) . '_' . mb_substr($nGram, $i, mb_strlen($nGram) - $i);
+                        $extraNGrams[] = mb_substr($nGram, 0, $i - 1) . '_' . mb_substr(
+                                $nGram,
+                                $i,
+                                mb_strlen($nGram) - $i
+                            );
                     }
                 }
             }
@@ -182,7 +191,7 @@ trait RedisSearchTrait
     /**
      * Обновление поискового индекса для указанных сущностей
      *
-     * Обновление происходит пачками по 100 сущностей
+     * Обновление происходит пачками по N сущностей (default=100)
      * для избежания превышения ограничений на использование памяти.
      *
      * По мере итерации для каждой сущности извлекаются n-граммы на указанные строковые поля.
@@ -203,10 +212,11 @@ trait RedisSearchTrait
      * добавляющей id сущностей с весами в z-set с ключом соответстующем n-грамме.
      *
      * @param Generator $items
+     * @param int $chunkSize Количество сущностей для обновления в одну итерацию
      * @return int Количество сделанных записей в БД
      */
-    public function updateSearchIndex(Generator $items): int {
-        $chunkSize = 100;
+    public function updateSearchIndex(Generator $items, int $chunkSize = 100): int
+    {
         $chunkCount = 0;
 
         $count = 0;
@@ -308,7 +318,8 @@ trait RedisSearchTrait
      *
      * @return int Количество удаленных ключей
      */
-    public function clearSearchIndex(): int {
+    public function clearSearchIndex(): int
+    {
         $count = $this->clearSearchIndexByPattern($this->searchKeyPrefix . $this->keyPrefix . '*');
         $count += $this->clearSearchIndexByPattern($this->searchFilterKeyPrefix . $this->keyPrefix . '*');
         $count += $this->clearSearchIndexByPattern($this->searchResultKeyPrefix . $this->keyPrefix . '*');
@@ -339,7 +350,8 @@ trait RedisSearchTrait
      * @param int $limit
      * @return array
      */
-    public function search(string $query, array $filters = [], $offset = 0, $limit = INF) {
+    public function search(string $query, array $filters = [], int $offset = 0, int $limit = INF): array
+    {
         $searchResultKeyPrefix = $this->searchResultKeyPrefix . $this->keyPrefix;
         $searchFilterKeyPrefix = $this->searchFilterKeyPrefix . $this->keyPrefix;
         $resultKey = $searchResultKeyPrefix . $query;
@@ -376,6 +388,12 @@ trait RedisSearchTrait
         }
         $first = $this->zrevrangebyscore($resultKey, INF, $this->minResultScore, 0, 1, true);
 
-        return $this->zrevrangebyscore($resultKey, INF, empty($first) ? $this->minResultScore : array_values($first)[0] / 10, $offset, $limit);
+        return $this->zrevrangebyscore(
+            $resultKey,
+            INF,
+            empty($first) ? $this->minResultScore : array_values($first)[0] / 10,
+            $offset,
+            $limit
+        );
     }
 }
