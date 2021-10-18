@@ -1,5 +1,5 @@
 import isEqual from 'lodash.isequal';
-import {useState, useCallback, useMemo, ChangeEvent, SyntheticEvent} from 'react';
+import {useState, useCallback, useMemo, ChangeEvent, SyntheticEvent, useRef} from 'react';
 import {useHistory} from 'react-router-dom';
 
 import {Status} from '../api/ManagmentApi';
@@ -158,7 +158,7 @@ export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
         SetIsEmailSubmit(true);
     };
 
-    let statusOutline: boolean = false;
+    const statusOutline = useRef<boolean>(true);
 
     const isFilterApply = useMemo(() => {
         let isFilter = false;
@@ -169,7 +169,11 @@ export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
 
         if (!isEqual(data.status, options[0].value)) {
             isFilter = true;
-            statusOutline = true;
+            statusOutline.current = true;
+        }
+
+        if (isEqual(data.status, options[0].value)) {
+            statusOutline.current = false;
         }
 
         if (data.email && isEmailSubmit) {
@@ -189,6 +193,6 @@ export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
     return {
         isFiltered: isFilterApply,
         onEmailSubmit,
-        statusOutline,
+        statusOutline: statusOutline.current,
     };
 };
