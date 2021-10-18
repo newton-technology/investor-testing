@@ -4,13 +4,12 @@ import {useTableDates} from '../../hooks/useTable';
 function ReactMock() {
     const {datesValue, onDateChange} = useTableDates();
 
-    const html = (
+    return (
         <>
             <input data-testid='dateStart' value={datesValue.dateStart} name='dateStart' onChange={onDateChange} />
             <input data-testid='dateEnd' value={datesValue.dateEnd} name='dateEnd' onChange={onDateChange} />;
         </>
     );
-    return <>{html}</>;
 }
 
 describe('Set dates using the useTableDates hook', () => {

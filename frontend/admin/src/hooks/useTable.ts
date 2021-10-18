@@ -109,8 +109,8 @@ export const useTableDates = (): IUseTableDates => {
 
     const dates = useMemo<TFormattedDates>(() => {
         return {
-            dateStart: unixTime(date.dateStart, `00:00`) || undefined,
-            dateEnd: unixTime(date.dateEnd, `23:59`) || undefined,
+            dateStart: unixTime(date.dateStart, '00:00') || undefined,
+            dateEnd: unixTime(date.dateEnd, '23:59') || undefined,
         };
     }, [date]);
 
@@ -151,11 +151,11 @@ interface ITableFilterParams {
 
 export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
     const {options, data, resetTable, searchParams} = params;
-    const IsSearchParams = !!searchParams.get('email');
-    const [isEmailSubmit, SetIsEmailSubmit] = useState<boolean>(IsSearchParams);
+    const isSearchParams = !!searchParams.get('email');
+    const [isEmailSubmit, setIsEmailSubmit] = useState<boolean>(isSearchParams);
 
     const onEmailSubmit = () => {
-        SetIsEmailSubmit(true);
+        setIsEmailSubmit(true);
     };
 
     const statusOutline = useRef<boolean>(true);
@@ -181,7 +181,7 @@ export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
         }
 
         if (isEmailSubmit && !data.email) {
-            SetIsEmailSubmit(false);
+            setIsEmailSubmit(false);
             if (!isFilter) {
                 resetTable();
             }
