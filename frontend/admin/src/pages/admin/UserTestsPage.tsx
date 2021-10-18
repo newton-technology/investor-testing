@@ -140,7 +140,7 @@ const BreadcrumbsContainer = styled.div`
 
 const Breadcrumb = styled(Link)`
     align-items: center;
-    color: #2f6feb;
+    color: ${({theme}) => theme.palette.secondary};
     display: flex;
     margin-right: 24px;
     font-weight: bold;
@@ -153,7 +153,7 @@ const Chevron = styled(Icon)`
     transform: rotate(180deg);
 
     path {
-        fill: #2f6feb;
+        fill: ${({theme}) => theme.palette.secondary};
     }
 `;
 
