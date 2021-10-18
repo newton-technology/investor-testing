@@ -9,6 +9,7 @@ dayjs.extend(utc);
 export const dateFormatter = (UNIX_timestamp: number, format: string): string => {
     return dayjs.unix(UNIX_timestamp).tz('Europe/Moscow').locale('ru').format(format);
 };
+
 export const todayDay = dayjs(new Date()).locale('ru').tz('Europe/Moscow').format('YYYY-MM-D');
 
 export const unixTime = (day: string, time: string): number => {
