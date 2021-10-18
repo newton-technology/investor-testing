@@ -9,6 +9,7 @@ import {Status} from '../../api/ManagmentApi';
 import {useUserTestById} from '../../hooks/useAdmin';
 import {useScrollToTop} from '../../hooks/useScrollToTop';
 import {dateFormatter} from '../../utils/tableUtils';
+import {removeHint} from '../../utils/textUtils';
 
 const translateStatus = {
     [Status.PASSED]: 'Тест пройден',
@@ -63,7 +64,7 @@ export const UserTestsPage: React.FC = () => {
                     <QuestionContainer key={item.id}>
                         <QuestionTitle>
                             <span>{index + 1}.</span>
-                            {item.question}
+                            {removeHint(item.question)}
                         </QuestionTitle>
                         {item.answers.map((answer) => (
                             <AnswerRow key={answer.id}>
