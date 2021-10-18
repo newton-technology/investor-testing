@@ -2,14 +2,13 @@ import React, {memo, MouseEvent} from 'react';
 import {useHistory} from 'react-router';
 import styled from 'styled-components';
 
-import NoReslt from './components/NoReslt';
-
 import {ITestResponse, Sort, Status} from '../../../../api/ManagmentApi';
 import {Icon} from '../../../../components/Icon';
 import {Loader} from '../../../../components/Loader';
 import {dateFormatter} from '../../../../utils/tableUtils';
-import {HintedText} from './components/HintedText';
 import HighLightText from './components/HighlightText';
+import {HintedText} from './components/HintedText';
+import NoReslt from './components/NoReslt';
 
 interface IProps {
     tests: ITestResponse[];

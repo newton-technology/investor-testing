@@ -3,9 +3,8 @@ import {useParams} from 'react-router';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components';
 
-import {Icon} from '../../components/Icon';
-
 import {Status} from '../../api/ManagmentApi';
+import {Icon} from '../../components/Icon';
 import {useUserTestById} from '../../hooks/useAdmin';
 import {useScrollToTop} from '../../hooks/useScrollToTop';
 import {dateFormatter} from '../../utils/tableUtils';
