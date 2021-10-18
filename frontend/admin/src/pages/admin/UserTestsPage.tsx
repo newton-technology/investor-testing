@@ -38,7 +38,7 @@ export const UserTestsPage: React.FC = () => {
                     <Chevron name='chevron_right' />
                     Назад
                 </Breadcrumb>
-                <Breadcrumb to={`/test/${id}`}>
+                <Breadcrumb to={`/tests/?email=${userEmail}`}>
                     <Chevron name='chevron_right' />
                     Все тесты пользователя
                 </Breadcrumb>

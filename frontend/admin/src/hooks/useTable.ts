@@ -1,5 +1,6 @@
 import isEqual from 'lodash.isequal';
 import {useState, useCallback, useMemo, ChangeEvent, SyntheticEvent} from 'react';
+import {useHistory} from 'react-router-dom';
 
 import {Status} from '../api/ManagmentApi';
 import {Option} from '../pages/admin/AllTestsPage';
@@ -15,30 +16,43 @@ interface IUseTableSearch {
     resetTableSearch: () => void;
 }
 
-export const useTableSearch = (initialValue: string = ''): IUseTableSearch => {
-    const [inputValue, setInputValue] = useState<string>(initialValue);
+export const useTableSearch = (searchParams: URLSearchParams, initialValue: string = ''): IUseTableSearch => {
+    const email = searchParams.get('email');
+    const [inputValue, setInputValue] = useState<string>(email ? email : initialValue);
     const [tableValue, setTableValue] = useState<string>(initialValue);
+    const history = useHistory();
 
-    const onChangeTableValue = useCallback((value: string) => {
-        setTableValue(value);
-        setInputValue('');
-    }, []);
+    const onChangeTableValue = useCallback(
+        (value: string) => {
+            searchParams.set('email', value);
+            history.push(`/tests?${searchParams}`);
+            setTableValue(value);
+            setInputValue('');
+        },
+        [history, searchParams],
+    );
 
     const onChangeInputValue = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
             if (tableValue) setTableValue('');
+            searchParams.set('email', event.target.value);
+            history.push(`/tests?${searchParams}`);
             setInputValue(event.target.value);
         },
-        [tableValue],
+        [tableValue, history, searchParams],
     );
 
     const OnInputValueSubmit = (cb: () => void): void => {
         if (inputValue) cb();
     };
 
-    const resetTableSearch = (): void => {
+    const resetTableSearch = () => {
         setInputValue('');
         setTableValue('');
+        if (searchParams.get('email')) {
+            searchParams.delete('email');
+            history.push(`/tests?${searchParams}`);
+        }
     };
 
     return {
@@ -130,13 +144,15 @@ interface ITableFilterData {
 }
 interface ITableFilterParams {
     options: Option[];
+    searchParams: URLSearchParams;
     data: Partial<ITableFilterData>;
     resetTable: () => void;
 }
 
 export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
-    const {options, data, resetTable} = params;
-    const [isEmailSubmit, SetIsEmailSubmit] = useState<boolean>(false);
+    const {options, data, resetTable, searchParams} = params;
+    const IsSearchParams = !!searchParams.get('email');
+    const [isEmailSubmit, SetIsEmailSubmit] = useState<boolean>(IsSearchParams);
 
     const onEmailSubmit = () => {
         SetIsEmailSubmit(true);
