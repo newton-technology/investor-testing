@@ -18,4 +18,12 @@ describe('Remove text inside hint tag', () => {
             'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
         );
     });
+
+    it('Should return text without a hint tag if it appears more than once in the text.', () => {
+        expect(
+            removeHint(
+                'Lorem ipsum dolor<hint>some text</hint> sit amet, <hint></hint>consectetur adipisicing elit.<hint>some text</hint>',
+            ),
+        ).toBe('Lorem ipsum dolor sit amet, consectetur adipisicing elit.');
+    });
 });
