@@ -1,5 +1,4 @@
 import React, {useState, useCallback, useEffect, useMemo, useRef} from 'react';
-import {useLocation} from 'react-router-dom';
 import styled from 'styled-components';
 
 import {Sort, Status} from '../../api/ManagmentApi';
@@ -27,11 +26,8 @@ const limitPerRequest = 20;
 const reponseDefaultValue = {tests: [], limit: 0, offset: 0, total: 0};
 
 export const AllTestsPage: React.FC = () => {
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-
     const {email, tableValue, value, onChangeInputValue, onChangeTableValue, onInputValueSubmit, resetTableSearch} =
-        useTableSearch(searchParams);
+        useTableSearch();
     const {status, statusHandler, resetTableStatus} = useTableStatus();
     const {datesValue, formattedDates, onDateChange, clearTableDates} = useTableDates();
     const [page, setPage] = useState<TPage>(1);
@@ -71,7 +67,6 @@ export const AllTestsPage: React.FC = () => {
 
     const {onEmailSubmit, isFiltered, statusOutline} = useTableFilter({
         options: options,
-        searchParams: searchParams,
         data: {
             status: status,
             email: email,
