@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {BrowserRouter as Router} from 'react-router-dom';
 
 import './index.css';
 
@@ -17,7 +18,9 @@ const importBuildTarget = (): any => {
     const {default: App} = await importBuildTarget();
     ReactDOM.render(
         <React.StrictMode>
-            <App />
+            <Router>
+                <App />
+            </Router>
         </React.StrictMode>,
         document.getElementById('root'),
     );
