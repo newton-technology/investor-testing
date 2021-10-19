@@ -1,8 +1,10 @@
 import isEqual from 'lodash.isequal';
-import {useState, useCallback, useMemo, ChangeEvent, SyntheticEvent} from 'react';
+import {useState, useCallback, useMemo, ChangeEvent, SyntheticEvent, useRef} from 'react';
+import {useHistory} from 'react-router-dom';
 
 import {Status} from '../api/ManagmentApi';
 import {Option} from '../pages/admin/AllTestsPage';
+import {unixTime} from '../utils/tableUtils';
 
 interface IUseTableSearch {
     email: string | undefined;
@@ -10,34 +12,47 @@ interface IUseTableSearch {
     value: string;
     onChangeTableValue: (value: string) => void;
     onChangeInputValue: (event: ChangeEvent<HTMLInputElement>) => void;
-    OnInputValueSubmit: (callBack: () => void) => void;
+    onInputValueSubmit: (callBack: () => void) => void;
     resetTableSearch: () => void;
 }
 
-export const useTableSearch = (initialValue: string = ''): IUseTableSearch => {
-    const [inputValue, setInputValue] = useState<string>(initialValue);
+export const useTableSearch = (searchParams: URLSearchParams, initialValue: string = ''): IUseTableSearch => {
+    const email = searchParams.get('email');
+    const [inputValue, setInputValue] = useState<string>(email ? email : initialValue);
     const [tableValue, setTableValue] = useState<string>(initialValue);
+    const history = useHistory();
 
-    const onChangeTableValue = useCallback((value: string) => {
-        setTableValue(value);
-        setInputValue('');
-    }, []);
+    const onChangeTableValue = useCallback(
+        (value: string) => {
+            searchParams.set('email', value);
+            history.push(`/tests?${searchParams}`);
+            setTableValue(value);
+            setInputValue('');
+        },
+        [history, searchParams],
+    );
 
     const onChangeInputValue = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
             if (tableValue) setTableValue('');
+            searchParams.set('email', event.target.value);
+            history.push(`/tests?${searchParams}`);
             setInputValue(event.target.value);
         },
-        [tableValue],
+        [tableValue, history, searchParams],
     );
 
-    const OnInputValueSubmit = (cb: () => void): void => {
+    const onInputValueSubmit = (cb: () => void): void => {
         if (inputValue) cb();
     };
 
-    const resetTableSearch = (): void => {
+    const resetTableSearch = () => {
         setInputValue('');
         setTableValue('');
+        if (searchParams.get('email')) {
+            searchParams.delete('email');
+            history.push(`/tests?${searchParams}`);
+        }
     };
 
     return {
@@ -46,7 +61,7 @@ export const useTableSearch = (initialValue: string = ''): IUseTableSearch => {
         tableValue,
         onChangeTableValue,
         onChangeInputValue,
-        OnInputValueSubmit,
+        onInputValueSubmit,
         resetTableSearch,
     };
 };
@@ -94,8 +109,8 @@ export const useTableDates = (): IUseTableDates => {
 
     const dates = useMemo<TFormattedDates>(() => {
         return {
-            dateStart: new Date(date.dateStart).setHours(0, 0) / 1000 || undefined,
-            dateEnd: new Date(date.dateEnd).setHours(23, 59) / 1000 || undefined,
+            dateStart: unixTime(date.dateStart, '00:00') || undefined,
+            dateEnd: unixTime(date.dateEnd, '23:59') || undefined,
         };
     }, [date]);
 
@@ -129,19 +144,21 @@ interface ITableFilterData {
 }
 interface ITableFilterParams {
     options: Option[];
+    searchParams: URLSearchParams;
     data: Partial<ITableFilterData>;
     resetTable: () => void;
 }
 
 export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
-    const {options, data, resetTable} = params;
-    const [isEmailSubmit, SetIsEmailSubmit] = useState<boolean>(false);
+    const {options, data, resetTable, searchParams} = params;
+    const isSearchParams = !!searchParams.get('email');
+    const [isEmailSubmit, setIsEmailSubmit] = useState<boolean>(isSearchParams);
 
     const onEmailSubmit = () => {
-        SetIsEmailSubmit(true);
+        setIsEmailSubmit(true);
     };
 
-    let statusOutline: boolean = false;
+    const statusOutline = useRef<boolean>(true);
 
     const isFilterApply = useMemo(() => {
         let isFilter = false;
@@ -152,7 +169,11 @@ export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
 
         if (!isEqual(data.status, options[0].value)) {
             isFilter = true;
-            statusOutline = true;
+            statusOutline.current = true;
+        }
+
+        if (isEqual(data.status, options[0].value)) {
+            statusOutline.current = false;
         }
 
         if (data.email && isEmailSubmit) {
@@ -160,7 +181,7 @@ export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
         }
 
         if (isEmailSubmit && !data.email) {
-            SetIsEmailSubmit(false);
+            setIsEmailSubmit(false);
             if (!isFilter) {
                 resetTable();
             }
@@ -172,6 +193,6 @@ export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
     return {
         isFiltered: isFilterApply,
         onEmailSubmit,
-        statusOutline,
+        statusOutline: statusOutline.current,
     };
 };
