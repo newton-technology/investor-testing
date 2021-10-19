@@ -13,14 +13,31 @@ yarn install --save-d
 
 ## Запуск приложения
 
+Для запуска клиентской части приложения
 ```
-yarn start
+yarn start-client
 ```
 
+Для запуска административной части приложения
+```
+yarn start-admin
+```
+
+Если необходимо изменить порт (по умолчанию 3000)
+```
+PORT=8000 yarn start-client
+```
 
 ## Сборка приложения
+
+Сборка клиентской части приложения
 ```
-yarn build
+yarn build-client
+```
+
+Сборка административной части приложения
+```
+yarn build-admin
 ```
 
 ## Кастомизация
@@ -50,7 +67,7 @@ logoOnLogin.(png/jp(e)g/svg) - логотип при авторизации
 ```
 #  "proxy": "http://localhost:9000" - прокси для запросов
 REACT_APP_API_URL=/api/investor_testing - URL для запросов по API
-REACT_APP_ADMIN_URL=http://localhost:8000/admin - URL на котором находится панель администратора
+REACT_APP_ADMIN_URL=http://localhost:3000/admin - URL на котором находится панель администратора
 ```
 
 ## Панель администратора
