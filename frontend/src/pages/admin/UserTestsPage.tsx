@@ -1,6 +1,6 @@
 import React from 'react';
 import {useParams} from 'react-router';
-import {Link} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import styled from 'styled-components';
 
 import {Status} from '../../api/ManagmentApi';
@@ -18,10 +18,15 @@ const translateStatus = {
     [Status.PROCESSING]: '',
 };
 
+interface ILocation {
+    prevPath: string | undefined;
+    getParams: string | undefined;
+}
+
 export const UserTestsPage: React.FC = () => {
     const {id} = useParams<{id: string}>();
     const {data: test} = useUserTestById(id);
-
+    const {state} = useLocation<ILocation>();
     useScrollToTop();
 
     if (!test) {
@@ -30,10 +35,20 @@ export const UserTestsPage: React.FC = () => {
 
     const {userEmail, completedAt, category, questions} = test;
 
+    const path = (): string => {
+        const {prevPath, getParams} = state || {prevPath: '', getParams: ''};
+        if (!prevPath) return '/';
+        let path = prevPath;
+        if (getParams) {
+            path += getParams;
+        }
+        return path;
+    };
+
     return (
         <Container>
             <BreadcrumbsContainer>
-                <Breadcrumb to='/'>
+                <Breadcrumb to={path}>
                     <Chevron name='chevron_right' />
                     Назад
                 </Breadcrumb>

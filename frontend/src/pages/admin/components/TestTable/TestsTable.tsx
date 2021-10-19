@@ -33,7 +33,7 @@ const columns: ITableColumn[] = [
 ];
 
 const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEmail, filter}) => {
-    const {push} = useHistory();
+    const {push, location} = useHistory();
 
     if (!isLoading && !tests.length) {
         return <NoReslt />;
@@ -44,7 +44,7 @@ const TestsTable: React.FC<IProps> = ({tests, sort, setSort, isLoading, selectEm
     };
 
     const selectTest = (id: number) => {
-        push(`/test/${id}`);
+        push(`/test/${id}`, {prevPath: location.pathname, getParams: location.search});
     };
 
     const emailHandler = (email: string) => (event: MouseEvent<HTMLElement>) => {
