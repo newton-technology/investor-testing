@@ -10,13 +10,13 @@ services:
     container_name: frontend
     volumes:
       - ./frontend.conf:/etc/nginx/conf.d/default.conf
-      - ../frontend/build/:/var/www/projects/web/
+      - ../frontend/build_client/:/var/www/projects/web/
   admin:
     image: nginx
     container_name: admin
     volumes:
       - ./admin.conf:/etc/nginx/conf.d/default.conf
-      - ../frontend/admin/build/:/var/www/projects/admin/
+      - ../frontend/build_admin/:/var/www/projects/admin/
   backend:
     image: nwtndevops/deploy_backend:latest
     container_name: backend
