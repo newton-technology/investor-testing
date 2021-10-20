@@ -1,4 +1,4 @@
-import {useCallback} from 'react';
+import {useCallback, useMemo} from 'react';
 import {useHistory} from 'react-router-dom';
 
 interface IUseTableHistory {
@@ -9,14 +9,14 @@ interface IUseTableHistory {
 
 export const useTableHistory = (): IUseTableHistory => {
     const {push, location} = useHistory();
-    const searchParams = new URLSearchParams(location.search);
+    const searchParams = useMemo(() => new URLSearchParams(location.search), [location]);
 
     const onChangeSearch = useCallback(
         (name: string, value: string) => {
             searchParams.set(name, value);
             push(`/tests?${searchParams}`);
         },
-        [history, searchParams],
+        [push, searchParams],
     );
 
     const onDeleteSearch = useCallback(
@@ -26,7 +26,7 @@ export const useTableHistory = (): IUseTableHistory => {
                 push(`/tests?${searchParams}`);
             }
         },
-        [history, searchParams],
+        [push, searchParams],
     );
 
     return {
