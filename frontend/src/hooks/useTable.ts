@@ -117,11 +117,13 @@ interface IUseTableDates {
 
 export const useTableDates = (): IUseTableDates => {
     const {onChangeSearch, onDeleteSearch, searchParams} = useTableHistory();
-    const dateStart = searchParams.get(Search.DATE_START);
-    const dateEnd = searchParams.get(Search.DATE_END);
+    const dateStart = searchParams.get(Search.DATE_START) || '';
+    const dateEnd = searchParams.get(Search.DATE_END) || '';
+    const isDateStart = /\d\d\d\d-\d\d-\d\d/.test(dateStart);
+    const isDateEnd = /\d\d\d\d-\d\d-\d\d/.test(dateEnd);
     const [date, setDate] = useState<TDate>({
-        dateStart: dateStart ? dateStart : '',
-        dateEnd: dateEnd ? dateEnd : '',
+        dateStart: isDateStart ? dateStart : '',
+        dateEnd: isDateEnd ? dateEnd : '',
     });
     const dates = useMemo<TFormattedDates>(() => {
         return {
