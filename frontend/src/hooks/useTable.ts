@@ -22,11 +22,14 @@ export const useTableSearch = (initialValue: string = ''): IUseTableSearch => {
     const [inputValue, setInputValue] = useState<string>(email ? email : initialValue);
     const [tableValue, setTableValue] = useState<string>(initialValue);
 
-    const onChangeTableValue = useCallback((value: string) => {
-        onChangeSearch(Search.EMAIL, value);
-        setTableValue(value);
-        setInputValue('');
-    }, []);
+    const onChangeTableValue = useCallback(
+        (value: string) => {
+            onChangeSearch(Search.EMAIL, value);
+            setTableValue(value);
+            setInputValue('');
+        },
+        [onChangeSearch],
+    );
 
     const onChangeInputValue = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +37,7 @@ export const useTableSearch = (initialValue: string = ''): IUseTableSearch => {
             onChangeSearch(Search.EMAIL, event.target.value);
             setInputValue(event.target.value);
         },
-        [tableValue],
+        [tableValue, onChangeSearch],
     );
 
     const onInputValueSubmit = (cb: () => void): void => {
@@ -132,10 +135,13 @@ export const useTableDates = (): IUseTableDates => {
         };
     }, [date]);
 
-    const onDateChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        setDate((prev) => ({...prev, [event.target.name]: event.target.value}));
-        onChangeSearch(event.target.name as TSearch, event.target.value);
-    }, []);
+    const onDateChange = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            setDate((prev) => ({...prev, [event.target.name]: event.target.value}));
+            onChangeSearch(event.target.name as TSearch, event.target.value);
+        },
+        [onChangeSearch],
+    );
 
     const clearTableDates = (): void => {
         setDate({dateStart: '', dateEnd: ''});
@@ -210,7 +216,7 @@ export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
         }
 
         return isFilter;
-    }, [data, isEmailSubmit, options, resetTable]);
+    }, [data, isEmailSubmit, options, resetTable, onDeleteSearch]);
 
     return {
         isFiltered: isFilterApply,
