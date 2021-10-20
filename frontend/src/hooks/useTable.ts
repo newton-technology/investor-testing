@@ -4,7 +4,7 @@ import {useState, useCallback, useMemo, ChangeEvent, SyntheticEvent, useRef} fro
 import {Status} from '../api/ManagmentApi';
 import {Option} from '../pages/admin/AllTestsPage';
 import {unixTime} from '../utils/tableUtils';
-import {useTableHistory} from './useTableHistory';
+import {Search, useTableHistory} from './useTableHistory';
 
 interface IUseTableSearch {
     email: string | undefined;
@@ -18,26 +18,23 @@ interface IUseTableSearch {
 
 export const useTableSearch = (initialValue: string = ''): IUseTableSearch => {
     const {onChangeSearch, onDeleteSearch, searchParams} = useTableHistory();
-    const email = searchParams.get('email');
+    const email = searchParams.get(Search.EMAIL);
     const [inputValue, setInputValue] = useState<string>(email ? email : initialValue);
     const [tableValue, setTableValue] = useState<string>(initialValue);
 
-    const onChangeTableValue = useCallback(
-        (value: string) => {
-            onChangeSearch('email', value);
-            setTableValue(value);
-            setInputValue('');
-        },
-        [history, searchParams],
-    );
+    const onChangeTableValue = useCallback((value: string) => {
+        onChangeSearch(Search.EMAIL, value);
+        setTableValue(value);
+        setInputValue('');
+    }, []);
 
     const onChangeInputValue = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
             if (tableValue) setTableValue('');
-            onChangeSearch('email', event.target.value);
+            onChangeSearch(Search.EMAIL, event.target.value);
             setInputValue(event.target.value);
         },
-        [tableValue, history, searchParams],
+        [tableValue],
     );
 
     const onInputValueSubmit = (cb: () => void): void => {
@@ -47,7 +44,7 @@ export const useTableSearch = (initialValue: string = ''): IUseTableSearch => {
     const resetTableSearch = () => {
         setInputValue('');
         setTableValue('');
-        onDeleteSearch('email');
+        onDeleteSearch(Search.EMAIL);
     };
 
     return {
@@ -71,17 +68,33 @@ interface IUseTableStatus {
 const statusInitialValue = [Status.PASSED, Status.FAILED];
 
 export const useTableStatus = (initialValue: Status[] = statusInitialValue): IUseTableStatus => {
-    const {onChangeSearch} = useTableHistory();
+    const {onChangeSearch, onDeleteSearch, searchParams} = useTableHistory();
+    const tableStatus = searchParams.get(Search.TABLE_STATUS);
+    const statusArr: string[] | null = tableStatus ? tableStatus.split('-') : null;
+    if (statusArr) {
+        const keys = Object.keys(Status);
+        const result: Status[] = [];
+        for (const element of statusArr) {
+            const key = keys.find((x) => {
+                return Status[x as keyof typeof Status] === element;
+            });
+            if (key) result.push(Status[key as keyof typeof Status]);
+        }
+        if (result.length > 0) {
+            initialValue = result;
+        }
+    }
+
     const [status, setStatus] = useState<Status[]>(initialValue);
 
-    const statusHandler = useCallback((_, {value}) => {
+    const statusHandler = (_: SyntheticEvent, {value}: {value: Status[]}) => {
         setStatus(value);
-        console.log(value);
-        onChangeSearch('tableStatus', value.join('-'));
-    }, []);
+        onChangeSearch(Search.TABLE_STATUS, value.join('-'));
+    };
 
     const resetTableStatus = (): void => {
-        setStatus(initialValue);
+        setStatus(statusInitialValue);
+        onDeleteSearch(Search.TABLE_STATUS);
     };
 
     return {
@@ -148,7 +161,7 @@ interface ITableFilterParams {
 
 export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
     const {options, data, resetTable} = params;
-    const {searchParams} = useTableHistory();
+    const {searchParams, onDeleteSearch} = useTableHistory();
     const isSearchParams = !!searchParams.get('email');
     const [isEmailSubmit, setIsEmailSubmit] = useState<boolean>(isSearchParams);
 
@@ -172,6 +185,7 @@ export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
 
         if (isEqual(data.status, options[0].value)) {
             statusOutline.current = false;
+            onDeleteSearch(Search.TABLE_STATUS);
         }
 
         if (data.email && isEmailSubmit) {
