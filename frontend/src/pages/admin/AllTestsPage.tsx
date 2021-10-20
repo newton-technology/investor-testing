@@ -23,7 +23,7 @@ const options: Option[] = [
 
 export type TPage = number | '';
 const limitPerRequest = 20;
-const reponseDefaultValue = {tests: [], limit: 0, offset: 0, total: 0};
+const responseDefaultValue = {tests: [], limit: 0, offset: 0, total: 0};
 
 export const AllTestsPage: React.FC = () => {
     const {email, tableValue, value, onChangeInputValue, onChangeTableValue, onInputValueSubmit, resetTableSearch} =
@@ -39,7 +39,7 @@ export const AllTestsPage: React.FC = () => {
     }, [page]);
 
     const {
-        data = reponseDefaultValue,
+        data = responseDefaultValue,
         isLoading,
         refetch,
     } = useAllTestsByParams({
