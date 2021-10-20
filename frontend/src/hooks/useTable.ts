@@ -4,7 +4,7 @@ import {useState, useCallback, useMemo, ChangeEvent, SyntheticEvent, useRef} fro
 import {Status} from '../api/ManagmentApi';
 import {Option} from '../pages/admin/AllTestsPage';
 import {unixTime} from '../utils/tableUtils';
-import {Search, useTableHistory} from './useTableHistory';
+import {Search, TSearch, useTableHistory} from './useTableHistory';
 
 interface IUseTableSearch {
     email: string | undefined;
@@ -116,8 +116,13 @@ interface IUseTableDates {
 }
 
 export const useTableDates = (): IUseTableDates => {
-    const [date, setDate] = useState<TDate>({dateStart: '', dateEnd: ''});
-
+    const {onChangeSearch, onDeleteSearch, searchParams} = useTableHistory();
+    const dateStart = searchParams.get(Search.DATE_START);
+    const dateEnd = searchParams.get(Search.DATE_END);
+    const [date, setDate] = useState<TDate>({
+        dateStart: dateStart ? dateStart : '',
+        dateEnd: dateEnd ? dateEnd : '',
+    });
     const dates = useMemo<TFormattedDates>(() => {
         return {
             dateStart: unixTime(date.dateStart, '00:00') || undefined,
@@ -127,10 +132,13 @@ export const useTableDates = (): IUseTableDates => {
 
     const onDateChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setDate((prev) => ({...prev, [event.target.name]: event.target.value}));
+        onChangeSearch(event.target.name as TSearch, event.target.value);
     }, []);
 
     const clearTableDates = (): void => {
         setDate({dateStart: '', dateEnd: ''});
+        onDeleteSearch(Search.DATE_START);
+        onDeleteSearch(Search.DATE_END);
     };
 
     return {
