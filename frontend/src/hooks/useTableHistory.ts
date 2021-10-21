@@ -1,13 +1,14 @@
 import {useCallback, useMemo} from 'react';
 import {useHistory} from 'react-router-dom';
 
-export type TSearch = 'email' | 'tableStatus' | 'dateStart' | `dateEnd`;
+export type TSearch = 'email' | 'tableStatus' | 'dateStart' | `dateEnd` | `page`;
 
 export enum Search {
     EMAIL = 'email',
     TABLE_STATUS = 'tableStatus',
     DATE_START = 'dateStart',
     DATE_END = 'dateEnd',
+    PAGE = 'page',
 }
 
 interface IUseTableHistory {

@@ -1,5 +1,5 @@
 import isEqual from 'lodash.isequal';
-import {useState, useCallback, useMemo, ChangeEvent, SyntheticEvent, useRef} from 'react';
+import {useState, useCallback, useMemo, ChangeEvent, SyntheticEvent, useRef, useEffect} from 'react';
 
 import {Status} from '../api/ManagmentApi';
 import {Option} from '../pages/admin/AllTestsPage';
@@ -122,8 +122,8 @@ export const useTableDates = (): IUseTableDates => {
     const {onChangeSearch, onDeleteSearch, searchParams} = useTableHistory();
     const dateStart = searchParams.get(Search.DATE_START) || '';
     const dateEnd = searchParams.get(Search.DATE_END) || '';
-    const isDateStart = /\d\d\d\d-\d\d-\d\d/.test(dateStart);
-    const isDateEnd = /\d\d\d\d-\d\d-\d\d/.test(dateEnd);
+    const isDateStart = /\d{4}-\d{2}-\d{2}/.test(dateStart);
+    const isDateEnd = /\d{4}-\d{2}-\d{2}/.test(dateEnd);
     const [date, setDate] = useState<TDate>({
         dateStart: isDateStart ? dateStart : '',
         dateEnd: isDateEnd ? dateEnd : '',
@@ -178,7 +178,7 @@ interface ITableFilterParams {
 export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
     const {options, data, resetTable} = params;
     const {searchParams, onDeleteSearch} = useTableHistory();
-    const isSearchParams = !!searchParams.get('email');
+    const isSearchParams = !!searchParams.get(Search.EMAIL);
     const [isEmailSubmit, setIsEmailSubmit] = useState<boolean>(isSearchParams);
 
     const onEmailSubmit = () => {
@@ -222,5 +222,38 @@ export const useTableFilter = (params: ITableFilterParams): IUseTableFilter => {
         isFiltered: isFilterApply,
         onEmailSubmit,
         statusOutline: statusOutline.current,
+    };
+};
+
+export type TPage = number | '';
+interface ITablePage {
+    page: TPage;
+    onChangePage: (nextPage: TPage) => void;
+}
+
+export const useTablePage = (totalPages: number): ITablePage => {
+    const {searchParams, onChangeSearch} = useTableHistory();
+    const numberOfPage = Number(searchParams.get(Search.PAGE));
+    const currentPage = (): number => {
+        if (numberOfPage > 0 && numberOfPage <= totalPages) {
+            return numberOfPage;
+        }
+        return 1;
+    };
+
+    const [page, setPage] = useState<TPage>(1);
+
+    useEffect(() => {
+        setPage(currentPage);
+    }, [currentPage]);
+
+    const onChangePage = useCallback((nextPage: TPage) => {
+        setPage(nextPage);
+        onChangeSearch(Search.PAGE, String(nextPage));
+    }, []);
+
+    return {
+        page: page,
+        onChangePage,
     };
 };

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import {Sort, Status} from '../../api/ManagmentApi';
 import {useAllTestsByParams} from '../../hooks/useAdmin';
-import {useTableDates, useTableSearch, useTableStatus, useTableFilter} from '../../hooks/useTable';
+import {useTableDates, useTableSearch, useTableStatus, useTableFilter, useTablePage} from '../../hooks/useTable';
 import DatePicker from './components/DatePicker';
 import Paginator from './components/Paginator';
 import SearchInput from './components/SearchInput';
@@ -30,9 +30,10 @@ export const AllTestsPage: React.FC = () => {
         useTableSearch();
     const {status, statusHandler, resetTableStatus} = useTableStatus();
     const {datesValue, formattedDates, onDateChange, clearTableDates} = useTableDates();
-    const [page, setPage] = useState<TPage>(1);
     const [sort, setSort] = useState<Sort>(Sort.COMPLETED_DESC);
     const isInitialRender = useRef<boolean>(true);
+    const [totalPages, setTotalPages] = useState(1);
+    const {page, onChangePage} = useTablePage(totalPages);
 
     const offsetValue = useMemo(() => {
         return page !== '' ? (page - 1) * limitPerRequest : 0;
@@ -52,17 +53,15 @@ export const AllTestsPage: React.FC = () => {
     });
 
     const {tests, total} = data;
-    const totalPages = Math.ceil(total / limitPerRequest);
-
-    const onChangePage = useCallback((nextPage: TPage) => {
-        setPage(nextPage);
-    }, []);
+    useMemo(() => {
+        setTotalPages(Math.ceil(total / limitPerRequest));
+    }, [total]);
 
     const reset = useCallback(() => {
         resetTableSearch();
         clearTableDates();
         resetTableStatus();
-        setPage(1);
+        onChangePage(1);
     }, [resetTableSearch, clearTableDates, resetTableStatus]);
 
     const {onEmailSubmit, isFiltered, statusOutline} = useTableFilter({

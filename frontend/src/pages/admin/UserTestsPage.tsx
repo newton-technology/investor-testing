@@ -37,7 +37,9 @@ export const UserTestsPage: React.FC = () => {
 
     const path = (): string => {
         const {prevPath, getParams} = state || {prevPath: '', getParams: ''};
-        if (!prevPath) return '/';
+        if (!prevPath) {
+            return '/';
+        }
         let path = prevPath;
         if (getParams) {
             path += getParams;
