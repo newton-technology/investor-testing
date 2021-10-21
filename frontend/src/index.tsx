@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter as Router} from 'react-router-dom';
+import {Router} from 'react-router-dom';
+
+import {history} from './history/history';
 
 import './index.css';
 
@@ -18,7 +20,7 @@ const importBuildTarget = (): any => {
     const {default: App} = await importBuildTarget();
     ReactDOM.render(
         <React.StrictMode>
-            <Router>
+            <Router history={history}>
                 <App />
             </Router>
         </React.StrictMode>,
