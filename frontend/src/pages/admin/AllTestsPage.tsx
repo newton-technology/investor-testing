@@ -3,10 +3,11 @@ import styled from 'styled-components';
 
 import {Sort, Status} from '../../api/ManagmentApi';
 import {useAllTestsByParams} from '../../hooks/useAdmin';
-import {useTableDates, useTableFilter, useTablePage} from './components/hooks/useTable';
+import DatePicker from './components/DatePicker';
+import {useTableFilter, useTablePage} from './components/hooks/useTable';
+import {useTableDates} from './components/hooks/useTableDates';
 import {useTableSearch} from './components/hooks/useTableSearch';
 import {useTableStatus} from './components/hooks/useTableStatus';
-import DatePicker from './components/DatePicker';
 import Paginator from './components/Paginator';
 import SearchInput from './components/SearchInput';
 import Select from './components/Select';
