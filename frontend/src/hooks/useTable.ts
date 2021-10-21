@@ -4,7 +4,7 @@ import {useState, useCallback, useMemo, ChangeEvent, useRef, useEffect} from 're
 import {Status} from '../api/ManagmentApi';
 import {Option} from '../pages/admin/AllTestsPage';
 import {unixTime} from '../utils/tableUtils';
-import {Search, TSearch, useTableHistory} from './useTableHistory';
+import {Search, TSearch, useTableHistory} from '../pages/admin/components/hooks/useTableHistory';
 
 export type TDate = {dateStart: string; dateEnd: string};
 type TFormattedDates = {dateStart: number | undefined; dateEnd: number | undefined};

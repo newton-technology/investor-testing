@@ -1,6 +1,6 @@
 import {useState, SyntheticEvent} from 'react';
 
-import {Status} from '../api/ManagmentApi';
+import {Status} from '../../../../api/ManagmentApi';
 import {Search, useTableHistory} from './useTableHistory';
 
 interface IUseTableStatus {
