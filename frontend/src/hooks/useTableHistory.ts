@@ -1,5 +1,5 @@
 import {useCallback, useMemo} from 'react';
-import {useHistory} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 
 export type TSearch = 'email' | 'tableStatus' | 'dateStart' | `dateEnd` | `page`;
 
@@ -18,7 +18,8 @@ interface IUseTableHistory {
 }
 
 export const useTableHistory = (): IUseTableHistory => {
-    const {push, location} = useHistory();
+    const {push} = useHistory();
+    const location = useLocation();
     const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
 
     const onChangeSearch = useCallback(
