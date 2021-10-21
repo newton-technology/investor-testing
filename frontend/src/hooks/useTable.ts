@@ -244,8 +244,8 @@ export const useTablePage = (totalPages: number): ITablePage => {
     const [page, setPage] = useState<TPage>(1);
 
     useEffect(() => {
-        setPage(currentPage);
-    }, [currentPage]);
+        setPage(currentPage());
+    }, [currentPage()]);
 
     const onChangePage = useCallback((nextPage: TPage) => {
         setPage(nextPage);
