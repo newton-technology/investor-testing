@@ -3,8 +3,9 @@ import styled from 'styled-components';
 
 import {Sort, Status} from '../../api/ManagmentApi';
 import {useAllTestsByParams} from '../../hooks/useAdmin';
-import {useTableDates, useTableStatus, useTableFilter, useTablePage} from '../../hooks/useTable';
+import {useTableDates, useTableFilter, useTablePage} from '../../hooks/useTable';
 import {useTableSearch} from '../../hooks/useTableSearch';
+import {useTableStatus} from '../../hooks/useTableStatus';
 import DatePicker from './components/DatePicker';
 import Paginator from './components/Paginator';
 import SearchInput from './components/SearchInput';
