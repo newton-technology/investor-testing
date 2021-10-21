@@ -1,10 +1,10 @@
 import isEqual from 'lodash.isequal';
 import {useState, useCallback, useMemo, ChangeEvent, useRef, useEffect} from 'react';
 
-import {Status} from '../api/ManagmentApi';
-import {Option} from '../pages/admin/AllTestsPage';
-import {unixTime} from '../utils/tableUtils';
-import {Search, TSearch, useTableHistory} from '../pages/admin/components/hooks/useTableHistory';
+import {Status} from '../../../../api/ManagmentApi';
+import {Option} from '../../AllTestsPage';
+import {unixTime} from '../../../../utils/tableUtils';
+import {Search, TSearch, useTableHistory} from './useTableHistory';
 
 export type TDate = {dateStart: string; dateEnd: string};
 type TFormattedDates = {dateStart: number | undefined; dateEnd: number | undefined};

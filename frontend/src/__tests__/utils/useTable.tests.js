@@ -1,5 +1,5 @@
 import {fireEvent, screen} from '@testing-library/react';
-import {useTableDates, useTablePage} from '../../hooks/useTable';
+import {useTableDates, useTablePage} from '../../pages/admin/components/hooks/useTable';
 import {renderInRouter} from '../../hoks/test/renderInRouter';
 import {history} from '../../history/history';
 import {renderHook, act} from '@testing-library/react-hooks';

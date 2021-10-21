@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import {Sort, Status} from '../../api/ManagmentApi';
 import {useAllTestsByParams} from '../../hooks/useAdmin';
-import {useTableDates, useTableFilter, useTablePage} from '../../hooks/useTable';
+import {useTableDates, useTableFilter, useTablePage} from './components/hooks/useTable';
 import {useTableSearch} from './components/hooks/useTableSearch';
 import {useTableStatus} from './components/hooks/useTableStatus';
 import DatePicker from './components/DatePicker';
