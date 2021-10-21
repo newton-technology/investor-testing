@@ -1,7 +1,7 @@
 import {useCallback, useMemo} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 
-export type TSearch = 'email' | 'tableStatus' | 'dateStart' | `dateEnd` | `page`;
+export type TSearch = 'email' | 'tableStatus' | 'dateStart' | 'dateEnd' | 'page';
 
 export enum Search {
     EMAIL = 'email',
