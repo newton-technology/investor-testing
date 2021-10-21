@@ -3,7 +3,8 @@ import styled from 'styled-components';
 
 import {Sort, Status} from '../../api/ManagmentApi';
 import {useAllTestsByParams} from '../../hooks/useAdmin';
-import {useTableDates, useTableSearch, useTableStatus, useTableFilter, useTablePage} from '../../hooks/useTable';
+import {useTableDates, useTableStatus, useTableFilter, useTablePage} from '../../hooks/useTable';
+import {useTableSearch} from '../../hooks/useTableSearch';
 import DatePicker from './components/DatePicker';
 import Paginator from './components/Paginator';
 import SearchInput from './components/SearchInput';
@@ -63,7 +64,7 @@ export const AllTestsPage: React.FC = () => {
         clearTableDates();
         resetTableStatus();
         onChangePage(1);
-    }, [resetTableSearch, clearTableDates, resetTableStatus]);
+    }, [resetTableSearch, clearTableDates, resetTableStatus, onChangePage]);
 
     const {onEmailSubmit, isFiltered, statusOutline} = useTableFilter({
         options: options,
