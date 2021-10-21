@@ -1,7 +1,10 @@
 import {fireEvent, screen} from '@testing-library/react';
-import {useTableDates} from '../../hooks/useTable';
+import {useTableDates, useTablePage} from '../../hooks/useTable';
 import {renderInRouter} from '../../hoks/test/renderInRouter';
 import {history} from '../../history/history';
+import {renderHook, act} from '@testing-library/react-hooks';
+import {Router} from 'react-router-dom';
+import React from 'react';
 
 function ReactMock() {
     const {datesValue, onDateChange} = useTableDates();
@@ -32,5 +35,36 @@ describe('Set dates using the useTableDates hook', () => {
     it('Hook returned a end date similar to the input data.', () => {
         fireEvent.change(inputEnd, {target: {value: '2021-10-08'}});
         expect(inputEnd.value).toBe('2021-10-08');
+    });
+});
+
+describe('useTablePage', () => {
+    beforeEach(() => {
+        history.push('/');
+    });
+
+    it('should have an initial useTablePage', async () => {
+        const {result} = renderHook(() => useTablePage(5), {
+            wrapper: ({children}) => (
+                <>
+                    <Router history={history}>
+                        <> {children}</>
+                    </Router>
+                </>
+            ),
+        });
+
+        expect(result.current.page).toBe(1);
+
+        act(() => {
+            result.current.onChangePage(3);
+        });
+        expect(history.location.search).toBe('?page=3');
+        expect(result.current.page).toBe(3);
+
+        await act(async () => {
+            history.push(`/tests?page=6`);
+        });
+        expect(history.location.search).toBe('?page=6');
     });
 });
