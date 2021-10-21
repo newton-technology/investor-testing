@@ -53,7 +53,8 @@ export const AllTestsPage: React.FC = () => {
     });
 
     const {tests, total} = data;
-    useMemo(() => {
+
+    useEffect(() => {
         setTotalPages(Math.ceil(total / limitPerRequest));
     }, [total]);
 
