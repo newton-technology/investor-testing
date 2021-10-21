@@ -40,20 +40,21 @@ describe('Set dates using the useTableDates hook', () => {
 
 describe('useTablePage', () => {
     beforeEach(() => {
-        history.push('/');
+        act(() => {
+            history.push('/tests');
+        });
+    });
+    const {result} = renderHook(() => useTablePage(10), {
+        wrapper: ({children}) => (
+            <>
+                <Router history={history}>
+                    <> {children}</>
+                </Router>
+            </>
+        ),
     });
 
     it('should have an initial useTablePage', async () => {
-        const {result} = renderHook(() => useTablePage(5), {
-            wrapper: ({children}) => (
-                <>
-                    <Router history={history}>
-                        <> {children}</>
-                    </Router>
-                </>
-            ),
-        });
-
         expect(result.current.page).toBe(1);
 
         act(() => {
@@ -66,5 +67,12 @@ describe('useTablePage', () => {
             history.push(`/tests?page=6`);
         });
         expect(history.location.search).toBe('?page=6');
+        expect(result.current.page).toBe(6);
+
+        await act(async () => {
+            history.push(`/tests?page=12`);
+        });
+        expect(history.location.search).toBe('?page=12');
+        expect(result.current.page).toBe(1);
     });
 });
