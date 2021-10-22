@@ -29,7 +29,9 @@ export const useTableSearch = (initialValue: string = ''): IUseTableSearch => {
 
     const onChangeInputValue = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
-            if (tableValue) setTableValue('');
+            if (tableValue) {
+                setTableValue('');
+            }
             onChangeSearch(Search.EMAIL, event.target.value);
             setInputValue(event.target.value);
         },
