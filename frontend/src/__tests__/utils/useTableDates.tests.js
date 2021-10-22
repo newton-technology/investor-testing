@@ -1,9 +1,6 @@
 import {fireEvent, screen} from '@testing-library/react';
 
 import {renderInRouter} from '../../hoks/test/renderInRouter';
-import {history} from '../../history/history';
-import {renderHook, act} from '@testing-library/react-hooks';
-import {Router} from 'react-router-dom';
 import React from 'react';
 import {useTableDates} from '../../pages/admin/components/hooks/useTableDates';
 
@@ -26,10 +23,7 @@ describe('Set dates using the useTableDates hook', () => {
     const inputEnd = screen.getByTestId('dateEnd');
 
     it('Hook returned a start date similar to the input data.', () => {
-        act(() => {
-            fireEvent.change(inputStart, {target: {value: '2021-10-09'}});
-        });
-
+        fireEvent.change(inputStart, {target: {value: '2021-10-09'}});
         expect(inputStart.value).toBe('2021-10-09');
     });
 
