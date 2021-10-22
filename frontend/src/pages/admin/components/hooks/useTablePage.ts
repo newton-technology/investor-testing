@@ -33,7 +33,7 @@ export const useTablePage = (totalPages: number): ITablePage => {
     );
 
     return {
-        page: page,
+        page,
         onChangePage,
     };
 };
