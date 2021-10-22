@@ -10,7 +10,7 @@ interface IProps {
 }
 const logos = require.context('../assets/img', false, /logo\.(svg|png|jpe?g)$/);
 
-export const Navbar: React.FC<IProps> = ({isAdmin}) => {
+export const Navbar: React.FC<IProps> = () => {
     const history = useHistory();
     const module = logos.keys().map(logos)[0] as any;
 
@@ -23,7 +23,7 @@ export const Navbar: React.FC<IProps> = ({isAdmin}) => {
         <NavContainer>
             <Container>
                 <Nav>
-                    <Logo to='/tests'>{module && <img src={module.default} />}</Logo>
+                    <Logo to='/tests'>{module && <img alt='Logo' src={module.default} />}</Logo>
                     <LogoutButton onClick={logout}>
                         <IconContainer name='arrow_right' />
                         Выйти
@@ -35,7 +35,7 @@ export const Navbar: React.FC<IProps> = ({isAdmin}) => {
 };
 
 const NavContainer = styled.div`
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 40px;
     padding-bottom: 17px;
     padding-top: 17px;
@@ -63,28 +63,6 @@ const LogoutButton = styled.div`
     font-size: 17px;
 `;
 
-const DownloadButton = styled(LogoutButton)`
-    margin-right: 32px;
-`;
-
 const IconContainer = styled(Icon)`
     margin-right: 8px;
-`;
-
-const NavLinks = styled.div`
-    align-items: center;
-    display: flex;
-    margin: 0 auto;
-`;
-
-const StyledNavLink = styled(Link)<{$isActive: boolean}>`
-    color: ${({$isActive, theme}) => ($isActive ? theme.palette.primary : theme.palette.regular)};
-    font-size: 17px;
-    font-weight: 500;
-    line-height: 22px;
-    margin: 0 12px;
-
-    &:hover {
-        color: ${({theme}) => theme.palette.primary};
-    }
 `;

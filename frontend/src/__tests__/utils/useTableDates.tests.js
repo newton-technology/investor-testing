@@ -1,7 +1,10 @@
-import {render, fireEvent, getByTestId} from '@testing-library/react';
-import {useTableDates} from '../../hooks/useTable';
+import {fireEvent, screen} from '@testing-library/react';
 
-function ReactMock() {
+import {renderInRouter} from '../../hoks/test/renderInRouter';
+import React from 'react';
+import {useTableDates} from '../../pages/admin/components/hooks/useTableDates';
+
+const ReactMock = () => {
     const {datesValue, onDateChange} = useTableDates();
 
     return (
@@ -10,12 +13,14 @@ function ReactMock() {
             <input data-testid='dateEnd' value={datesValue.dateEnd} name='dateEnd' onChange={onDateChange} />;
         </>
     );
-}
+};
+
+const render = () => renderInRouter(ReactMock);
 
 describe('Set dates using the useTableDates hook', () => {
-    const {container} = render(<ReactMock />);
-    const inputStart = getByTestId(container, 'dateStart');
-    const inputEnd = getByTestId(container, 'dateEnd');
+    render();
+    const inputStart = screen.getByTestId('dateStart');
+    const inputEnd = screen.getByTestId('dateEnd');
 
     it('Hook returned a start date similar to the input data.', () => {
         fireEvent.change(inputStart, {target: {value: '2021-10-09'}});

@@ -1,11 +1,14 @@
 import React, {useState, useCallback, useEffect, useMemo, useRef} from 'react';
-import {useLocation} from 'react-router-dom';
 import styled from 'styled-components';
 
 import {Sort, Status} from '../../api/ManagmentApi';
 import {useAllTestsByParams} from '../../hooks/useAdmin';
-import {useTableDates, useTableSearch, useTableStatus, useTableFilter} from '../../hooks/useTable';
 import DatePicker from './components/DatePicker';
+import {useTableDates} from './components/hooks/useTableDates';
+import {useTableFilter} from './components/hooks/useTableFilter';
+import {useTablePage} from './components/hooks/useTablePage';
+import {useTableSearch} from './components/hooks/useTableSearch';
+import {useTableStatus} from './components/hooks/useTableStatus';
 import Paginator from './components/Paginator';
 import SearchInput from './components/SearchInput';
 import Select from './components/Select';
@@ -24,26 +27,24 @@ const options: Option[] = [
 
 export type TPage = number | '';
 const limitPerRequest = 20;
-const reponseDefaultValue = {tests: [], limit: 0, offset: 0, total: 0};
+const responseDefaultValue = {tests: [], limit: 0, offset: 0, total: 0};
 
 export const AllTestsPage: React.FC = () => {
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-
     const {email, tableValue, value, onChangeInputValue, onChangeTableValue, onInputValueSubmit, resetTableSearch} =
-        useTableSearch(searchParams);
+        useTableSearch();
     const {status, statusHandler, resetTableStatus} = useTableStatus();
     const {datesValue, formattedDates, onDateChange, clearTableDates} = useTableDates();
-    const [page, setPage] = useState<TPage>(1);
     const [sort, setSort] = useState<Sort>(Sort.COMPLETED_DESC);
     const isInitialRender = useRef<boolean>(true);
+    const [totalPages, setTotalPages] = useState(1);
+    const {page, onChangePage} = useTablePage(totalPages);
 
     const offsetValue = useMemo(() => {
         return page !== '' ? (page - 1) * limitPerRequest : 0;
     }, [page]);
 
     const {
-        data = reponseDefaultValue,
+        data = responseDefaultValue,
         isLoading,
         refetch,
     } = useAllTestsByParams({
@@ -56,22 +57,20 @@ export const AllTestsPage: React.FC = () => {
     });
 
     const {tests, total} = data;
-    const totalPages = Math.ceil(total / limitPerRequest);
 
-    const onChangePage = useCallback((nextPage: TPage) => {
-        setPage(nextPage);
-    }, []);
+    useEffect(() => {
+        setTotalPages(Math.ceil(total / limitPerRequest));
+    }, [total]);
 
     const reset = useCallback(() => {
         resetTableSearch();
         clearTableDates();
         resetTableStatus();
-        setPage(1);
-    }, [resetTableSearch, clearTableDates, resetTableStatus]);
+        onChangePage(1);
+    }, [resetTableSearch, clearTableDates, resetTableStatus, onChangePage]);
 
     const {onEmailSubmit, isFiltered, statusOutline} = useTableFilter({
         options: options,
-        searchParams: searchParams,
         data: {
             status: status,
             email: email,

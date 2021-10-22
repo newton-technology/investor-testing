@@ -2,8 +2,9 @@ import React, {ChangeEvent} from 'react';
 import styled from 'styled-components';
 
 import {Icon} from '../../../components/Icon';
-import {TDate} from '../../../hooks/useTable';
 import {todayDay} from '../../../utils/tableUtils';
+import {TDate} from './hooks/useTableDates';
+
 interface IProps {
     date: TDate;
     dateHandler: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -38,7 +39,7 @@ const Container = styled.div`
 
 const InputsContainer = styled.div`
     background: ${({theme}) => theme.palette.bg.secondary};
-    border-radius: 0px 4px 4px 0px;
+    border-radius: 0 4px 4px 0;
     display: flex;
     padding: 10px 56px 10px 24px;
     position: relative;
@@ -75,7 +76,7 @@ const DateInput = styled.input.attrs({type: 'date', required: true})`
 const ClearButton = styled.div`
     align-items: center;
     background: ${({theme}) => theme.palette.secondary};
-    border-radius: 0px 4px 4px 0px;
+    border-radius: 0 4px 4px 0;
     cursor: pointer;
     display: flex;
     flex-direction: column;

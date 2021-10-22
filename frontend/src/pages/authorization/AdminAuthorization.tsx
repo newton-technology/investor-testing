@@ -19,7 +19,7 @@ export const AdminAuthorization: React.FC = () => {
         e.preventDefault();
         const {username, password} = form;
         const requestData = {username, password, scope: 'admin', grant_type: 'password'};
-        authService.sendCode(requestData).catch((e) => {
+        authService.sendCode(requestData).catch(() => {
             setIsError({username: true, password: true});
         });
     };
@@ -125,10 +125,4 @@ const StyledIcon = styled(Icon)`
     left: 32px;
     position: absolute;
     top: 20px;
-`;
-
-const ErrorMessage = styled.span`
-    color: ${({theme}) => theme.palette.error};
-    padding-top: 16px;
-    text-align: center;
 `;

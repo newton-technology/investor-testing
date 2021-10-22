@@ -6,6 +6,7 @@
   "dependencies": {
     "axios": "0.21.1",
     "dayjs": "1.10.6",
+    "history": "4.10.1",
     "html-react-parser": "^1.3.0",
     "lodash.isequal": "^4.5.0",
     "qs": "^6.10.1",
@@ -19,6 +20,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "5.11.4",
     "@testing-library/react": "11.1.0",
+    "@testing-library/react-hooks": "^7.0.2",
     "@testing-library/user-event": "12.1.10",
     "@types/axios": "0.14.0",
     "@types/jest": "26.0.24",
@@ -37,6 +39,7 @@
     "eslint-plugin-prettier": "3.4.0",
     "eslint-plugin-react-hooks": "4.2.0",
     "prettier": "2.3.2",
+    "react-test-renderer": "16.9.0",
     "stylelint": "13.13.1",
     "stylelint-config-recommended": "5.0.0",
     "stylelint-config-styled-components": "0.1.1",
