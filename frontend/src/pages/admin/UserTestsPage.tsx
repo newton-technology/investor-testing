@@ -85,7 +85,7 @@ export const UserTestsPage: React.FC = () => {
                         {item.answers.map((answer) => (
                             <AnswerRow key={answer.id}>
                                 {answer.selected ? <CheckedIcon /> : <Dot />}
-                                <AnswerText isSelected={answer.selected}>{answer.answer}</AnswerText>
+                                <AnswerText isSelected={answer.selected}>{removeHint(answer.answer)}</AnswerText>
                             </AnswerRow>
                         ))}
                     </QuestionContainer>
