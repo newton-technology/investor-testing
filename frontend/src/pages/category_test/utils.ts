@@ -33,7 +33,7 @@ export const getAnswersCountMessage = (min: number, max: number, all: number) =>
         return '(возможен один вариант ответа)';
     }
     if (min && max && max !== all) {
-        return `(возможно от ${max} до ${min} вариантов ответа)`;
+        return `(возможно от ${min} до ${max} вариантов ответа)`;
     }
     return '(возможно несколько вариантов ответа)';
 };
