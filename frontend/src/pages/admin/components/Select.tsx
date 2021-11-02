@@ -59,7 +59,7 @@ const Container = styled.div<{$isOpen: boolean; $outline: boolean}>`
     padding: 14px 24px;
     position: relative;
     width: 100%;
-    outline: ${({$outline, theme}) => ($outline ? `solid 2px ${theme.palette.secondary}` : 'none')}; ;
+    outline: ${({$outline, theme}) => ($outline ? `solid 2px ${theme.palette.secondary}` : 'none')};
 `;
 
 const SelectLabel = styled.label<{$isOpen: boolean}>`
@@ -77,7 +77,7 @@ const OptionsContainer = styled.div`
     font-size: 17px;
     left: 0;
     line-height: 22px;
-    padding: 2px 24px 14px 24px;
+    padding: 2px;
     position: absolute;
     top: 52px;
     width: 100%;
@@ -89,10 +89,9 @@ const StyledIcon = styled(Icon)<{$isOpen: boolean}>`
 `;
 
 const StyledOption = styled.div`
-    margin-bottom: 14px;
-
-    &:last-child {
-        margin-bottom: 0;
+    padding: 7px 24px 7px 24px;
+    &:hover {
+        background-color: ${({theme}) => theme.palette.bg.primary};
     }
 `;
 
