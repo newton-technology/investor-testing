@@ -1,6 +1,7 @@
 import React from 'react';
 import {useParams} from 'react-router';
 import {Link, useLocation} from 'react-router-dom';
+import parse from 'html-react-parser';
 import styled from 'styled-components';
 
 import {Status} from '../../api/ManagmentApi';
@@ -80,7 +81,7 @@ export const UserTestsPage: React.FC = () => {
                     <QuestionContainer key={item.id}>
                         <QuestionTitle>
                             <span>{index + 1}.</span>
-                            {removeHint(item.question)}
+                            {parse(removeHint(item.question))}
                         </QuestionTitle>
                         {item.answers.map((answer) => (
                             <AnswerRow key={answer.id}>
@@ -190,6 +191,31 @@ const QuestionTitle = styled.div`
     span {
         font-weight: bold;
         margin-right: 4px;
+    }
+
+    ol,
+    ul {
+        margin: 15px 0;
+        padding-left: 22px;
+        font-weight: 400;
+        list-style-position: inside;
+
+        li + li {
+            margin-top: 10px;
+        }
+    }
+
+    ul {
+        list-style-type: disc;
+    }
+
+    ol li {
+        counter-increment: item;
+
+        &:before {
+            content: counter(item) '. ';
+            font-weight: 600;
+        }
     }
 `;
 
