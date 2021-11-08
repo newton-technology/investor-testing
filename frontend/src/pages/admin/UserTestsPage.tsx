@@ -195,10 +195,10 @@ const QuestionTitle = styled.div`
 
     ol,
     ul {
-        margin: 15px 0;
-        padding-left: 22px;
+        margin: 10px 0 30px;
+        padding-left: 39px;
         font-weight: 400;
-        list-style-position: inside;
+        list-style-position: outside;
 
         li + li {
             margin-top: 10px;
@@ -209,13 +209,12 @@ const QuestionTitle = styled.div`
         list-style-type: disc;
     }
 
-    ol li {
-        counter-increment: item;
+    ol {
+        list-style-type: decimal;
+    }
 
-        &:before {
-            content: counter(item) '. ';
-            font-weight: 600;
-        }
+    li:first-letter {
+        text-transform: uppercase;
     }
 `;
 
