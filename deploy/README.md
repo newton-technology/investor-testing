@@ -3,8 +3,6 @@
 ## Для установки сервиса тестирования инвесторов необходимы следующие программы и компонеты:
 
 - docker, docker-compose
-- node.js 8+
-- yarn
 - СУБД `postgresql` + клиент (psql, например)
 - SMTP-сервер для рассылки почты
 - Возможно понадобятся доменное имя, запись в DNS и сертификат (при выводе приложения на прод).
@@ -66,22 +64,10 @@ cp proxy_nginx.conf.example proxy_nginx.conf
 $ cp .env.example .env
 ```
 
-- Установить зависимости
+- Установить зависимости и запустить сборку фронта и адмики 
 
 ```
-$ yarn install
-```
-
-- Скомпилировать клиента
-
-```
-$ yarn build-client
-```
-
-- Скомпилировать консоль администратора
-
-```
-$ yarn build-admin
+$ docker run -t --name frontend_builder -v `pwd`:/frontend -w /frontend nwtn_devops/frontend_builder:latest yarn install && yarn build-client && yarn build-admin 
 ```
 
 > Note: Предусмотрена возможность кастомизации контента на фронте. Для этого необходимо перед компиляцией фронта внести изменения в файл `customize.json`. Подробнее в (описании фронтенда)[/frontend/README.md]
