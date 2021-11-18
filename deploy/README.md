@@ -67,7 +67,7 @@ $ cp .env.example .env
 - Установить зависимости и запустить сборку фронта и адмики 
 
 ```
-$ docker run -t --name frontend_builder -v `pwd`:/frontend -w /frontend nwtn_devops/frontend_builder:latest yarn install && yarn build-client && yarn build-admin 
+$ docker run -t --name frontend_builder -v `pwd`:/frontend -w /frontend nwtndevops/frontend_builder:latest yarn install && yarn build-client && yarn build-admin 
 ```
 
 > Note: Предусмотрена возможность кастомизации контента на фронте. Для этого необходимо перед компиляцией фронта внести изменения в файл `customize.json`. Подробнее в (описании фронтенда)[/frontend/README.md]

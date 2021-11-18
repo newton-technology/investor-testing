@@ -14,4 +14,4 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
 
 # Образ выгружен на DockerHub, nwtn_devops/frontend_builder:latest 
 # Для сборки клиента и админки из директории investor-testing/frontend/ запустите:
-# $ docker run -t --name frontend_builder -v `pwd`:/frontend -w /frontend nwtn_devops/frontend_builder:latest yarn install && yarn build-client && yarn build-admin
+# $ docker run -t --name frontend_builder -v `pwd`:/frontend -w /frontend nwtndevops/frontend_builder:latest yarn install && yarn build-client && yarn build-admin
