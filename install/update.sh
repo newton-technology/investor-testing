@@ -5,12 +5,9 @@ SUCCESS='\033[0;32m'
 ERROR='\033[0;31m'
 DEFAULT='\033[0m\n'
 
-echo -en "${INFO}Скрипт по развертке системы тестирования квалифицированных инвесторов\n" \
-"Пожалуйтса, убедитесь, что у вас установлен нижеследующий список программ и компонентов:\n" \
- "- docker, docker-compose\n" \
- "- postgresql, psql, необходим доступ к СУБД с правами суперпользователя\n${DEFAULT}" \
+echo -en "${INFO}Скрипт по обновлению системы тестирования квалифицированных инвесторов\n${DEFAULT}" \
 
-requirments="docker docker-compose psql envsubst openssl"
+requirments="docker docker-compose psql envsubst"
 
 for cmd in ${requirments}
 do
@@ -35,39 +32,7 @@ then
     echo "APP_KEY=$(openssl rand -base64 32)" >> .env 
 fi
 
-echo -en "${INFO}Создание БД${DEFAULT}"
-
-DONT_REPLACE="$"
-export DONT_REPLACE
-
-export $(grep -v '^#' .env | xargs)
-
-PG_SUPERUSER=postgres
-
-read -p "Подготовка БД. Введите логин суперпользователя (по-умолчанию ${PG_SUPERUSER}): " input_pg_superuser
-
-if [[ $input_pg_superuser ]]
-then
-    PG_SUPERUSER=$input_pg_superuser
-fi
-
-export PG_SUPERUSER
-
-echo -en "${INFO}Подготовка БД. Введите пароль суперпользователя ${PG_SUPERUSER}:${DEFAULT}"
-
-psql -h $INVESTOR_TESTING_HOST -p $INVESTOR_TESTING_PORT -U $PG_SUPERUSER -W postgres << EOF 
-$(envsubst < ./templates/prepare-database.sql.template)
-EOF
-
-if [[ $? -eq 0 ]]
-then
-    echo -en "${SUCCESS}Успешно создана БД ${INVESTOR_TESTING_DATABASE}${DEFAULT}"
-else
-    echo -en "${ERROR}Не удалось создать БД ${INVESTOR_TESTING_DATABASE}${DEFAULT}" >&2
-    exit 1
-fi
-
-echo -en "${INFO}Создание схемы данных в БД ${INVESTOR_TESTING_DATABASE}.${DEFAULT}"
+echo -en "${INFO}Обновление схемы данных в БД ${INVESTOR_TESTING_DATABASE}.${DEFAULT}"
 PGPASSWORD=$INVESTOR_TESTING_ADMIN_PASSWORD psql -h $INVESTOR_TESTING_HOST -p $INVESTOR_TESTING_PORT -U admin -f ../database/make-database.sql $INVESTOR_TESTING_DATABASE
 
 if [[ $? -eq 0 ]]
@@ -124,11 +89,8 @@ docker rm frontend_builder
 
 cd ../deploy/
 
-echo -en "${INFO}Генерация ключей${DEFAULT}"
-openssl genrsa -out private.pem 3072
-openssl rsa -in private.pem -pubout -out public.pem
-
-echo -en "${INFO}Старт контейнеров${DEFAULT}"
+echo -en "${INFO}Рестарт контейнеров${DEFAULT}"
+docker-compose restart
 docker-compose up -d
 
 echo -en "${INFO}Окончание установки системы тестирования инвесторов.${DEFAULT}"
