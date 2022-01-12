@@ -9,6 +9,7 @@ import {Loader} from '../../components/Loader';
 import {useMutation} from '../../hooks/useMutation';
 import {useQuery} from '../../hooks/useQuery';
 import {useScrollToTop} from '../../hooks/useScrollToTop';
+import MoExBanner from './components/MoExBanner/MoExBanner';
 import {IQuestion, QuestionCard} from './components/QuestionCard';
 import {TestPreview} from './components/TestPreview';
 import {TestResult} from './components/TestResult';
@@ -152,7 +153,12 @@ export const CategoryTest: React.FC = () => {
                     )}
                 </TestContainer>
             )}
-            {isTestResultVisible && <TestResult isSuccess={checkTestMutation.data?.status === 'passed'} />}
+            {isTestResultVisible && (
+                <>
+                    <TestResult isSuccess={checkTestMutation.data?.status === 'passed'} />
+                    <MoExBanner />
+                </>
+            )}
         </Container>
     );
 };
