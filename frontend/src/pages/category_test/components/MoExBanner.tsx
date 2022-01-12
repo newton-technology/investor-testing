@@ -1,26 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {ReactComponent as BannerLogo} from './moex-school-logo.svg';
-import {ReactComponent as BackgroundImage} from './bg-image.svg';
+import {ReactComponent as BannerLogo} from '../../../assets/svg/moex-school-logo.svg';
+import {ReactComponent as BackgroundImage} from '../../../assets/svg/moex-banner-background.svg';
 
-const MoExBanner: React.FC = (props) => (
-    <Container>
-        <Background>
-            <BackgroundImage />
-        </Background>
+interface IProps {
+    className?: string;
+}
+
+const bannerLink = process.env.REACT_APP_MOEX_SCHOOL_BANNER_LINK;
+
+const MoExBanner: React.FC<IProps> = (props) => (
+    <Container href={bannerLink} target='_blank' className={props.className}>
+        <BackgroundImage />
         <BannerLogo />
         <Title>&laquo;Путь инвестора&raquo;</Title>
         <Subtitle>Бесплатный курс от школы Московской Биржи</Subtitle>
     </Container>
 );
 
-const Container = styled.div`
+const Container = styled.a`
     position: relative;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     background-color: ${({theme}) => theme.palette.bg.secondary};
-    padding: 24px;
+    padding: 24px 24px 213px;
     margin: 41px 0;
     border-radius: 10px;
     text-align: center;
@@ -29,45 +34,8 @@ const Container = styled.div`
          text-align: left;
          padding: 24px 32px;
     `}
-`;
 
-const Title = styled.p`
-    color: ${({theme}) => theme.palette.featured};
-    font-size: 28px;
-    font-weight: 700;
-    line-height: 1.4;
-    text-transform: uppercase;
-    margin: 24px 0 12px;
-
-    ${({theme}) => theme.breakpoint('md')`
-         font-size: 24px;
-         margin: 0;
-    `}
-`;
-
-const Subtitle = styled.p`
-    font-size: 18px;
-    font-weight: 400;
-    text-transform: uppercase;
-    max-width: 270px;
-    margin: 0 auto 213px;
-
-    ${({theme}) => theme.breakpoint('md')`
-         font-size: 14px;
-         max-width: none;
-         margin: 0;
-    `}
-`;
-
-const Background = styled.div`
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-
-    svg {
+    svg#moex-background {
         position: absolute;
         bottom: 0;
         right: 0;
@@ -91,6 +59,34 @@ const Background = styled.div`
             }
         `}
     }
+`;
+
+const Title = styled.p`
+    color: ${({theme}) => theme.palette.featured};
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-transform: uppercase;
+    margin: 24px 0 12px;
+
+    ${({theme}) => theme.breakpoint('md')`
+         font-size: 24px;
+         margin: 0;
+    `}
+`;
+
+const Subtitle = styled.p`
+    font-size: 18px;
+    font-weight: 400;
+    text-transform: uppercase;
+    max-width: 270px;
+    margin: 0 auto;
+
+    ${({theme}) => theme.breakpoint('md')`
+         font-size: 14px;
+         max-width: none;
+         margin: 0;
+    `}
 `;
 
 export default MoExBanner;
