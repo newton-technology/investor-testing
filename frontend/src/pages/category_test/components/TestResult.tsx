@@ -19,9 +19,7 @@ const subtitle = {
     fail: 'Попробуйте пройти ещё раз,\nколичество попыток неограниченно.',
 };
 
-const MoExSchoolLink =
-    'https://school.moex.com/put-investora/?utm_source=newton&utm_medium=affiliate' +
-    '&utm_campaign=investor_testing&utm_content=test_failed';
+const MoExSchoolLink = process.env.REACT_APP_MOEX_SCHOOL_FAILED_TEST_LINK;
 
 export const TestResult: React.FC<IProps> = (props) => {
     const {isSuccess} = props;
