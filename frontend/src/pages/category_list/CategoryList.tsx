@@ -8,6 +8,8 @@ import {Loader} from '../../components/Loader';
 import {useQuery} from '../../hooks/useQuery';
 import {useScrollToTop} from '../../hooks/useScrollToTop';
 import {CategoryCard} from './components/CategoryCard';
+import MOEXMobileBanner from '../category_test/components/MoExBanner';
+import MOEXDesktopBanner from './components/MoExBanner';
 
 export interface ICategory {
     category: {
@@ -37,6 +39,8 @@ export const CategoryList: React.FC = () => {
                 {data?.map((test: ICategory) => {
                     return <CategoryCard key={test.category.id} status={test.status} {...test.category} />;
                 })}
+                <DesktopBanner />
+                <MobileBanner />
             </List>
         </Container>
     );
@@ -61,4 +65,38 @@ const List = styled.div`
     ${({theme}) => theme.breakpoint('md')`
         grid-template-columns: repeat(2, 1fr);
     `}
+`;
+
+const DesktopBanner = styled(MOEXDesktopBanner)`
+    visibility: hidden;
+    position: fixed;
+
+    ${({theme}) => theme.breakpoint('lg')`
+        visibility: visible;
+        position: relative;
+    `}
+`;
+
+const MobileBanner = styled(MOEXMobileBanner)`
+    padding: 24px 24px 213px;
+    margin: 12px 0;
+    text-align: center;
+
+    ${({theme}) => theme.breakpoint('lg')`
+        visibility: hidden;
+        position: fixed;
+    `}
+
+    svg#moex-background {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        transform: translate(84px, 42px);
+        width: 338px;
+        height: 263px;
+
+        [data-hidden-mb] {
+            display: none;
+        }
+    }
 `;
