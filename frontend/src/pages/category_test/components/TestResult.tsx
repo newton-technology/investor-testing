@@ -16,8 +16,10 @@ const title = {
 
 const subtitle = {
     success: 'Уведомление об оценке результата\nскоро придет на вашу почту',
-    fail: 'Уведомление об оценке результата\nскоро придет на вашу почту',
+    fail: 'Попробуйте пройти ещё раз,\nколичество попыток неограниченно.',
 };
+
+const MoExSchoolLink = process.env.REACT_APP_MOEX_SCHOOL_FAILED_TEST_LINK;
 
 export const TestResult: React.FC<IProps> = (props) => {
     const {isSuccess} = props;
@@ -39,6 +41,16 @@ export const TestResult: React.FC<IProps> = (props) => {
                 <IconContainer name={isSuccess ? 'check_circle' : 'cross'} size={46} isSuccess={isSuccess} />
                 <Title isSuccess={isSuccess}>{isSuccess ? title.success : title.fail}</Title>
                 <Subtitle>{isSuccess ? subtitle.success : subtitle.fail}</Subtitle>
+                {!isSuccess && (
+                    <Subtitle>
+                        Подготовиться помогут материалы
+                        <br />
+                        <FeaturedLink href={MoExSchoolLink} target='_blank'>
+                            Школы Московской Биржи
+                        </FeaturedLink>
+                        .
+                    </Subtitle>
+                )}
                 {isSuccess ? (
                     <Button to='/'>Вернуться на главную</Button>
                 ) : (
@@ -149,4 +161,9 @@ const Bg = styled.div<{isSuccess: boolean}>`
             max-width: none;
         `}
     }
+`;
+
+const FeaturedLink = styled.a`
+    color: ${({theme}) => theme.palette.featured};
+    text-decoration: underline;
 `;
