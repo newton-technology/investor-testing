@@ -6,6 +6,8 @@ import {Container} from './Container';
 
 const {phones, site, license} = customize.content || {};
 
+const moexLink = process.env.REACT_APP_MOEX_LINK;
+
 export const Footer: React.FC = () => {
     return (
         <FooterContainer>
@@ -30,8 +32,19 @@ export const Footer: React.FC = () => {
                     </FooterMiddle>
                 )}
                 <FooterBottom>
-                    {site && <a href={site}>Перейти на официальный сайт</a>}
-                    <a href='https://nwtn.io/'>Разработано Ньютон Технологии © 2021</a>
+                    {site && (
+                        <a href={site}>
+                            <Underlined>Перейти на официальный сайт</Underlined>
+                        </a>
+                    )}
+                    <Contributors>
+                        <a href='https://nwtn.io/'>
+                            Разработано <Underlined>Ньютон Технологии</Underlined> © 2021
+                        </a>
+                        <a href={moexLink}>
+                            Совместно с <Underlined>Московской биржей</Underlined>
+                        </a>
+                    </Contributors>
                 </FooterBottom>
             </Container>
         </FooterContainer>
@@ -114,9 +127,10 @@ const FooterBottom = styled.div`
     flex-direction: column;
 
     ${({theme}) => theme.breakpoint('md')`
-        font-size: 20px;
+        font-size: 17px;
         flex-direction: row;
         justify-content: space-between;
+        align-items: end;
     `}
 
     a:hover {
@@ -124,11 +138,16 @@ const FooterBottom = styled.div`
         transition: color 0.2s ease-in-out;
     }
 
-    a + a {
-        margin-top: 16px;
-
-        ${({theme}) => theme.breakpoint('md')`
-            margin-top: 0;
-        `}
+    a {
+        margin-bottom: 8px;
     }
+`;
+
+const Contributors = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const Underlined = styled.span`
+    text-decoration: underline;
 `;

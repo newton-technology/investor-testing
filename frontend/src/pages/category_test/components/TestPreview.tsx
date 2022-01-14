@@ -18,6 +18,8 @@ const recommendations: string[] = [
     'На почту придёт уведомление о результате тестирования',
 ];
 
+const moexSchoolLink = process.env.REACT_APP_MOEX_SCHOOL_BEFORE_TEST;
+
 export const TestPreview: React.FC<IProps> = (props) => {
     const {title, goToTest, isTestVisible} = props;
 
@@ -40,6 +42,17 @@ export const TestPreview: React.FC<IProps> = (props) => {
                         </ListItem>
                     );
                 })}
+                <ListItem>
+                    <FeaturedCheckIcon name='check_circle' />
+                    <span>
+                        <FeaturedText>Школа Московской биржи</FeaturedText>
+                        <span> предлагает </span>
+                        <FeaturedLink href={moexSchoolLink} target='_blank'>
+                            бесплатный&nbsp;курс
+                        </FeaturedLink>
+                        <span> для начинающих инвесторов</span>
+                    </span>
+                </ListItem>
             </List>
             {!isTestVisible && (
                 <ButtonContainer>
@@ -95,6 +108,19 @@ const IconContainer = styled(Icon)`
     margin-right: 16px;
     padding-top: 3px;
     color: ${({theme}) => theme.palette.primary};
+`;
+
+const FeaturedCheckIcon = styled(IconContainer)`
+    color: ${({theme}) => theme.palette.featured};
+`;
+
+const FeaturedText = styled.span`
+    color: ${({theme}) => theme.palette.featured};
+`;
+
+const FeaturedLink = styled.a`
+    color: ${({theme}) => theme.palette.featured};
+    text-decoration: underline;
 `;
 
 const ButtonContainer = styled.div`
