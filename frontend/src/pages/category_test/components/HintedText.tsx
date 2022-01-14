@@ -14,16 +14,19 @@ export const HintedText: React.FC<IProps> = ({text}) => {
         replace: (domNode: any) => {
             if (domNode.type === 'tag' && domNode.name === 'hint') {
                 return (
-                    <Tooltip
-                        overlay={domToReact(domNode.children, options)}
-                        placement='bottom'
-                        trigger={['click']}
-                        align={{offset: [0, 6]}}
-                        transitionName={'fade'}>
-                        <HintIconContainer>
-                            <Icon name='info' />
-                        </HintIconContainer>
-                    </Tooltip>
+                    <>
+                        &nbsp;
+                        <Tooltip
+                            overlay={domToReact(domNode.children, options)}
+                            placement='bottom'
+                            trigger={['click']}
+                            align={{offset: [0, 6]}}
+                            transitionName={'fade'}>
+                            <HintIconContainer>
+                                <NonBreakingIcon name='info' />
+                            </HintIconContainer>
+                        </Tooltip>
+                    </>
                 );
             }
         },
@@ -35,10 +38,17 @@ const HintIconContainer = styled.span`
     position: relative;
     cursor: pointer;
     color: ${({theme}) => theme.palette.secondary};
-    margin: 0 4px;
-    top: -1px;
+    margin-right: 4px;
+    padding-right: 17px;
 
     &:hover {
         color: ${({theme}) => theme.palette.regular};
     }
+`;
+
+const NonBreakingIcon = styled(Icon)`
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
 `;
