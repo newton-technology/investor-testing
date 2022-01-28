@@ -146,6 +146,10 @@ const FooterBottom = styled.div`
 const Contributors = styled.div`
     display: flex;
     flex-direction: column;
+
+    ${({theme}) => theme.breakpoint('md')`
+        align-items: flex-end;
+    `}
 `;
 
 const Underlined = styled.span`
