@@ -5,11 +5,10 @@ namespace Common\Packages\Http\Middleware;
 use Closure;
 use Exception;
 
+use Common\Base\Http\Request;
 use Common\Base\Http\Response;
 use Common\Base\Repositories\Redis\RedisRepositoryCacheTrait;
 use Common\Base\Utils\Composer;
-
-use Illuminate\Http\Request;
 
 class ThrottleMiddleware
 {
@@ -34,15 +33,7 @@ class ThrottleMiddleware
         $interval = config($configPrefix . '.interval');
         $attemptsCount = config($configPrefix . '.attempts');
 
-        $key = implode(
-            ':',
-            [
-                'throttling',
-                Composer::getApplicationName(),
-                $request->getMethod(),
-                $request->getPathInfo(),
-            ]
-        );
+        $key = $this->getKey($request);
 
         $accessAttempts = $this->incr($key);
         if ($accessAttempts === 1) {
@@ -55,5 +46,18 @@ class ThrottleMiddleware
         $response = $next($request);
         $response->headers->set(Response::HEADER_REQUEST_TIME_LEFT, $this->ttl($key));
         return $response;
+    }
+
+    protected function getKey(Request $request): string
+    {
+        return implode(
+            ':',
+            [
+                'throttling',
+                Composer::getApplicationName(),
+                $request->getMethod(),
+                $request->getPathInfo(),
+            ]
+        );
     }
 }

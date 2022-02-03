@@ -11,7 +11,7 @@ class TestResultMail extends CommonTestResultMail
     public function build(): self
     {
         return $this->view('emails.test_result')
-            ->subject('Уведомление о результатах тестирования')
+            ->subject('Уведомление о результате тестирования')
             ->with(
                 [
                     'categoryDescription' => $this->categoryDescription,

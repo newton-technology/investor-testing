@@ -43,6 +43,16 @@ abstract class DateTimeUtils
     }
 
     /**
+     * Получить экземпляр завтрашней даты
+     *
+     * @return DateTime
+     */
+    public static function tomorrow(): DateTime
+    {
+        return (new DateTime())->add(new DateInterval('P1D'))->setTime(0,0);
+    }
+
+    /**
      * Создать экземпляр из timestamp
      *
      * @param int|float $timestamp

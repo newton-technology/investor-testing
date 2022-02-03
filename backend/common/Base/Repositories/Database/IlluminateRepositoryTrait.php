@@ -123,6 +123,8 @@ use Illuminate\Support\Facades\DB;
  *
  *        Дополнительно можно задать поля `dates` для `Sample::class`.
  *        Дополнительно можно задать поле `fields` со списком выбираемых полей (string, поля указывать через запятую)
+ *        Дополнительно можно задать поле `filters` со списком фильтров
+ *        Если не задать поле `entity`, то вернется массив значений поля, заданного в `array_field`
  *
  *        Если задать признак 'array' => false, то в сеттер попадет одна сущность вместо массива.
  *        При этом если в результате join будет выбрано больше одной записи, будет выброшено исключение.
@@ -404,7 +406,7 @@ trait IlluminateRepositoryTrait
             );
         }
 
-        if ($fields[0] === '*') {
+        if (reset($fields) === '*') {
             $builder->addSelect(['*']);
         } else {
             foreach ($fields as $key => $value) {
@@ -459,10 +461,35 @@ trait IlluminateRepositoryTrait
 
         $fields = $expression['fields'] ?? '*';
 
+        $filterExpression = implode(
+            ' and',
+            array_map(fn($filter) => $this->getFilterExpression($filter), $expression['filters'] ?? [])
+        );
+        if (!empty($filterExpression)) {
+            $filterExpression = 'and ' . $filterExpression;
+        }
+
         return new Expression(
             "(select array_to_json(array_agg({$field})) from (select {$fields} from {$expression['table']}" .
-            " where {$binding}) as {$field}) as {$field}"
+            " where {$binding} {$filterExpression}) as {$field}) as {$field}"
         );
+    }
+
+    protected function getFilterExpression(array $filter): string
+    {
+        switch (count($filter)) {
+            case 0:
+                return '';
+            case 2:
+                return "{$filter[0]} = '{$filter[1]}'";
+            case 3:
+                if (strtolower($filter[1]) === 'in') {
+                    $keys = implode(', ', array_map(fn($key) => "'{$key}'", $filter[2]));
+                    return "{$filter[0]} in ({$keys})";
+                }
+                break;
+        }
+        throw new LogicException('unsupported filter');
     }
 
     /**
@@ -499,15 +526,26 @@ trait IlluminateRepositoryTrait
             }
 
             if (property_exists($raw, $field)) {
-                $class = $expression['entity'];
+                $class = $expression['entity'] ?? null;
+                $arrayField = $expression['array_field'] ?? null;
+
+                if (is_null($class) && is_null($arrayField)) {
+                    throw new LogicException('incorrect settings for fields entity and array_field');
+                }
+
                 $raw->$field = array_map(
-                    function ($item) use ($class, $expression) {
+                    function ($item) use ($class, $arrayField, $expression) {
                         foreach ($expression['dates'] ?? [] as $time) {
                             if (property_exists($item, $time)) {
                                 $item->$time = TransformationUtils::stringToTimestamp($item->$time);
                             }
                         }
-                        return $class::fromObject($item, true, true);
+                        if (!is_null($arrayField) && !isset($item->{$arrayField})) {
+                            throw new LogicException('incorrect settings for field array_field');
+                        }
+                        return $class
+                            ? $class::fromObject($item, true, true)
+                            : $item->{$arrayField};
                     },
                     json_decode($raw->$field) ?? []
                 );

@@ -114,6 +114,14 @@ trait RedisRepositoryTrait
     }
 
     /**
+     * @param string $key
+     * @return bool|int
+     */
+    public function pttl(string $key) {
+        return $this->connectionInstance->pttl($key);
+    }
+
+    /**
      * @param $key string
      * @param $value
      * @throws Exception
@@ -496,22 +504,23 @@ trait RedisRepositoryTrait
      * Очистка кеша поиска по шаблону ключа
      *
      * Используется неблокирующий метод unlink
-     * Каждая пачка из 1000 ключей помещается в одну команду unlink
+     * Каждая пачка из N ключей помещается в одну команду unlink
      *
      * @param string $pattern
+     * @param int $clearChunkSize Количество сущностей для очистки в одну итерацию
      * @return int
      */
-    protected function unlinkByPattern(string $pattern): int {
+    protected function unlinkByPattern(string $pattern, int $clearChunkSize = 1000): int {
         $count = 0;
         $keyIterator = $this->scan($pattern);
         $chunks = [];
-        $chunkCount = 0;
+        $chunkSize = 0;
         while ($keyIterator->valid()) {
             $chunks[] = $keyIterator->current();
             $keyIterator->next();
-            if (++$chunkCount >= 1000 || !$keyIterator->valid()) {
+            if (++$chunkSize >= $clearChunkSize || !$keyIterator->valid()) {
                 $count += $this->unlink($chunks);
-                $chunkCount = 0;
+                $chunkSize = 0;
                 $chunks = [];
             }
         }

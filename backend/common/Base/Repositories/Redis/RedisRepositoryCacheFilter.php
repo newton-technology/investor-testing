@@ -187,11 +187,12 @@ trait RedisRepositoryCacheFilter
     /**
      * Очистка индекса фильтров
      *
+     * @param int $cacheClearingChunkSize Количество сущностей для очистки в одну итерацию
      * @return int
      */
-    public function clearFilterCache(): int
+    public function clearFilterCache(int $cacheClearingChunkSize): int
     {
-        return $this->unlinkByPattern($this->getFilterKey('*'));
+        return $this->unlinkByPattern($this->getFilterKey('*'), $cacheClearingChunkSize);
     }
 
     /**

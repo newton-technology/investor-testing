@@ -124,28 +124,30 @@ trait RedisRepositoryCacheTrait
     /**
      * Очистка кэша и индексов
      *
+     * @param int $cacheClearingChunkSize Количество сущностей для очистки в одну итерацию
      * @return int
      */
-    public function clearCache(): int
+    public function clearCache(int $cacheClearingChunkSize): int
     {
         $count = 0;
-        $count += $this->clearEntitiesCache();
-        $count += $this->clearFilterCache();
-        $count += $this->clearOrderCache();
+        $count += $this->clearEntitiesCache($cacheClearingChunkSize);
+        $count += $this->clearFilterCache($cacheClearingChunkSize);
+        $count += $this->clearOrderCache($cacheClearingChunkSize);
         return $count;
     }
 
     /**
      * Очистка кэша сущностей
      *
+     * @param int $cacheClearingChunkSize Количество сущностей для очистки в одну итерацию
      * @return int
      */
-    public function clearEntitiesCache(): int
+    public function clearEntitiesCache(int $cacheClearingChunkSize): int
     {
         $count = 0;
-        $count += $this->unlinkByPattern($this->getKeyEntity());
-        $count += $this->unlinkByPattern($this->getEntityKeyPrefix() . ':entity:*');
-        $count += $this->unlinkByPattern($this->getKeyEntities());
+        $count += $this->unlinkByPattern($this->getKeyEntity(), $cacheClearingChunkSize);
+        $count += $this->unlinkByPattern($this->getEntityKeyPrefix() . ':entity:*', $cacheClearingChunkSize);
+        $count += $this->unlinkByPattern($this->getKeyEntities(), $cacheClearingChunkSize);
         return $count;
     }
 

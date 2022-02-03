@@ -12,6 +12,7 @@ use Common\Base\Jwt\JWTRepository;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\TransferStats;
@@ -98,6 +99,37 @@ trait HttpServiceRepositoryTrait
      */
     protected function sendRequest(string $userId, string $method, string $uri, array $options = [], array $claims = [])
     {
+        $clientOptions = $this->getClientOptionsForServiceRequest($userId, $uri, $claims);
+        $response = (new Client($clientOptions))->send(
+            new Request($method, $uri),
+            $this->optionsMiddleware($options)
+        );
+
+        return !empty($response->getBody()->getSize())
+            ? \GuzzleHttp\json_decode($response->getBody())
+            : null;
+    }
+
+    protected function getSourceExceptionMessage(GuzzleException $exception): string
+    {
+        $message = $exception->getMessage();
+        if (!$exception instanceof RequestException) {
+            return $message;
+        }
+        $errorResponse = $exception->getResponse();
+        if (is_null($errorResponse)) {
+            return $message;
+        }
+        $errorResponseBody = (string)$errorResponse->getBody();
+        $decoded = json_decode($errorResponseBody);
+        if (is_null($decoded)) {
+            return $message;
+        }
+        return $decoded->message ?? $errorResponseBody;
+    }
+
+    protected function getClientOptionsForServiceRequest(string $userId, string $uri, array $claims = []): array
+    {
         $clientOptions = [
             RequestOptions::HEADERS => [
                 'Authorization' => 'Bearer ' .
@@ -113,14 +145,7 @@ trait HttpServiceRepositoryTrait
             };
         }
 
-        $response = (new Client($clientOptions))->send(
-            new Request($method, $uri),
-            $this->optionsMiddleware($options)
-        );
-
-        return !empty($response->getBody()->getSize())
-            ? \GuzzleHttp\json_decode($response->getBody())
-            : null;
+        return $clientOptions;
     }
 
     /**
