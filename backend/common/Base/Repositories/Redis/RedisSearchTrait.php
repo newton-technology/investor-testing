@@ -21,6 +21,7 @@ use Generator;
  *     'type' => 'exact', // Тип индекса. Возможные значения: full | substr | exact. Полный с поддержкой опечаток, по подстрокам (без опечаток), полное совпадение. По умолчанию full
  *     'weight' => 10 | function ($item) {return $item['type'] === 'common_stock' ? 10 : 1} // Модификатор веса. Влияет на ранжирование в выдаче. Можно передать число или функцию, которая будет возвращать модификатор. По умолчанию 1
  *     'aliases' => ['sber' => ['сбер']] // Синонимы к значениям. В поисковую выдачу сущность попадет в том числе при поиске по синонимам, с учетом указанных параметров. По умолчанию null
+ *     'minQueryLength' => 3 | function ($item) {return strlen($item['ticker']) >= 3 ? 3 : 1} // Минимальная допустимая длина запроса (фактически n-граммы) для данного параметра. По умолчанию 3
  *   ],
  * ]
  * @var array $searchFilterFields Массив названий полей, по которым будет осуществлятся фильтрация
@@ -59,13 +60,6 @@ trait RedisSearchTrait
     protected $searchFilterKeyPrefix = 'search:filter:';
 
     /**
-     * Минимальная длина n-граммы
-     *
-     * @var int
-     */
-    protected $minN = 3;
-
-    /**
      * Минимальный вес значимых результатов поиска
      *
      * @var int
@@ -76,19 +70,17 @@ trait RedisSearchTrait
      * Функция для извлечения массива слов из строки, а так же добавление в массив синонимов при наличии
      *
      * Строка приводится к нижнему регистру и разбивается на слова,
-     * разделенные пробелами и знаками, отличными от букв, цифр, _ и -
+     * разделенные пробелами и знаками, отличными от букв, цифр, &, _ и -
      *
      * @param string $string
      * @param array $aliases
      * @return array
      */
-    protected function getWords(string $string, array $aliases = []): array
+    protected function getWords(string $string, array $aliases = [], int $minN = 1): array
     {
-        $normalizedString = trim(mb_ereg_replace('[^а-яё\w_-]+', ' ', mb_strtolower($string)));
+        $normalizedString = trim(mb_ereg_replace('[^а-яё\w&_-]+', ' ', mb_strtolower($string)));
         $words = mb_split('\s+', $normalizedString);
-        $filterCallback = function ($word) {
-            return mb_strlen($word) >= $this->minN;
-        };
+        $filterCallback = fn($word) => mb_strlen($word) >= $minN;
         $words = array_filter($words, $filterCallback);
         $wordsWithAliases = $words;
         foreach ($words as $word) {
@@ -109,23 +101,24 @@ trait RedisSearchTrait
      * Очистка кеша поиска по шаблону ключа
      *
      * Используется неблокирующий метод unlink
-     * Каждая пачка из 1000 ключей помещается в одну команду unlink
+     * Каждая пачка из N ключей помещается в одну команду unlink
      *
      * @param string $pattern
+     * @param int $clearChunkSize Количество сущностей для очистки в одну итерацию
      * @return int
      */
-    protected function clearSearchIndexByPattern(string $pattern): int
+    protected function clearSearchIndexByPattern(string $pattern, int $clearChunkSize = 1000): int
     {
         $count = 0;
         $keyIterator = $this->scan($pattern);
         $chunks = [];
-        $chunkCount = 0;
+        $chunkSize = 0;
         while ($keyIterator->valid()) {
             $chunks[] = $keyIterator->current();
             $keyIterator->next();
-            if (++$chunkCount >= 1000 || !$keyIterator->valid()) {
+            if (++$chunkSize >= $clearChunkSize || !$keyIterator->valid()) {
                 $count += $this->unlink($chunks);
-                $chunkCount = 0;
+                $chunkSize = 0;
                 $chunks = [];
             }
         }
@@ -144,12 +137,12 @@ trait RedisSearchTrait
      * @param array $aliases
      * @return array
      */
-    public function getNGrams(string $string, array $aliases = []): array
+    public function getNGrams(string $string, array $aliases = [], int $minN = 1): array
     {
         $nGrams = [];
-        foreach ($this->getWords($string, $aliases) as $word) {
-            for ($i = 0; $i <= mb_strlen($word) - $this->minN; $i++) {
-                for ($j = $this->minN; $j <= mb_strlen($word) - $i; $j++) {
+        foreach ($this->getWords($string, $aliases, $minN) as $word) {
+            for ($i = 0; $i <= mb_strlen($word) - $minN; $i++) {
+                for ($j = $minN; $j <= mb_strlen($word) - $i; $j++) {
                     $nGrams[] = mb_substr($word, $i, $j);
                 }
             }
@@ -168,12 +161,12 @@ trait RedisSearchTrait
      * @param array $aliases
      * @return array
      */
-    public function getExtraNGrams(string $string, array $aliases = []): array
+    public function getExtraNGrams(string $string, array $aliases = [], int $minN = 1): array
     {
         $extraNGrams = [];
-        foreach ($this->getNGrams($string, $aliases) as $nGram) {
+        foreach ($this->getNGrams($string, $aliases, $minN) as $nGram) {
             for ($i = 0; $i < mb_strlen($nGram); $i++) {
-                if (mb_strlen($nGram) >= $this->minN) {
+                if (mb_strlen($nGram) >= max(3, $minN)) {
                     $extraNGrams[] = mb_substr($nGram, 0, $i) . '_' . mb_substr($nGram, $i, mb_strlen($nGram) - $i);
                     if ($i > 0) {
                         $extraNGrams[] = mb_substr($nGram, 0, $i - 1) . '_' . mb_substr(
@@ -212,10 +205,11 @@ trait RedisSearchTrait
      * добавляющей id сущностей с весами в z-set с ключом соответстующем n-грамме.
      *
      * @param Generator $items
-     * @param int $chunkSize Количество сущностей для обновления в одну итерацию
+     * @param int $updateChunkSize Количество сущностей для обновления в одну итерацию
+     * @param int $clearChunkSize Количество сущностей для очистки в одну итерацию
      * @return int Количество сделанных записей в БД
      */
-    public function updateSearchIndex(Generator $items, int $chunkSize = 100): int
+    public function updateSearchIndex(Generator $items, int $updateChunkSize = 100, int $clearChunkSize = 1000): int
     {
         $chunkCount = 0;
 
@@ -228,7 +222,7 @@ trait RedisSearchTrait
         $groupByFilter = [];
 
         while (true) {
-            if ($chunkCount >= $chunkSize || !$items->valid()) {
+            if ($chunkCount >= $updateChunkSize || !$items->valid()) {
                 $client = $this->connectionInstance->pipeline();
                 foreach ($groupByNGram as $nGram => $values) {
                     $client = $client->zAdd($searchKeyPrefix . $nGram, ['NX'], ...$values);
@@ -248,12 +242,19 @@ trait RedisSearchTrait
             $itemId = $item[$searchIdField];
 
             foreach ($this->searchFilterFields ?? [] as $searchFilterField) {
-                if (array_key_exists($searchFilterField, $item) && !is_null($item[$searchFilterField])) {
-                    $value = is_string($item[$searchFilterField])
-                        ? $item[$searchFilterField]
-                        : json_encode($item[$searchFilterField]);
-                    $groupByFilter[$searchFilterField . '__' . $value][] = 1;
-                    $groupByFilter[$searchFilterField . '__' . $value][] = $itemId;
+                if (is_string($searchFilterField)) {
+                    if (array_key_exists($searchFilterField, $item) && !is_null($item[$searchFilterField])) {
+                        $value = is_string($item[$searchFilterField])
+                            ? $item[$searchFilterField]
+                            : json_encode($item[$searchFilterField]);
+                        $groupByFilter[$searchFilterField . '__' . $value][] = 1;
+                        $groupByFilter[$searchFilterField . '__' . $value][] = $itemId;
+                    }
+                } elseif (is_array($searchFilterField)) {
+                    $key = $searchFilterField[0];
+                    $value = $searchFilterField[1]($item);
+                    $groupByFilter[$key . '__' . $value][] = 1;
+                    $groupByFilter[$key . '__' . $value][] = $itemId;
                 }
             }
 
@@ -261,11 +262,12 @@ trait RedisSearchTrait
                 $valueParam = $param['value'] ?? null;
                 $type = $param['type'] ?? 'full';
                 $weightParam = $param['weight'] ?? 1;
+                $minQueryLengthParam = $param['minQueryLength'] ?? 3;
                 $aliases = $param['aliases'] ?? [];
 
                 if (!is_null($valueParam) && is_callable($valueParam)) {
                     $value = $valueParam($item);
-                } else if (array_key_exists($key, $item)) {
+                } elseif (array_key_exists($key, $item)) {
                     $value = $item[$key];
                 } else {
                     $value = null;
@@ -277,6 +279,12 @@ trait RedisSearchTrait
                     $weight = $weightParam;
                 }
 
+                if (is_callable($minQueryLengthParam)) {
+                    $minQueryLength = $minQueryLengthParam($item);
+                } else {
+                    $minQueryLength = $minQueryLengthParam;
+                }
+
                 if (is_null($value)) {
                     continue;
                 }
@@ -286,8 +294,8 @@ trait RedisSearchTrait
                     // Значительно увеличиваем приоритет выдачи точного совпадения над остальными
                     $groupByNGram[$fullString][] = 20 * $weight * mb_strlen($fullString);
                     $groupByNGram[$fullString][] = $itemId;
-                } else if ($type === 'substr' || $type === 'full') {
-                    $nGrams = $this->getNGrams($value, $aliases);
+                } elseif ($type === 'substr' || $type === 'full') {
+                    $nGrams = $this->getNGrams($value, $aliases, $minQueryLength);
                     foreach ($nGrams as $nGram) {
                         // Увеличиваем вес выдачи по подстроке на порядок по сравнению с выдачей учитывающей ошибки
                         // Это дает более релевантный список и при этом поиск по строке с опечаткой дает хороший результат
@@ -295,7 +303,7 @@ trait RedisSearchTrait
                         $groupByNGram[$nGram][] = $itemId;
                     }
                     if ($type === 'full') {
-                        $extraNGrams = $this->getExtraNGrams($value);
+                        $extraNGrams = $this->getExtraNGrams($value, $aliases, $minQueryLength);
                         foreach ($extraNGrams as $nGram) {
                             $groupByNGram[$nGram][] = $weight * mb_strlen($nGram);
                             $groupByNGram[$nGram][] = $itemId;
@@ -308,7 +316,7 @@ trait RedisSearchTrait
             $items->next();
         }
 
-        $this->clearSearchIndexByPattern($this->searchResultKeyPrefix . $this->keyPrefix . '*');
+        $this->clearSearchIndexByPattern($this->searchResultKeyPrefix . $this->keyPrefix . '*', $clearChunkSize);
 
         return $count;
     }
@@ -316,13 +324,23 @@ trait RedisSearchTrait
     /**
      * Удаление всех записей, связанных с поисковым индексом
      *
+     * @param int $clearChunkSize Количество сущностей для очистки в одну итерацию
      * @return int Количество удаленных ключей
      */
-    public function clearSearchIndex(): int
+    public function clearSearchIndex(int $clearChunkSize = 1000): int
     {
-        $count = $this->clearSearchIndexByPattern($this->searchKeyPrefix . $this->keyPrefix . '*');
-        $count += $this->clearSearchIndexByPattern($this->searchFilterKeyPrefix . $this->keyPrefix . '*');
-        $count += $this->clearSearchIndexByPattern($this->searchResultKeyPrefix . $this->keyPrefix . '*');
+        $count = $this->clearSearchIndexByPattern(
+            $this->searchKeyPrefix . $this->keyPrefix . '*',
+            $clearChunkSize
+        );
+        $count += $this->clearSearchIndexByPattern(
+            $this->searchFilterKeyPrefix . $this->keyPrefix . '*',
+            $clearChunkSize
+        );
+        $count += $this->clearSearchIndexByPattern(
+            $this->searchResultKeyPrefix . $this->keyPrefix . '*',
+            $clearChunkSize
+        );
         return $count;
     }
 
@@ -354,7 +372,7 @@ trait RedisSearchTrait
     {
         $searchResultKeyPrefix = $this->searchResultKeyPrefix . $this->keyPrefix;
         $searchFilterKeyPrefix = $this->searchFilterKeyPrefix . $this->keyPrefix;
-        $resultKey = $searchResultKeyPrefix . $query;
+        $resultKey = $searchResultKeyPrefix . $query . (empty($filters) ? '' : ('__' . json_encode($filters)));
         if (!$this->exists($resultKey)) {
             $intersectingKeys = [];
             $client = $this->connectionInstance->pipeline();

@@ -26,10 +26,6 @@ class MetaInformationContainer
     {
     }
 
-    private function __wakeup()
-    {
-    }
-
     /**
      * Получить сохраненный экземпляр метаинформации для класса
      *

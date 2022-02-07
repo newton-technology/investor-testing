@@ -89,8 +89,12 @@ trait HttpRepositoryTrait
      * @return array|bool|float|int|mixed|object|string|null
      * @throws GuzzleException
      */
-    protected function sendRequestWithClientOptions(string $method, string $uri, array $options = [], array $clientOptions = [])
-    {
+    protected function sendRequestWithClientOptions(
+        string $method,
+        string $uri,
+        array $options = [],
+        array $clientOptions = []
+    ) {
         $response = (new Client($clientOptions))->send(
             new Request($method, $uri),
             $this->optionsMiddleware($options)
@@ -107,7 +111,7 @@ trait HttpRepositoryTrait
      * @return array
      * @throws Throwable
      */
-    protected function sendAsyncRequests(array $httpRequests): array
+    public function sendAsyncRequests(array $httpRequests): array
     {
         return $this->sendAsyncRequestsWithClientOptions($httpRequests, $this->getClientOptions());
     }
@@ -123,8 +127,14 @@ trait HttpRepositoryTrait
      */
     protected function sendAsyncRequestsWithClientOptions(array $httpRequests, array $clientOptions = []): array
     {
-        $client = new Client($clientOptions);
+        $promises = $this->getAsyncRequestsPromises($httpRequests, $clientOptions);
+        $responses = Utils::unwrap($promises);
+        return $this->getResponsesFromAsyncRequestsMap($httpRequests, $responses);
+    }
 
+    protected function getAsyncRequestsPromises(array $httpRequests, array $clientOptions = []): array
+    {
+        $client = new Client($clientOptions);
         $promises = [];
         foreach ($httpRequests as $name => $request) {
             $promises[$name] = $client->sendAsync(
@@ -132,17 +142,18 @@ trait HttpRepositoryTrait
                 $this->optionsMiddleware($request->getOptions())
             );
         }
+        return $promises;
+    }
 
-        $responses = Utils::unwrap($promises);
+    protected function getResponsesFromAsyncRequestsMap(array $httpRequests, array $responses): array
+    {
         $result = [];
-
         foreach ($responses as $name => $response) {
             $result[$name] = $this->getBodyContent(
                 $response,
                 $httpRequests[$name]->getOptions()[RequestOptions::HEADERS]['Accept'] ?? null
             );
         }
-
         return $result;
     }
 

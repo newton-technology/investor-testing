@@ -32,4 +32,25 @@ abstract class NumberUtils
             return $diff / min(($absA + $absB), PHP_FLOAT_MAX) < $epsilon;
         }
     }
+
+    /**
+     * Функция проверки равенства чисел с плавающей точкой с заданной точностью
+     * при условии, что одно из чисел может быть нуллом.
+     * Два нулла считаются эквивалентными
+     *
+     * @param float|null $a
+     * @param float|null $b
+     * @param float $epsilon
+     * @return bool
+     */
+    public static function nearlyEqualNullable(?float $a, ?float $b, float $epsilon = PHP_FLOAT_EPSILON): bool
+    {
+        if (is_null($a)) {
+            return is_null($b);
+        }
+        if (is_null($b)) {
+            return false;
+        }
+        return self::nearlyEqual($a, $b, $epsilon);
+    }
 }

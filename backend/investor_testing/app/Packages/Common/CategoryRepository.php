@@ -70,8 +70,31 @@ class CategoryRepository
         $this->deleteEntities([]);
     }
 
-    public function getCategoryById(int $categoryId): Category
+    public function getCategoryById(int $categoryId): ?Category
     {
         return $this->getEntityById($categoryId);
+    }
+
+    /**
+     * Возвращает категорию по code
+     *
+     * @param string $code
+     * @return Category|null
+     */
+    public function getCategoryByCode(string $code): ?Category
+    {
+        return $this->getEntityByKey([
+            ['code', $code]
+        ]);
+    }
+
+    /**
+     * Редактирование категории
+     *
+     * @param Category $category
+     */
+    public function updateCategory(Category $category): void
+    {
+        $this->updateEntityWithApplyResult($category);
     }
 }

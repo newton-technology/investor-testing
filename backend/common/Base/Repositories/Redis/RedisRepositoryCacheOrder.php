@@ -259,11 +259,12 @@ trait RedisRepositoryCacheOrder
     /**
      * Очистка индексов сортировок
      *
+     * @param int $cacheClearingChunkSize Количество сущностей для очистки в одну итерацию
      * @return int
      */
-    public function clearOrderCache(): int
+    public function clearOrderCache(int $cacheClearingChunkSize): int
     {
-        return $this->unlinkByPattern($this->getOrderKey('*'));
+        return $this->unlinkByPattern($this->getOrderKey('*'), $cacheClearingChunkSize);
     }
 
     /**

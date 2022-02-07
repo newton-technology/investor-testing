@@ -1,14 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dloshmanov
- * Date: 2019-04-16
- * Time: 12:08
- */
 
 namespace Common\Base\Http;
 
 use SimpleXMLElement;
+
+use Common\Base\Utils\TransformationUtils;
 
 /**
  * Class Response
@@ -55,12 +51,13 @@ class Response
 
     /**
      * Метод для возврата файла в качестве ответа
+     *
      * @param mixed $file
      * @param string $fileName
      * @param string $contentType
-     * @param int $contentLength
      * @param int $status
      * @param array $headers
+     *
      * @return \Illuminate\Http\Response
      */
     public static function file($file, string $fileName, string $contentType, int $status = 200, $headers = [])
@@ -88,30 +85,49 @@ class Response
     /**
      * Ответ сервера с кодом 404
      *
-     * @param array $data
+     * @param array|string $data
      * @param array $headers
+     *
      * @return JsonResponse
      */
     public static function notFound($data = [], $headers = [])
     {
-        return self::response(\Illuminate\Http\Response::HTTP_NOT_FOUND, $data, $headers);
+        $payload = self::processPayload(
+            TransformationUtils::stringCamelCaseToUnderScore(__FUNCTION__),
+            $data
+        );
+
+        return self::response(\Illuminate\Http\Response::HTTP_NOT_FOUND, $payload, $headers);
     }
 
     /**
      * Ответ сервера с кодом 403
      *
-     * @param array $data
+     * @param array|string $data
      * @param array $headers
+     *
      * @return JsonResponse
      */
     public static function forbidden($data = [], $headers = [])
     {
-        return self::response(\Illuminate\Http\Response::HTTP_FORBIDDEN, $data, $headers);
+        $payload = self::processPayload(__FUNCTION__, $data);
+
+        return self::response(\Illuminate\Http\Response::HTTP_FORBIDDEN, $payload, $headers);
     }
 
+    /**
+     * Неавторизованный запрос
+     *
+     * @param array|string $data
+     * @param array $headers
+     *
+     * @return JsonResponse
+     */
     public static function unauthorized($data = [], $headers = [])
     {
-        return self::response(\Illuminate\Http\Response::HTTP_UNAUTHORIZED, $data, $headers);
+        $payload = self::processPayload(__FUNCTION__, $data);
+
+        return self::response(\Illuminate\Http\Response::HTTP_UNAUTHORIZED, $payload, $headers);
     }
 
     /**
@@ -119,6 +135,7 @@ class Response
      *
      * @param array $data
      * @param array $headers
+     *
      * @return JsonResponse
      */
     public static function created($data = [], $headers = [])
@@ -127,17 +144,23 @@ class Response
     }
 
     /**
-     * Cервер успешно принял запрос, может работать с указанным видом данных
+     * Сервер успешно принял запрос, может работать с указанным видом данных
      * (например, в теле запроса находится XML-документ, имеющий верный синтаксис),
      * однако имеется какая-то логическая ошибка, из-за которой невозможно произвести операцию над ресурсом
      *
-     * @param array $data
+     * @param array|string $data
      * @param array $headers
+     *
      * @return JsonResponse
      */
     public static function unprocessableEntity($data = [], $headers = [])
     {
-        return self::response(\Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY, $data, $headers);
+        $payload = self::processPayload(
+            TransformationUtils::stringCamelCaseToUnderScore(__FUNCTION__),
+            $data
+        );
+
+        return self::response(\Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY, $payload, $headers);
     }
 
     /**
@@ -145,6 +168,7 @@ class Response
      *
      * @param array $data
      * @param array $headers
+     *
      * @return JsonResponse
      */
     public static function deleted($data = [], $headers = [])
@@ -157,6 +181,7 @@ class Response
      *
      * @param array $data
      * @param array $headers
+     *
      * @return JsonResponse
      */
     public static function accepted($data = [], $headers = [])
@@ -167,57 +192,91 @@ class Response
     /**
      * Непредвиденная ошибка
      *
-     * @param array $data
+     * @param array|string $data
      * @param array $headers
+     *
      * @return JsonResponse
      */
     public static function internalServerError($data = [], $headers = [])
     {
-        return self::response(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR, $data, $headers);
+        $payload = self::processPayload(
+            TransformationUtils::stringCamelCaseToUnderScore(__FUNCTION__),
+            $data
+        );
+
+        return self::response(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR, $payload, $headers);
     }
 
     /**
      * Слишком много запросов
      *
-     * @param array $data
+     * @param array|string $data
      * @param array $headers
+     *
      * @return JsonResponse
      */
     public static function tooManyRequests($data = [], $headers = [])
     {
-        return self::response(\Illuminate\Http\Response::HTTP_TOO_MANY_REQUESTS, $data, $headers);
+        $payload = self::processPayload(
+            TransformationUtils::stringCamelCaseToUnderScore(__FUNCTION__),
+            $data
+        );
+
+        return self::response(\Illuminate\Http\Response::HTTP_TOO_MANY_REQUESTS, $payload, $headers);
     }
 
     /**
      * Запрос конфликтует с текущим состоянием изменяемого ресурса
      *
-     * @param array $data
+     * @param array|string $data
      * @param array $headers
+     *
      * @return JsonResponse
      */
-    public static function conflict(array $data = [], array $headers = []): JsonResponse
+    public static function conflict($data = [], array $headers = []): JsonResponse
     {
-        return self::response(\Illuminate\Http\Response::HTTP_CONFLICT, $data, $headers);
+        $payload = self::processPayload(__FUNCTION__, $data);
+
+        return self::response(\Illuminate\Http\Response::HTTP_CONFLICT, $payload, $headers);
     }
 
     /**
      * Ошибка клиента при обращении к эндпойнту
      *
-     * @param array $data
+     * @param array|string $data
      * @param array $headers
+     *
      * @return JsonResponse
      */
     public static function badRequest($data = [], $headers = [])
     {
-        return self::response(\Illuminate\Http\Response::HTTP_BAD_REQUEST, $data, $headers);
+        $payload = self::processPayload(__FUNCTION__, $data);
+
+        return self::response(\Illuminate\Http\Response::HTTP_BAD_REQUEST, $payload, $headers);
     }
 
-    /**
-     * @param array $headers
-     */
-    private static function applyHeaders(array &$headers)
+    private static function applyHeaders(array &$headers): void
     {
         $headers[self::HEADER_RESPONSE_VERSION] = 2;
         $headers[self::HEADER_RESPONSE_TIME] = microtime(true);
+    }
+
+    /**
+     * @param string $code Код ошибки
+     * @param array|string $inputData Входные данные
+     *
+     * @return array|string[]
+     */
+    private static function processPayload(string $code, $inputData): array
+    {
+        $payload = ['code' => $code];
+
+        if (is_string($inputData)) {
+            $payload['message'] = $inputData;
+        } else {
+            $payload = array_merge($payload, $inputData);
+        }
+
+        return $payload;
     }
 }

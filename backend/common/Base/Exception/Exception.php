@@ -1,14 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dloshmanov
- * Date: 2019-04-16
- * Time: 13:14
- */
 
 namespace Common\Base\Exception;
 
 use Throwable;
+
+use Common\Base\Utils\TransformationUtils;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,17 +15,22 @@ use Symfony\Component\HttpFoundation\Response;
 class Exception extends \Exception
 {
     /**
-     * @var int
+     * HTTP-код
      */
     protected int $httpCode;
 
     /**
-     * @var array|null
+     * Код ошибки
+     */
+    protected ?string $exceptionCode = null;
+
+    /**
+     * Данные для ответа
      */
     protected ?array $payload = null;
 
     /**
-     * @var array
+     * Заголовки для ответа
      */
     protected array $headers = [];
 
@@ -46,44 +47,38 @@ class Exception extends \Exception
         parent::__construct($message, $code, $previous);
     }
 
-    /**
-     * @return int
-     */
     public function getHttpCode(): int
     {
         return $this->httpCode;
     }
 
-    /**
-     * @param array|null $payload
-     * @return Exception
-     */
+    public function getExceptionCode(): ?string
+    {
+        return $this->exceptionCode;
+    }
+
+    public function setExceptionCode(?string $exceptionCode): self
+    {
+        $this->exceptionCode = $exceptionCode;
+        return $this;
+    }
+
     public function setPayload(?array $payload): Exception
     {
         $this->payload = $payload;
         return $this;
     }
 
-    /**
-     * @return array|null
-     */
     public function getPayload(): ?array
     {
         return $this->payload;
     }
 
-    /**
-     * @return array
-     */
     public function getHeaders(): array
     {
         return $this->headers;
     }
 
-    /**
-     * @param array $headers
-     * @return Exception
-     */
     public function setHeaders(array $headers): self
     {
         $this->headers = $headers;
@@ -97,7 +92,8 @@ class Exception extends \Exception
      */
     public static function unauthorized(string $message = 'authorization error', Throwable $previous = null): self
     {
-        return new self($message, Response::HTTP_UNAUTHORIZED, 0, $previous);
+        return (new self($message, Response::HTTP_UNAUTHORIZED, 0, $previous))
+            ->setExceptionCode(__FUNCTION__);
     }
 
     /**
@@ -107,7 +103,8 @@ class Exception extends \Exception
      */
     public static function forbidden(string $message = 'forbidden', Throwable $previous = null): self
     {
-        return new self($message, Response::HTTP_FORBIDDEN, 0, $previous);
+        return (new self($message, Response::HTTP_FORBIDDEN, 0, $previous))
+            ->setExceptionCode(__FUNCTION__);
     }
 
     /**
@@ -117,7 +114,8 @@ class Exception extends \Exception
      */
     public static function unprocessableEntity(string $message = 'unprocessable entity', Throwable $previous = null): self
     {
-        return new self($message, Response::HTTP_UNPROCESSABLE_ENTITY, 0, $previous);
+        return (new self($message, Response::HTTP_UNPROCESSABLE_ENTITY, 0, $previous))
+            ->setExceptionCode(TransformationUtils::stringCamelCaseToUnderScore(__FUNCTION__));
     }
 
     /**
@@ -127,7 +125,8 @@ class Exception extends \Exception
      */
     public static function badRequest(string $message = 'bad request', Throwable $previous = null): self
     {
-        return new self($message, Response::HTTP_BAD_REQUEST, 0, $previous);
+        return (new self($message, Response::HTTP_BAD_REQUEST, 0, $previous))
+            ->setExceptionCode(TransformationUtils::stringCamelCaseToUnderScore(__FUNCTION__));
     }
 
     /**
@@ -137,7 +136,8 @@ class Exception extends \Exception
      */
     public static function internalServerError(string $message = 'internal server error', Throwable $previous = null): self
     {
-        return new self($message, Response::HTTP_INTERNAL_SERVER_ERROR, 0, $previous);
+        return (new self($message, Response::HTTP_INTERNAL_SERVER_ERROR, 0, $previous))
+            ->setExceptionCode(TransformationUtils::stringCamelCaseToUnderScore(__FUNCTION__));
     }
 
     /**
@@ -147,16 +147,19 @@ class Exception extends \Exception
      */
     public static function entityNotFoundException(string $message = 'entity not found', Throwable $previous = null): self
     {
-        return new self($message, Response::HTTP_NOT_FOUND, 0, $previous);
+        return (new self($message, Response::HTTP_NOT_FOUND, 0, $previous))
+            ->setExceptionCode(TransformationUtils::stringCamelCaseToUnderScore(__FUNCTION__));
     }
 
     public static function serviceUnavailable($message = 'service unavailable', Throwable $previous = null): self
     {
-        return new self($message, Response::HTTP_SERVICE_UNAVAILABLE, 0, $previous);
+        return (new self($message, Response::HTTP_SERVICE_UNAVAILABLE, 0, $previous))
+            ->setExceptionCode(TransformationUtils::stringCamelCaseToUnderScore(__FUNCTION__));
     }
 
     public static function conflict($message = 'conflict with current state', Throwable $previous = null): self
     {
-        return new self($message,Response::HTTP_CONFLICT, 0, $previous);
+        return (new self($message,Response::HTTP_CONFLICT, 0, $previous))
+            ->setExceptionCode(__FUNCTION__);
     }
 }

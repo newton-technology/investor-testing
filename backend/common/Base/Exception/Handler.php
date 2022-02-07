@@ -69,25 +69,35 @@ class Handler extends ExceptionHandler
                 $exception->getHeaders()
             );
         }
+
         if ($exception instanceof \Common\Base\Exception\Exception) {
+            $defaultPayload = ['message' => $exception->getMessage()];
+
+            if ($exception->getExceptionCode() !== null) {
+                $defaultPayload['code'] = $exception->getExceptionCode();
+            }
+
             return \Common\Base\Http\Response::response(
                 $exception->getHttpCode(),
-                $exception->getPayload() ?? ['message' => $exception->getMessage()],
+                $exception->getPayload() ?? $defaultPayload,
                 $exception->getHeaders()
             );
-        } elseif ($exception instanceof ValidationException) {
-            return response()->json($exception->errors(), Response::HTTP_BAD_REQUEST, [], JSON_UNESCAPED_UNICODE);
-        } else {
-            if (!app()->environment('production')) {
-                return parent::render($request, $exception);
-            }
-            return response()->json(
-                [
-                    'code' => 'INTERNAL_SERVER_ERROR',
-                    'message' => 'internal server error',
-                ],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
         }
+
+        if ($exception instanceof ValidationException) {
+            return response()->json($exception->errors(), Response::HTTP_BAD_REQUEST, [], JSON_UNESCAPED_UNICODE);
+        }
+
+        if (!app()->environment('production')) {
+            return parent::render($request, $exception);
+        }
+
+        return response()->json(
+            [
+                'code' => 'INTERNAL_SERVER_ERROR',
+                'message' => 'internal server error',
+            ],
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
     }
 }
