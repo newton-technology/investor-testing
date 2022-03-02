@@ -1,0 +1,48 @@
+server {
+    listen 0.0.0.0:80;
+    server_name ${MAIN_DOMEN}; # <- внешний домен
+    index index.php;
+
+    location / {
+        proxy_pass http://frontend;
+        proxy_redirect     off;
+        proxy_set_header   Host                 ${DONT_REPLACE}host;
+        proxy_set_header   X-Real-IP            ${DONT_REPLACE}remote_addr;
+        proxy_set_header   X-Forwarded-For      ${DONT_REPLACE}proxy_add_x_forwarded_for;
+        proxy_http_version 1.1;
+    }
+
+    location /api/investor_testing {
+        proxy_pass http://backend_nginx/;
+        proxy_redirect     off;
+        proxy_set_header   Host                 ${DONT_REPLACE}host;
+        proxy_set_header   X-Real-IP            ${DONT_REPLACE}remote_addr;
+        proxy_set_header   X-Forwarded-For      ${DONT_REPLACE}proxy_add_x_forwarded_for;
+        proxy_http_version 1.1;
+    }
+}
+
+
+server {
+    listen 0.0.0.0:80;
+    server_name ${ADMIN_DOMEN}; # <- домен адмики
+    index index.php;
+
+    location / {
+        proxy_pass http://admin;
+        proxy_redirect     off;
+        proxy_set_header   Host                 ${DONT_REPLACE}host;
+        proxy_set_header   X-Real-IP            ${DONT_REPLACE}remote_addr;
+        proxy_set_header   X-Forwarded-For      ${DONT_REPLACE}proxy_add_x_forwarded_for;
+        proxy_http_version 1.1;
+    }
+
+    location /api/investor_testing {
+        proxy_pass http://backend_nginx/;
+        proxy_redirect     off;
+        proxy_set_header   Host                 ${DONT_REPLACE}host;
+        proxy_set_header   X-Real-IP            ${DONT_REPLACE}remote_addr;
+        proxy_set_header   X-Forwarded-For      ${DONT_REPLACE}proxy_add_x_forwarded_for;
+        proxy_http_version 1.1;
+    }
+}
